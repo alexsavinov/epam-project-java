@@ -66,20 +66,12 @@
             <scope>provided</scope>
         </dependency>
 
-<!--            <groupId>org.apache.logging.log4j</groupId>-->
-<!--            <artifactId>log4j-to-slf4j</artifactId>-->
-<!--            <version>2.19.0</version>-->
-<!--            <scope>compile</scope>-->
-<!--        </dependency>-->
-
-
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.30</version>
             <scope>compile</scope>
         </dependency>
-
 
         <dependency>
             <groupId>com.google.code.gson</groupId>
@@ -109,6 +101,27 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
             </plugin>
+
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-antrun-plugin</artifactId>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <phase>compile</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>run</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <tasks>-->
+<!--&lt;!&ndash;                                <delete file="${project.build.directory}/classes/abc.properties" />&ndash;&gt;-->
+<!--                                <mkdir dir="${project.build.directory}/test111" />-->
+<!--                            </tasks>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
+
     </build>
 </project>
+

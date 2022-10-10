@@ -5,6 +5,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -17,42 +18,60 @@ import org.apache.logging.log4j.Logger;
 @WebListener
 public class ContextListener implements ServletContextListener {
 
-    /*
-     * Stores locale's settings in ServletContext attribute "locales".
-     */
+    private static final String LOCALES = "locales";
+    private static final String LOCALES_ERROR = "Can't define path for locales - check params in web.xml";
+
     @Override
     public void contextInitialized(ServletContextEvent event) {
 
         System.out.println("Starting application...");
 
+        /* Init path for logs */
         ServletContext context = event.getServletContext();
-        String localesFileName = context.getInitParameter("locales");
+        String logPath = context.getRealPath("/logs");
+        System.setProperty("logPath", logPath);
+
+        Logger logger = null;
+
+        try {
+            logger = LogManager.getLogger(ContextListener.class);
+        } catch (RuntimeException exception) {
+            System.out.println("Cannot start Logger!");
+            System.out.println("logPath: " + logPath);
+            exception.printStackTrace();
+        }
+
+        /* Init locales settings */
+        loadLocales(context);
+
+        if (logger != null) {
+            logger.info("locales.list = {}", context.getAttribute(LOCALES));
+            logger.info("logPath = {}", logPath);
+        }
+    }
+
+    /*
+     * Init locales settings
+     */
+    private void loadLocales(ServletContext context) {
+        String localesFileName = context.getInitParameter(LOCALES);
         String localesFileRealPath = context.getRealPath(localesFileName);
 
         if (localesFileRealPath == null) {
-            System.out.println("Can't define path for locales - check params in web.xml");
+            System.out.println(LOCALES_ERROR);
+            return;
         }
 
         Properties locales = new Properties();
-        try {
-            locales.load(new FileInputStream(localesFileRealPath));
-//            locales.list(System.out);
+
+        try (FileInputStream fileInputStream = new FileInputStream(localesFileRealPath)) {
+            locales.load(fileInputStream);
+            context.setAttribute(LOCALES, locales);
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found: " + localesFileRealPath);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("ERROR loadLocales: " + e.getMessage());
         }
-
-        context.setAttribute("locales", locales);
-
-//        ServletContext servletContext = event.getServletContext();
-//        String path = servletContext.getRealPath("/WEB-INF/log4j2.log");
-//
-//        System.out.println("path = " + path);
-//
-//        System.setProperty("logFile", path);
-
-//        final Logger log = LogManager.getLogger(ContextListener.class);
-//        log.debug("path = " + path);
-
 
     }
 

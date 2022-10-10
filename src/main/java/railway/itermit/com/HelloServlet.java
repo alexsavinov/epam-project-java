@@ -15,28 +15,24 @@ public class HelloServlet extends HttpServlet {
     @Override
     public void init() {
         logger.info("#init");
-        logger.warn("#init");
-        logger.error("#init");
         message = "Hello World!";
     }
 
     @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) {
 
         logger.info("#doGet");
-        logger.warn("#doGet");
-        logger.error("#doGet");
 
         response.setContentType("text/html");
 
         // Hello
-        PrintWriter out = response.getWriter();
-        out.println("<html><body>");
-        out.println("<h1>" + message + "</h1>");
-        out.println("</body></html>");
-    }
-
-    @Override
-    public void destroy() {
+        try {
+            PrintWriter out = response.getWriter();
+            out.println("<html><body>");
+            out.println("<h1>" + message + "</h1>");
+            out.println("</body></html>");
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
     }
 }
