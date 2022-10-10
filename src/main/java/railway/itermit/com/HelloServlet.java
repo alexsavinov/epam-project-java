@@ -2,8 +2,13 @@ package railway.itermit.com;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import railway.itermit.com.dao.UserDAO;
+import railway.itermit.com.dao.entity.User;
+import railway.itermit.com.dao.impl.UserDAOImpl;
+import railway.itermit.com.db.DBException;
 
 import java.io.*;
+import java.util.ArrayList;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 
@@ -14,25 +19,41 @@ public class HelloServlet extends HttpServlet {
 
     @Override
     public void init() {
-        logger.info("#init");
+        logger.trace("#init()");
+
         message = "Hello World!";
     }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
 
-        logger.info("#doGet");
+        logger.trace("#doGet(request, response)");
 
         response.setContentType("text/html");
 
-        // Hello
+
+        ArrayList<User> users = new ArrayList<>();
+
+        UserDAO userDAO = new UserDAOImpl();
+
+        try {
+            users = userDAO.getAll();
+            users.forEach(logger::info);
+        } catch (DBException e) {
+            logger.error("DBException while update(id, user): {}", e.getMessage());
+        }
+
         try {
             PrintWriter out = response.getWriter();
             out.println("<html><body>");
             out.println("<h1>" + message + "</h1>");
+            out.println("<ul>");
+            users.forEach(s -> out.println("<li>" + s + "</li>"));
+            out.println("</ul>");
             out.println("</body></html>");
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
+
     }
 }

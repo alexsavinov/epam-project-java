@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<Configuration status="info" name="railway.itermit.com">
+<Configuration status="trace" name="railway.itermit.com">
     <Properties>
         <Property name="basePath">${sys:logPath}</Property>
     </Properties>
@@ -42,7 +42,7 @@
     </Appenders>
 
     <Loggers>
-        <Root level="info">
+        <Root level="trace">
             <AppenderRef ref="Async"/>
         </Root>
     </Loggers>

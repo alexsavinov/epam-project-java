@@ -9,10 +9,10 @@ create table users
 (
     id       int auto_increment
         primary key,
-    name     VARCHAR(50)    null,
-    password VARCHAR(50)    null,
-    lang     VARCHAR(20)    null,
-    isadmin  boolean not null default 0
+    name     VARCHAR(50)  null,
+    email    VARCHAR(100) null,
+    password VARCHAR(255) null,
+    isadmin  boolean      not null default 0
 
 );
 

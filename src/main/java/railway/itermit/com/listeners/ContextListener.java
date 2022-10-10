@@ -45,8 +45,8 @@ public class ContextListener implements ServletContextListener {
         loadLocales(context);
 
         if (logger != null) {
-            logger.info("locales.list = {}", context.getAttribute(LOCALES));
-            logger.info("logPath = {}", logPath);
+            logger.warn("locales.list = {}", context.getAttribute(LOCALES));
+            logger.warn("logPath = {}", logPath);
         }
     }
 
