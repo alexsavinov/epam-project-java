@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Context>
+
+    <Resource name="jdbc/sql-connector-pool"
+              auth="Container"
+              type="javax.sql.DataSource"
+              maxTotal="8"
+              maxIdle="30"
+              maxWaitMillis="10000"
+              username="epam"
+              password="bYhbznnIvd_123"
+              driverClassName="com.mysql.cj.jdbc.Driver"
+              url="jdbc:mysql://192.168.1.8:3306/railwaydb"/>
+
+</Context>
