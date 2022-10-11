@@ -1,0 +1,199 @@
+:root {
+    --main-color1: #2F2E33;
+    --main-color2: #D5D6D2;
+    --main-color3: #FFFFFF;
+    --main-color4: #3A5199;
+    --main-color4-light: #BAD1ff;
+}
+
+
+._main-color1 {
+    color: var(--main-color1);
+}
+
+._main-color2 {
+    color: var(--main-color2);
+}
+
+._main-color3 {
+    color: var(--main-color3);
+}
+
+._main-color4 {
+    color: var(--main-color4);
+}
+
+
+._main-bg-color1 {
+    background-color: var(--main-color1);
+}
+
+._main-bg-color2 {
+    background-color: var(--main-color2);
+}
+
+._main-bg-color3 {
+    background-color: var(--main-color3);
+}
+
+._main-bg-color4 {
+    background-color: var(--main-color4);
+}
+
+._main-bg-color4-light {
+    background-color: var(--main-color4-light);
+}
+
+
+body {
+    background-color: var(--main-color3);
+    color: var(--main-color1);
+    height: 100vh;
+    margin: 0;
+}
+
+._wrapper {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    /*justify-content: space-between;*/
+    /*opacity: 0.6;*/
+    /*background:var(--main-color3) url('/images/standards.png') no-repeat right bottom;*/
+    background-color: white;
+    /*background-image: url("/images/train.jpg");*/
+    background-repeat: no-repeat;
+    background-position: right bottom;
+    background-attachment: fixed;
+    /*background-image: linear-gradient(rgba(255, 255, 255, 1), rgba(255, 255, 255, .9)), url("/images/standards.png");*/
+    margin-top: auto;
+}
+
+/* Header */
+
+.header {
+    background-color: var(--main-color2);
+    color: var(--main-color1);
+    /*height: 50px;*/
+}
+
+
+/* Footer */
+
+.footer {
+    background-color: var(--main-color2);
+    height: 25px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    font-size: 14px;
+}
+
+
+a {
+    color: var(--main-color1);
+}
+
+a:hover {
+    color: var(--main-color4);
+}
+
+
+/* Customizing bootstrap tags */
+
+.badge {
+    background-color: var(--main-color4);
+}
+
+.btn {
+    background-color: var(--main-color3);
+    color: var(--main-color1);
+}
+
+.alert {
+    /*background-color: var(--main-color4-light);*/
+    /*border: 2px dotted var(--main-color4);*/
+    border: 2px solid var(--main-color4);
+}
+
+nav .navbar-nav li a {
+    color: var(--main-color1);
+}
+
+nav .navbar-nav li a:hover {
+    color: var(--main-color4);
+}
+
+.navbar {
+    background-color: var(--main-color2);
+}
+
+
+.fa-search {
+    color: var(--main-color4);
+}
+
+.fa-ticket {
+    color: var(--main-color4);
+}
+
+.fa-info-circle {
+    color: var(--main-color4);
+    /*background-color: var(--main-color4);*/
+}
+
+.fa-exclamation-triangle {
+    color: darkred;
+}
+
+.fa-plus-circle {
+    color: green;
+}
+
+.fa-arrow-circle-left {
+    color: var(--main-color4);
+}
+
+
+/* Custom tags */
+
+._empty50px {
+    min-height: 50px;
+    display: flex;
+}
+
+
+/* form */
+
+._form {
+    /*border: 1px solid black;*/
+    /*border-color: var(--main-color2);*/
+    width: 400px;
+}
+
+._search-form {
+    max-width: 650px;
+}
+
+._input-number {
+    height: 38px;
+    width: 120px;
+}
+
+._input-daterange {
+    width: 250px;
+}
+
+._input-station {
+    width: 250px;
+}
+
+
+._wrapper-table {
+    /*width: 90%;*/
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+.btn {
+    /*max-width: 100px;*/
+}

@@ -1,4 +1,4 @@
-package railway.itermit.com.db;
+package com.itermit.railway.db;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

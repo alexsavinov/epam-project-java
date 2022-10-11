@@ -1,0 +1,9 @@
+<div class="d-flex justify-content-start align-items-center ms-3 me-5 m-3">
+
+    <div class="btn btn-sm btn-outline-secondary shadow-sm" onclick="goBack('${url}');">
+        <i class="fa fa-arrow-circle-left" aria-hidden="true"></i>
+        Back
+    </div>
+
+    <% session.removeAttribute("url"); %>
+</div>

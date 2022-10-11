@@ -37,7 +37,7 @@
 
         <Async name="Async">
             <AppenderRef ref="fileLogger"/>
-            <AppenderRef ref="LogToConsole"/>
+<!--            <AppenderRef ref="LogToConsole"/>-->
         </Async>
     </Appenders>
 

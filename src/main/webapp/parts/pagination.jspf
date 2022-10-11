@@ -1,0 +1,83 @@
+<div class="d-flex justify-content-center">
+
+    <form action="/search" method="post" id="paginatorForm">
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end">
+                <input type="hidden" id="pg_page" name="pg_page" value="0"/>
+
+                <li <c:if test="${sessionScope.paginator.pageIsFirst() eq true}">
+                    class="page-item disabled"
+                </c:if>>
+                    <a class="page-link" href="#" tabindex="-1"
+                       onclick="goByPage(1);">
+                        &laquo;
+                    </a>
+                </li>
+
+                <li <c:if test="${sessionScope.paginator.pageIsFirst() eq true}">
+                    class="page-item disabled"
+                </c:if>>
+                    <a class="page-link" href="#"
+                       onclick="goByPage(${sessionScope.paginator.getPrev_page()});">
+                        &lsaquo;
+                    </a>
+                </li>
+
+                <li <c:if test="${sessionScope.paginator.pageIsFirst() eq true}">
+                    class="page-item disabled"
+                </c:if>>
+                    <a class="page-link" href="#"
+                       onclick="goByPage(${sessionScope.paginator.getPrev_page()});">
+                        <c:if test="${sessionScope.paginator.pageIsFirst() eq true}">
+                            ..
+                        </c:if>
+                        <c:if test="${sessionScope.paginator.pageIsFirst() ne true}">
+                            ${sessionScope.paginator.getPrev_page()}
+                        </c:if>
+                    </a>
+                </li>
+
+                <li class="page-item active">
+                    <a class="page-link" href="#">
+                        ${sessionScope.paginator.getPage()}
+                    </a>
+                </li>
+
+                <li <c:if test="${sessionScope.paginator.pageIsLast() eq true}">
+                    class="page-item disabled"
+                </c:if>>
+                    <a class="page-link" href="#"
+                       onclick="goByPage(${sessionScope.paginator.getNext_page()});">
+                        <c:if test="${sessionScope.paginator.pageIsLast() eq true}">
+                            ..
+                        </c:if>
+                        <c:if test="${sessionScope.paginator.pageIsLast() ne true}">
+                            ${sessionScope.paginator.getNext_page()}
+                        </c:if>
+                    </a>
+                </li>
+
+                <li <c:if test="${sessionScope.paginator.pageIsLast() eq true}">
+                    class="page-item disabled"
+                </c:if>>
+                    <a class="page-link" href="#"
+                       onclick="goByPage(${sessionScope.paginator.getNext_page()});">
+                        &rsaquo;
+                    </a>
+                </li>
+
+                <li <c:if test="${sessionScope.paginator.pageIsLast() eq true}">
+                    class="page-item disabled"
+                </c:if>>
+                    <a class="page-link" href="#"
+                       onclick="goByPage(${sessionScope.paginator.getPages()});">
+                        &raquo;
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+    </form>
+
+</div>

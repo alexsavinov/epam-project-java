@@ -1,11 +1,11 @@
-package railway.itermit.com.dao.impl;
+package com.itermit.railway.dao.impl;
 
+import com.itermit.railway.dao.UserDAO;
+import com.itermit.railway.dao.entity.User;
+import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.DBManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import railway.itermit.com.dao.UserDAO;
-import railway.itermit.com.dao.entity.User;
-import railway.itermit.com.db.DBException;
-import railway.itermit.com.db.DBManager;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -140,7 +140,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public void add(User user) throws DBException {
 
-        logger.trace("#add(user)");
+        logger.trace("#add(user): {}", user);
 
         DBManager dbManager = DBManager.getInstance();
         Connection connection = dbManager.getConnection();
@@ -210,8 +210,8 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.setInt(++l, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            logger.error("SQLException while update(id, user): {}", e.getMessage());
-            throw new DBException("SQLException while update(id, user)!", e);
+            logger.error("SQLException while delete(id): {}", e.getMessage());
+            throw new DBException("SQLException while delete(id)!", e);
         } finally {
             DBManager.closePreparedStatement(preparedStatement);
             DBManager.closeConnection(connection);

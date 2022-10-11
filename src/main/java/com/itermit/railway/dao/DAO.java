@@ -1,6 +1,6 @@
-package railway.itermit.com.dao;
+package com.itermit.railway.dao;
 
-import railway.itermit.com.db.DBException;
+import com.itermit.railway.db.DBException;
 
 import java.util.ArrayList;
 

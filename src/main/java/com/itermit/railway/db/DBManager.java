@@ -1,4 +1,4 @@
-package railway.itermit.com.db;
+package com.itermit.railway.db;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,7 +25,7 @@ public class DBManager {
      */
     public static synchronized DBManager getInstance() {
 
-        logger.trace("#DBManager instance created.");
+        logger.trace("#DBManager getInstance().");
 
         if (instance == null) {
             instance = new DBManager();
@@ -41,7 +41,7 @@ public class DBManager {
      */
     public Connection getConnection() throws DBException {
 
-        logger.trace("#getConnection.");
+        logger.trace("#getConnection().");
 
         Connection connection;
         DataSource ds;

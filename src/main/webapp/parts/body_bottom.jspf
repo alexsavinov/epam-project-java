@@ -1,0 +1,334 @@
+<%--<script src="js/jquery-3.6.1.min.js"></script>--%>
+<%--<script src="js/bootstrap.min.js"></script>--%>
+<!-- JavaScript Bundle with Popper -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+        crossorigin="anonymous"></script>
+<%--<script src="js/all.min.js"></script>--%>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+
+<script type="text/javascript">
+    var startDate = new Date();
+    var endDate = new Date();
+    startDate.setMonth(endDate.getMonth() - 2);
+    endDate.setMonth(endDate.getMonth() + 2);
+    $(function () {
+        $('input[name="daterange"]').daterangepicker({
+            startDate: startDate,
+            endDate: endDate,
+            // timePicker: true,
+            // timePickerIncrement: 30,
+            locale: {
+                format: 'DD/MM/YYYY'
+            }
+        });
+    });
+
+    function goBack(url) {
+        if (url) {
+            window.location.href = url;
+        } else {
+            history.back();
+        }
+    }
+
+    function goByUrl(a) {
+        window.location.href = a;
+    }
+
+    function updateTime() {
+        const date_departure = document.getElementById("date_departure").value;
+        const date_arrival = document.getElementById("date_arrival").value;
+        const date1 = new Date(date_departure);
+        // const date1 = moment(new Date(date_departure)).format('YYYY-MM-DDTHH:mm');
+        const date2 = new Date(date_arrival);
+        const diffTime = Math.abs(date2 - date1);
+
+        document.getElementById("travel_time").value = msToTime(diffTime);
+    }
+
+    function msToTime(duration) {
+        let milliseconds = Math.floor((duration % 1000) / 100),
+            seconds = Math.floor((duration / 1000) % 60),
+            minutes = Math.floor((duration / (1000 * 60)) % 60),
+            hours = Math.floor((duration / (1000 * 60 * 60)) % 24),
+            days = Math.floor(duration / (1000 * 60 * 60 * 24));
+
+        if (seconds) seconds = (seconds == 1) ? "1 second" : seconds + " seconds";
+        if (minutes) minutes = (minutes == 1) ? "1 minute " : minutes + " minutes ";
+        if (hours) hours = (hours == 1) ? "1 hour " : hours + " hours ";
+        if (days) days = (days == 1) ? "1 day " : days + " days ";
+
+        return ((days) ? days : "")
+            + ((hours) ? hours : "")
+            + ((minutes) ? minutes : "")
+            + ((seconds) ? seconds : "");
+    }
+
+    function updateUser() {
+        const id = document.getElementById("user").value;
+        $.ajax({
+            url: "/users/get/" + id,
+            type: "POST",
+            // data: new FormData(document.getElementById("fileForm")),
+            data: {
+                user_id: id,
+                json: true
+            },
+            // enctype: 'multipart/form-data',
+            // processData: false,
+            // contentType: false,
+            success: function (res) {
+                console.log('RESPONSE: ', res);
+                // $(".impostSuccess").modal('show');
+                // file.val('');
+                document.getElementById("user_id").value = res.id;
+                document.getElementById("user_name").value = res.name;
+            },
+            error: function (err) {
+                // file.val('');
+                console.log('RESPONSE: ', err);
+                // $(".impostFail").modal('show');
+            }
+        });
+    }
+
+    function updateRoute() {
+        const id = document.getElementById("route").value;
+
+        $.ajax({
+            url: "/routes/getById/" + id,
+            type: "POST",
+            data: {
+                reqValue: id
+            },
+            success: function (res) {
+                // console.log('RESPONSE: ', res);
+                document.getElementById("train_number").value = res.train_number;
+                document.getElementById("station_departure").value = res.station_departure.name;
+                document.getElementById("station_arrival").value = res.station_arrival.name;
+                document.getElementById("date_departure").value = res.date_departure;
+                document.getElementById("date_arrival").value = res.date_arrival;
+                document.getElementById("travel_cost").value = res.travel_cost;
+                document.getElementById("seats_available").value = res.seats_available;
+                document.getElementById("seats_total").value = res.seats_total;
+            },
+            error: function (err) {
+                console.log('ERROR: ', err);
+            }
+        });
+
+        updateTime();
+    }
+
+    function updateRoutes() {
+
+        $.ajax({
+            url: "/routes/getAll",
+            type: "POST",
+            // data: {
+            //     reqValue: id
+            // },
+            success: function (res) {
+                // console.log('RESPONSE: ', res);
+                document.getElementById("train_number").value = res.train_number;
+                document.getElementById("station_departure").value = res.station_departure.name;
+                document.getElementById("station_arrival").value = res.station_arrival.name;
+                document.getElementById("date_departure").value = res.date_departure;
+                document.getElementById("date_arrival").value = res.date_arrival;
+                document.getElementById("travel_cost").value = res.travel_cost;
+                document.getElementById("seats_available").value = res.seats_available;
+                document.getElementById("seats_total").value = res.seats_total;
+            },
+            error: function (err) {
+                console.log('ERROR: ', err);
+            }
+        });
+
+        updateTime();
+    }
+
+    function resetForm() {
+        // e.preventDefault();
+
+        // const id = document.getElementById("user").value;
+        $.ajax({
+            url: "/search",
+            type: "POST",
+            // data: new FormData(document.getElementById("fileForm")),
+            data: {
+                action: "reset",
+                // json: true
+            },
+            // enctype: 'multipart/form-data',
+            // processData: false,
+            // contentType: false,
+            success: function (res) {
+                // console.log('RESPONSE: ', res);
+                // console.log('RESPONSE: ', 'OK');
+
+                document.getElementById('daterange').value = "";
+                document.getElementById('station_arrival_id').value = 0;
+                document.getElementById('station_departure_id').value = 0;
+                document.getElementById('min_seats').value = "";
+                document.getElementById('cost_min').value = "";
+                document.getElementById('cost_max').value = "";
+                document.getElementById('travel_time_min').value = "";
+                document.getElementById('travel_time_max').value = "";
+
+
+                // $(".impostSuccess").modal('show');
+                // file.val('');
+                // document.getElementById("user_id").value = res.id;
+                // document.getElementById("user_name").value = res.name;
+            },
+            error: function (err) {
+                // file.val('');
+                console.log('ERROR: ', err);
+                // $(".impostFail").modal('show');
+            }
+        });
+    }
+
+    function submitForm() {
+        const frm = $('#searchForm');
+
+        frm.submit(function (e) {
+
+            e.preventDefault();
+
+            $.ajax({
+                type: frm.attr('method'),
+                url: frm.attr('action'),
+                data: {
+                    'action': 'search',
+                    'from': frm.serialize()
+                },
+                success: function (res) {
+                    console.log('Submission was successful.');
+                    console.log(res);
+
+                    // clear child nodes
+                    const routes = document.getElementById("routes");
+                    while (routes.firstChild) {
+                        routes.removeChild(routes.lastChild);
+                    }
+
+                    divWrapper = document.createElement("div");
+                    divWrapper.classList.add('_wrapper-table');
+                    routes.appendChild(divWrapper);
+
+                    // creating table
+                    const table = document.createElement('table');
+                    table.classList.add('table', 'table-striped', 'table-hover', 'p-5', 'mt-3');
+                    divWrapper.appendChild(table);
+
+                    const thead = document.createElement('thead');
+                    table.appendChild(thead);
+
+                    const trHead = document.createElement('tr');
+                    thead.appendChild(trHead);
+
+                    appendTr(trHead, 'Train #');
+                    appendTr(trHead, 'Departure');
+                    appendTr(trHead, 'Date/time departure');
+                    appendTr(trHead, 'Travel time');
+                    appendTr(trHead, 'Arrival');
+                    appendTr(trHead, 'Date/time arrival');
+                    appendTr(trHead, 'Travel cost');
+                    appendTr(trHead, 'Seats total');
+                    appendTr(trHead, 'Seats available');
+
+                    const tbody = document.createElement('tbody');
+                    table.appendChild(tbody);
+
+                    let tr, td, th;
+
+                    for (var i = 0; i < res.data.length; i++) {
+                        tr = document.createElement('tr');
+                        tr.setAttribute("onclick", 'changeFunc("/search/reserve/' + i + '")');
+                        tr.id = 'row' + i;
+                        tbody.appendChild(tr);
+
+                        th = document.createElement('th');
+                        th.setAttribute('scope', 'col');
+                        th.innerText = res.data[i].train_number;
+                        tr.appendChild(th);
+
+                        appendTd(tr, res.data[i].station_departure.name);
+                        appendTd(tr, res.data[i].date_departure);
+                        appendTd(tr, 0);
+                        appendTd(tr, res.data[i].station_arrival.name);
+                        appendTd(tr, res.data[i].date_arrival);
+                        appendTd(tr, res.data[i].travel_cost);
+                        appendTd(tr, res.data[i].seats_total);
+                        appendTd(tr, res.data[i].seats_available);
+                    }
+
+                    console.log(routes)
+                },
+                error: function (data) {
+                    console.log('An error occurred.');
+                    console.log(data);
+                },
+            });
+        });
+    }
+
+    function appendTr(parentElement, tittle) {
+        const element = document.createElement('th');
+        element.setAttribute('scope', 'col');
+        element.innerText = tittle;
+        parentElement.appendChild(element);
+    }
+
+    function appendTd(parentElement, tittle) {
+        const element = document.createElement('td');
+        element.innerText = tittle;
+        parentElement.appendChild(element);
+    }
+
+    function goByPage(pg_page) {
+        if (pg_page) {
+            document.getElementById("pg_page").value = pg_page;
+            document.getElementById("paginatorForm").submit();
+        }
+    }
+
+
+    function setLanguage(locale, url) {
+
+            document.getElementById("changeLocale").submit();
+        // const frm = $('#changeLocale');
+        //
+        //
+        // frm.submit(function (e) {
+        //
+        //     console.log('frm', frm)
+        //     // e.preventDefault();
+        //
+        //     $.ajax({
+        //         type: frm.attr('method'),
+        //         url: frm.attr('action'),
+        //         data: {
+        //             locale: locale,
+        //             url: url
+        //         },
+        //         success: function (res) {
+        //             console.log('Submission was successful.');
+        //             console.log(res);
+        //         },
+        //         error: function (data) {
+        //             console.log('An error occurred.');
+        //             console.log(data);
+        //         },
+        //     });
+        // });
+    }
+
+</script>

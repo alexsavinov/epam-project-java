@@ -1,0 +1,29 @@
+<div>
+
+    <%--    ${messages}--%>
+    <%--    ${isAuthorized ? "You" : "" }--%>
+
+    <c:if test="${not empty errors}">
+        <div class="alert alert-danger m-5 shadow alert-dismissible fade show" role="alert">
+            <i class="fa fa-exclamation-triangle fa-2xl me-2"></i>
+                ${errors}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+<%--        <%= request.getSession().setAttribute("errors", null) %>--%>
+
+        <c:set var="errors" value="${null}" scope="session" />
+<%--        <c:out value="${sessionScope.user}" />--%>
+    </c:if>
+
+    <c:if test="${not empty messages}">
+        <div class="alert alert-light m-5 shadow alert-dismissible fade show" role="alert">
+            <i class="fa fa-info-circle fa-2xl me-2"></i>
+                ${messages}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <c:set var="messages" value="${null}" scope="session" />
+    </c:if>
+
+</div>
