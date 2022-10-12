@@ -103,16 +103,16 @@ public class Route implements Serializable {
 
         Duration duration = Duration.between(date1, date2);
 
-        int seconds = duration.toSecondsPart();
-        int minutes = duration.toMinutesPart();
-        int hours = duration.toHoursPart();
+//        int seconds = duration.toSecondsPart();
+//        int minutes = duration.toMinutesPart();
+//        int hours = duration.toHoursPart();
         long days = duration.toDays();
 
         StringBuffer sb = new StringBuffer();
         if (days != 0) sb.append(days + (days == 1 ? " day " : " days "));
-        if (hours != 0) sb.append(hours + (hours == 1 ? " hour " : " hours "));
-        if (minutes != 0) sb.append(minutes + (minutes == 1 ? " minute " : " minutes "));
-        if (seconds != 0) sb.append(seconds + (seconds == 1 ? " second " : " seconds "));
+//        if (hours != 0) sb.append(hours + (hours == 1 ? " hour " : " hours "));
+//        if (minutes != 0) sb.append(minutes + (minutes == 1 ? " minute " : " minutes "));
+//        if (seconds != 0) sb.append(seconds + (seconds == 1 ? " second " : " seconds "));
 
         return sb.toString();
 

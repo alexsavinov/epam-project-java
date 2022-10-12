@@ -2,7 +2,7 @@ package com.itermit.railway;
 
 
 import com.itermit.railway.dao.entity.User;
-import org.apache.commons.codec.digest.DigestUtils;
+//import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import com.itermit.railway.dao.UserDAO;
@@ -52,11 +52,13 @@ public class AuthServlet extends HttpServlet {
             logger.info("doGet auth -- " + request.getRequestURI());
 
             request.getRequestDispatcher("/auth.jsp").forward(request, response);
-            doPost(request, response);
+//            doPost(request, response);
         } else {
             logger.info("doGet UNHANDLED request.getRequestURI() -- " + request.getRequestURI());
+//            response.sendRedirect("/");
 
         }
+
 
     }
 
@@ -82,7 +84,10 @@ public class AuthServlet extends HttpServlet {
 //            request.setAttribute("name", name);
 //            request.setAttribute("password", password);
 
-            User user = new User.Builder().withName(name).withPassword(DigestUtils.sha256Hex(password)).build();
+
+            // TODO: 256
+//            User user = new User.Builder().withName(name).withPassword(DigestUtils.sha256Hex(password)).build();
+            User user = new User.Builder().withName(name).withPassword(password).build();
 //                    0, name, DigestUtils.sha256Hex(password), false);
 
             UserDAO userDAO = new UserDAOImpl();
@@ -93,6 +98,9 @@ public class AuthServlet extends HttpServlet {
                 try {
                     if (user.getId() == 0) {
                         request.setAttribute("errors", "401 Unauthorized");
+                        response.sendRedirect("/");
+                        return;
+
                     } else {
                         logger.info("doPost " + user);
 //                        request.getSession().setAttribute("messages", "You are authorized!");
