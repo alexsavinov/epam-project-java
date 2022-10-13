@@ -32,7 +32,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-@WebServlet(name = "SearchServlet", value = "/SearchServlet")
+@WebServlet(name = "SearchServlet", urlPatterns = {"/search", "/search/reserve/*"})
 public class SearchServlet extends HttpServlet {
 
     private static final Logger logger = LogManager.getLogger(SearchServlet.class);

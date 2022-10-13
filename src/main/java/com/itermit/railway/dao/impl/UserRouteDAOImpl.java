@@ -395,4 +395,10 @@ public class UserRouteDAOImpl implements UserRouteDAO {
         }
     }
 
+    public static String getEncryptedPassword(String password) {
+
+
+        return "";
+    }
+
 }

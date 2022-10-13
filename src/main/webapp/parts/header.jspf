@@ -8,12 +8,8 @@
             <div class="collapse navbar-collapse" id="navbarToggler">
 
                 <div class="d-flex me-3 align-items-center">
-
                     <i class="fa fa-ticket fa-2xl m-1 me-3 d-none d-lg-flex"></i>
                     <a class="navbar-brand fw-bolder _main-color4" href="/">railway.itermit.com</a>
-
-                    <%--                <img src="/images/train2.jpg" alt="">--%>
-                    <%--                <a class="navbar-brand" href="#">${pageScope.title}</a>--%>
                 </div>
 
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -27,29 +23,25 @@
                             <fmt:message key='header_jspf.btn.search'/>
                         </a>
                     </li>
-                    <%--                    <li class="nav-item">--%>
-                    <%--                        <a class="nav-link disabled">Disabled</a>--%>
-                    <%--                    </li>--%>
                 </ul>
-
 
                 <div class="d-flex align-items-start flex-column flex-lg-row">
 
                     <c:choose>
                         <c:when test="${(isAuthorized == null || isAuthorized == false)}">
                             <a class="btn btn-outline-secondary d-flex flex-row align-items-center shadow-sm"
-                               href="/auth">
+                               href="/login">
                                 <i class="fa fa-sign-in me-2"></i>
                                 <div><fmt:message key='header_jspf.btn.login'/></div>
                             </a>
                         </c:when>
                         <c:otherwise>
-                            <a class="btn btn-outline-secondary m-1" href="/profile">
+                            <a class="btn btn-outline-secondary m-1 ms-0" href="/profile">
                                 <i class="far fa-user"></i>
                                     ${username}
                             </a>
-                            <a class="btn btn-outline-secondary m-1 d-flex flex-row align-items-center shadow-sm"
-                               href="/auth">
+                            <a class="btn btn-outline-secondary m-1 ms-0 d-flex flex-row align-items-center shadow-sm"
+                               href="/logout">
                                 <i class="fa fa-sign-out me-2"></i>
                                 <div><fmt:message key='header_jspf.btn.logout'/></div>
                             </a>
@@ -57,7 +49,7 @@
                     </c:choose>
                 </div>
 
-                <div>
+                <div class="m-1 ms-0">
                     <c:set var="language"
                            value="${not empty currentLocale ? currentLocale : not empty language ? language : 'en'}"
                            scope="session"/>
@@ -68,11 +60,14 @@
 <%--                    locale2 ${sessionScope["javax.servlet.jsp.jstl.fmt.locale"]}--%>
 <%--                    language ${pageContext.request.locale.language}--%>
                 </div>
-                <form class="m-1" action="/parts/changeLocale.jsp" method="post" id="changeLocale">
+<%--                language = ${language}--%>
+                <form class="m-0" action="/parts/changeLocale.jsp" method="post" id="changeLocale">
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <c:forEach items="${applicationScope.locales}" var="locale">
-                            <label <c:if test="${locale.key == language}"> class="btn btn-secondary active"</c:if>
-                                    <c:if test="${locale.key != language}"> class="btn btn-secondary"</c:if>>
+                            <label
+                                    <c:if test="${locale.key != language}"> class="btn btn-secondary"</c:if>
+                                    <c:if test="${locale.key == language}"> class="btn btn-secondary active"</c:if>
+                            >
                                 <input type="radio" name="locale" id="${locale.key}" autocomplete="off"
                                        value="${locale.key}"
                                        onclick="submit()"
@@ -84,7 +79,7 @@
                     </div>
                     <input type="hidden" name="url" value="<%=request.getRequestURI()%>"/>
                 </form>
-
+                request.getPathInfo(): <%=request.getPathInfo()%>
                 <%--                <form action="/parts/changeLocale.jsp" method="post">--%>
                 <%--                    <fmt:message key="settings_jsp.label.set_locale"/>--%>
                 <%--                    <select name="locale">--%>

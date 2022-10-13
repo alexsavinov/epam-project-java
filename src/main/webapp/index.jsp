@@ -17,7 +17,7 @@
 
         <div class="m-3 _main-content">
 
-            <div class="display-3 m-5 w-90 text-center _main-color1 ">
+            <div class="display-5 m-2 w-90 text-center _main-color1 ">
                 <fmt:message key='index_jsp.welcome.head1'/>
             </div>
 
@@ -30,7 +30,8 @@
                 <div class="h5 mb-5">
                     <div class="mb-4">
                         <a href="/search">
-                            <i class="fa fa-search fa-2xl me-2"></i><fmt:message key='index_jsp.welcome.head3'/>
+                            <i class="fa fa-search fa-2xl me-2"></i>
+                            <fmt:message key='index_jsp.welcome.head3'/>
                         </a>
                     </div>
 
@@ -48,7 +49,7 @@
                 <c:if test="${isAuthorized != true}">
                     <div>
                         <span class="badge">!</span> <fmt:message key='index_jsp.welcome.text_bottom1'/>
-                        <a href="/auth"><fmt:message key='index_jsp.welcome.text_bottom2'/></a>
+                        <a href="/login"><fmt:message key='index_jsp.welcome.text_bottom2'/></a>
                         <fmt:message key='index_jsp.welcome.text_bottom3'/>
                     </div>
                 </c:if>

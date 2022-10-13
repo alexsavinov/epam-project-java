@@ -37,7 +37,12 @@ public class AuthFilter implements Filter {
         HttpSession session = httpReq.getSession();
 
         if (active) {
-            isAuthorized = (Boolean) session.getAttribute("isAuthorized");
+
+            // TODO: вынести в отдельный класс некий, и там получать этот атрибут.
+            //  Или, например, кастом таг для этого заюзать.
+            //  И для isAdmin тоже таг подойдет.
+
+            isAuthorized = Objects.nonNull(session.getAttribute("isAuthorized"));
             logger.info("httpReq.getRequestURI(): {}", httpReq.getRequestURI());
 
             if (httpReq.getRequestURI().equals("/profile")) {
