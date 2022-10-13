@@ -25,44 +25,13 @@
         <param-value>uk</param-value>
     </context-param>
 
-    <!-- SERVLETS -->
-<!--    <servlet>-->
-<!--        <servlet-name>AuthServlet</servlet-name>-->
-<!--        <servlet-class>com.itermit.railway.AuthServlet</servlet-class>-->
-<!--    </servlet>-->
-<!--    <servlet-mapping>-->
-<!--        <servlet-name>AuthServlet</servlet-name>-->
-<!--        <url-pattern>/auth</url-pattern>-->
-<!--        <url-pattern>/profile</url-pattern>-->
-<!--    </servlet-mapping>-->
-
-<!--    <servlet>-->
-<!--        <servlet-name>InitServlet</servlet-name>-->
-<!--        <servlet-class>com.itermit.railway.InitServlet</servlet-class>-->
-<!--    </servlet>-->
-<!--    <servlet-mapping>-->
-<!--        <servlet-name>InitServlet</servlet-name>-->
-<!--        <url-pattern>/error</url-pattern>-->
-<!--    </servlet-mapping>-->
-
-<!--    <servlet>-->
-<!--        <servlet-name>SearchServlet</servlet-name>-->
-<!--        <servlet-class>com.itermit.railway.SearchServlet</servlet-class>-->
-<!--    </servlet>-->
-<!--    <servlet-mapping>-->
-<!--        <servlet-name>SearchServlet</servlet-name>-->
-<!--        <url-pattern>/search</url-pattern>-->
-<!--        <url-pattern>/search/reserve/*</url-pattern>-->
-<!--    </servlet-mapping>-->
-
-    <!-- ERROR PAGE-->
-    <error-page>
+        <error-page>
         <error-code>404</error-code>
         <location>/error404.jsp</location>
     </error-page>
-<!--    <error-page>-->
-<!--        <exception-type>java.lang.Exception</exception-type>-->
-<!--        <location>/error</location>-->
-<!--    </error-page>-->
+    <error-page>
+        <exception-type>java.lang.Exception</exception-type>
+        <location>/error</location>
+    </error-page>
 
 </web-app>

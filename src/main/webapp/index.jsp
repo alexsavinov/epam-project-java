@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <%@ include file="/parts/head.jspf" %>
     <title>
@@ -62,7 +62,7 @@
 
 </div>
 
-<%@ include file="/parts/body_bottom.jspf" %>
+<%@ include file="/parts/bodyBottom.jspf" %>
 
 </body>
 </html>

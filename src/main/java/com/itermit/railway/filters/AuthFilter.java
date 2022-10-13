@@ -7,14 +7,18 @@ import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Objects;
 
-@WebFilter(
-        urlPatterns = {"/*"},
-        initParams = {@WebInitParam(name = "active", value = "true")}
-)
+
+/*
+ * Filter for check user permission to page.
+ * If user has no access then redirect to Login page.
+ */
+@WebFilter(urlPatterns = {"/*"},
+        initParams = {@WebInitParam(name = "active", value = "true")})
 public class AuthFilter implements Filter {
 
     private Boolean active;
@@ -27,6 +31,11 @@ public class AuthFilter implements Filter {
         isAuthorized = false;
     }
 
+    /*
+     * isAuthorized stores in HttpSession.
+     * And it's sets in moment of user login.
+     * Then deletes on logout.
+     */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
@@ -34,21 +43,21 @@ public class AuthFilter implements Filter {
         logger.trace("#doFilter(servletRequest, servletResponse, filterChain). active: {}", active);
 
         HttpServletRequest httpReq = (HttpServletRequest) servletRequest;
+        HttpServletResponse httpResp = (HttpServletResponse) servletResponse;
         HttpSession session = httpReq.getSession();
 
-        if (active) {
-
-            // TODO: вынести в отдельный класс некий, и там получать этот атрибут.
-            //  Или, например, кастом таг для этого заюзать.
-            //  И для isAdmin тоже таг подойдет.
-
-            isAuthorized = Objects.nonNull(session.getAttribute("isAuthorized"));
+        if (active.equals(true)) {
             logger.info("httpReq.getRequestURI(): {}", httpReq.getRequestURI());
 
+            isAuthorized = (Boolean) session.getAttribute("isAuthorized");
+            isAuthorized = isAuthorized != null && isAuthorized;
+
+            /* REDIRECTS to login page (no access) */
             if (httpReq.getRequestURI().equals("/profile")) {
-                if (!isAuthorized) {
-                    logger.info("doFilter is NOT Authorized -> auth.jsp");
-                    servletRequest.getRequestDispatcher("/auth.jsp").forward(servletRequest, servletResponse);
+                if (isAuthorized.equals(false)) {
+                    logger.error("NOT Authorized -> redirecting to /login");
+                    httpResp.sendRedirect("/login");
+                    return;
                 }
             }
         }

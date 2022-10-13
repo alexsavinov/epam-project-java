@@ -49,7 +49,7 @@
 <div class="_wrapper">
     <%@ include file="/parts/header.jspf" %>
 
-    <%@ include file="/parts/body_top.jspf" %>
+    <%@ include file="/parts/bodyTop.jspf" %>
 
     <%@ include file="/parts/message.jspf" %>
 
@@ -213,7 +213,7 @@
 </div>
 
 
-<%@ include file="/parts/body_bottom.jspf" %>
+<%@ include file="/parts/bodyBottom.jspf" %>
 
 </body>
 </html>

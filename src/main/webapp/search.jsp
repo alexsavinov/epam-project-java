@@ -155,7 +155,7 @@
 
 </div>
 
-<%@ include file="/parts/body_bottom.jspf" %>
+<%@ include file="/parts/bodyBottom.jspf" %>
 
 </body>
 </html>

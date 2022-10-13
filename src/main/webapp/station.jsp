@@ -13,7 +13,7 @@
 <div class="_wrapper">
     <%@ include file="/parts/header.jspf" %>
 
-    <%@ include file="/parts/body_top.jspf" %>
+    <%@ include file="/parts/bodyTop.jspf" %>
 
     <div class="ms-5 h3 _main-color1">
         Station
@@ -32,7 +32,7 @@
 
     <c:if test="${not empty messages}">
         <div class="alert alert-light m-5 shadow alert-dismissible fade show" role="alert">
-            <i class="fa fa-info-circle fa-2xl me-2"></i>
+            <em class="fa fa-info-circle fa-2xl me-2"></em>
                 ${messages}
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
@@ -69,7 +69,7 @@
 </div>
 
 
-<%@ include file="/parts/body_bottom.jspf" %>
+<%@ include file="/parts/bodyBottom.jspf" %>
 
 </body>
 </html>

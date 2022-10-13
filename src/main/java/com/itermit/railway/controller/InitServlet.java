@@ -1,4 +1,4 @@
-package com.itermit.railway;
+package com.itermit.railway.controller;
 
 
 import org.apache.logging.log4j.LogManager;
@@ -22,26 +22,34 @@ public class InitServlet extends HttpServlet {
 
     private static final Logger logger = LogManager.getLogger(InitServlet.class);
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) {
 
         logger.trace("#doGet(request, response)");
 
         if (request.getRequestURI().equals("/error")) {
             response.setContentType("text/html");
 
-            PrintWriter out = response.getWriter();
-            out.println("<html><body>");
-            out.write("<h2>Error description</h2>");
-            out.write("<ul>");
-            Arrays.asList(ERROR_STATUS_CODE, ERROR_EXCEPTION_TYPE, ERROR_MESSAGE)
-                    .forEach(e -> out.write("<li>" + e + ":" + request.getAttribute(e) + " </li>"));
-            out.write("</ul>");
+            PrintWriter out = null;
+            try {
+                out = response.getWriter();
+
+                out.println("<html lang='en'><body>");
+                out.write("<h2>Error description</h2>");
+                out.write("<ul>");
+                for (String s : Arrays.asList(ERROR_STATUS_CODE, ERROR_EXCEPTION_TYPE, ERROR_MESSAGE)) {
+                    out.write("<li>" + s + ":" + request.getAttribute(s) + " </li>");
+                }
+                out.write("</ul>");
+            } catch (IOException e) {
+                logger.error("IOException. response.getWriter()!  {}", e.getMessage());
+                return;
+            }
 
             String error = (String) Objects.requireNonNull(request.getAttribute("error"));
             if (!error.isEmpty()) {
                 logger.error(error);
                 out.write("<h2>" + error + "</h2>");
-//                request.getSession().removeAttribute("error");
             }
             out.println("</body></html>");
         } else {

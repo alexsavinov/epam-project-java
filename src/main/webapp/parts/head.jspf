@@ -3,6 +3,10 @@
 
 <fmt:setBundle basename="resources"/>
 
+<%@ taglib prefix="customTags" uri="http://com.itermit.railway/customTags" %>
+<%@ taglib prefix="tagFile" tagdir="/WEB-INF/tags" %>
+
+
 <meta charset="UTF-8">
 <meta name="viewport"
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">

@@ -12,7 +12,7 @@
 <div class="_wrapper">
     <%@ include file="/parts/header.jspf" %>
 
-    <%@ include file="/parts/body_top.jspf" %>
+    <%@ include file="/parts/bodyTop.jspf" %>
 
     <div class="ms-5 h3 _main-color1">
         Stations
@@ -26,6 +26,7 @@
         </a>
 
         <table class="table table-striped table-hover p-5">
+            <caption>Stations</caption>
             <thead>
             <tr>
                 <th scope="col">id</th>
@@ -67,7 +68,7 @@
 </div>
 
 
-<%@ include file="/parts/body_bottom.jspf" %>
+<%@ include file="/parts/bodyBottom.jspf" %>
 
 </body>
 </html>

@@ -1,6 +1,6 @@
 <%@ include file="/parts/head.jspf" %>
 
-<fmt:setLocale value="${param.locale}" scope="session"/>
-<fmt:setBundle basename="resources"/>
-<c:set var="currentLocale" value="${param.locale}" scope="session"/>
-<c:redirect url="${param.url}"/>
+<tagFile:checkLocale locale="${param.locale}"/>
+
+<c:if test = "${empty param.url}"><c:redirect url="/"/></c:if>
+<c:if test = "${not empty param.url}"><c:redirect url="${param.url}"/></c:if>
