@@ -30,7 +30,7 @@
                 <div class="h5 mb-5">
                     <div class="mb-4">
                         <a href="/search">
-                            <i class="fa fa-search fa-2xl me-2"></i>
+                            <em class="fa fa-search fa-2xl me-2"></em>
                             <fmt:message key='index_jsp.welcome.head3'/>
                         </a>
                     </div>
@@ -46,13 +46,14 @@
                     <fmt:message key='index_jsp.welcome.text7'/>
                 </div>
 
-                <c:if test="${isAuthorized != true}">
-                    <div>
-                        <span class="badge">!</span> <fmt:message key='index_jsp.welcome.text_bottom1'/>
-                        <a href="/login"><fmt:message key='index_jsp.welcome.text_bottom2'/></a>
+                    <div class="<customTags:access role="authorized" modifier="d-none"/>">
+                        <span class="badge">!</span>
+                        <fmt:message key='index_jsp.welcome.text_bottom1'/>
+                        <a href="/login">
+                            <fmt:message key='index_jsp.welcome.text_bottom2'/>
+                        </a>
                         <fmt:message key='index_jsp.welcome.text_bottom3'/>
                     </div>
-                </c:if>
 
             </div>
         </div>

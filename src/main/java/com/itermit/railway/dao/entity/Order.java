@@ -5,14 +5,14 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
-public class UserRoute implements Serializable {
+public class Order implements Serializable {
     private int id;
     private User user;
     private Route route;
     private int seats;
     private String date_reserve;
 
-    public UserRoute(int id, User user, Route route, int seats, String date_reserve) {
+    public Order(int id, User user, Route route, int seats, String date_reserve) {
         this.id = id;
         this.user = user;
         this.route = route;
@@ -20,7 +20,7 @@ public class UserRoute implements Serializable {
         this.date_reserve = date_reserve;
     }
 
-    public UserRoute(int user_id, int route_id, int seats) {
+    public Order(int user_id, int route_id, int seats) {
         this.id = 0;
         this.user = new User.Builder().withId(user_id).build();
         this.route = new Route(route_id);
@@ -74,7 +74,7 @@ public class UserRoute implements Serializable {
 
     @Override
     public String toString() {
-        return "UserRoute{" +
+        return "Order{" +
                 "user=" + user +
                 ", route=" + route +
                 ", seats=" + seats +

@@ -1,10 +1,10 @@
 package com.itermit.railway.dao.impl;
 
-import com.itermit.railway.dao.UserRouteDAO;
+import com.itermit.railway.dao.OrderDAO;
+import com.itermit.railway.dao.entity.Order;
 import com.itermit.railway.dao.entity.Route;
 import com.itermit.railway.dao.entity.Station;
 import com.itermit.railway.dao.entity.User;
-import com.itermit.railway.dao.entity.UserRoute;
 import com.itermit.railway.db.DBException;
 import com.itermit.railway.db.DBManager;
 import com.itermit.railway.utils.FilterQuery;
@@ -18,16 +18,16 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-public class UserRouteDAOImpl implements UserRouteDAO {
+public class OrderDAOImpl implements OrderDAO {
 
-    private static final Logger logger = LogManager.getLogger(UserRouteDAOImpl.class);
+    private static final Logger logger = LogManager.getLogger(OrderDAOImpl.class);
 
     private static final String SQL_GET_ALL_USERSROUTES = "SELECT " +
-            "users_routes.id, " +
-            "users_routes.seats, " +
-            "users_routes.user_id, " +
-            "users_routes.route_id, " +
-            "users_routes.date_reserve, " +
+            "orders.id, " +
+            "orders.seats, " +
+            "orders.user_id, " +
+            "orders.route_id, " +
+            "orders.date_reserve, " +
             "users.name as user_name, " +
             "routes.train_number as route_train_number, " +
             "routes.station_departure_id as station_departure_id, " +
@@ -39,17 +39,17 @@ public class UserRouteDAOImpl implements UserRouteDAO {
             "routes.date_arrival as route_date_arrival, " +
             "s_d.name as station_departure_name, " +
             "s_a.name as station_arrival_name " +
-            "FROM users_routes " +
-            "LEFT JOIN users ON users_routes.user_id = users.id " +
-            "LEFT JOIN routes ON users_routes.route_id = routes.id " +
+            "FROM orders " +
+            "LEFT JOIN users ON orders.user_id = users.id " +
+            "LEFT JOIN routes ON orders.route_id = routes.id " +
             "LEFT JOIN stations s_a ON routes.station_arrival_id = s_a.id " +
             "LEFT JOIN stations s_d ON routes.station_departure_id = s_d.id";
     private static final String SQL_GET_USERROUTE_BY_ID = "SELECT " +
-            "users_routes.id, " +
-            "users_routes.seats, " +
-            "users_routes.user_id, " +
-            "users_routes.route_id, " +
-            "users_routes.date_reserve, " +
+            "orders.id, " +
+            "orders.seats, " +
+            "orders.user_id, " +
+            "orders.route_id, " +
+            "orders.date_reserve, " +
             "users.name as user_name, " +
             "routes.train_number as route_train_number, " +
             "routes.station_departure_id as station_departure_id, " +
@@ -62,29 +62,29 @@ public class UserRouteDAOImpl implements UserRouteDAO {
             "routes.date_arrival as route_date_arrival, " +
             "s_d.name as station_departure_name, " +
             "s_a.name as station_arrival_name " +
-            "FROM users_routes " +
-            "LEFT JOIN users ON users_routes.user_id = users.id " +
-            "LEFT JOIN routes ON users_routes.route_id = routes.id " +
+            "FROM orders " +
+            "LEFT JOIN users ON orders.user_id = users.id " +
+            "LEFT JOIN routes ON orders.route_id = routes.id " +
             "LEFT JOIN stations s_a ON routes.station_arrival_id = s_a.id " +
             "LEFT JOIN stations s_d ON routes.station_departure_id = s_d.id " +
-            "LEFT JOIN users_routes ur ON routes.id = ur.route_id " +
-            "WHERE users_routes.id = ? " +
+            "LEFT JOIN orders ur ON routes.id = ur.route_id " +
+            "WHERE orders.id = ? " +
             "GROUP BY routes.id ";
 
     private static final String SQL_ADD_USERROUTE = "INSERT " +
-            "INTO users_routes (user_id, route_id, seats, date_reserve) " +
+            "INTO orders (user_id, route_id, seats, date_reserve) " +
             "VALUES (?, ?, ?, ?)";
     private static final String SQL_UPDATE_USERROUTE = "UPDATE " +
-            "users_routes SET user_id = ?, route_id = ?, seats = ?, date_reserve = ? " +
+            "orders SET user_id = ?, route_id = ?, seats = ?, date_reserve = ? " +
             "WHERE id = ?";
     private static final String SQL_DELETE_USERROUTE = "DELETE FROM " +
-            "users_routes WHERE id = ?";
+            "orders WHERE id = ?";
 
 
     @Override
-    public ArrayList<UserRoute> getAll() throws DBException {
+    public ArrayList<Order> getAll() throws DBException {
 
-        ArrayList<UserRoute> usersRoutes = new ArrayList<>();
+        ArrayList<Order> usersRoutes = new ArrayList<>();
 
         DBManager dbManager = DBManager.getInstance();
         Connection connection = dbManager.getConnection();
@@ -126,7 +126,7 @@ public class UserRouteDAOImpl implements UserRouteDAO {
                         resultSet.getInt("route_seats_total")
                 );
 
-                UserRoute userRoute = new UserRoute(
+                Order userRoute = new Order(
                         resultSet.getInt("id"),
                         user,
                         route,
@@ -150,12 +150,12 @@ public class UserRouteDAOImpl implements UserRouteDAO {
         return usersRoutes;
     }
 
-    public ArrayList<UserRoute> getFiltered(ArrayList<FilterQuery> filters) throws DBException {
+    public ArrayList<Order> getFiltered(ArrayList<FilterQuery> filters) throws DBException {
 
         logger.trace("#getFiltered()");
         logger.info("filters: " + filters);
 
-        ArrayList<UserRoute> usersRoutes = new ArrayList<>();
+        ArrayList<Order> usersRoutes = new ArrayList<>();
 
         DBManager dbManager = DBManager.getInstance();
         Connection connection = dbManager.getConnection();
@@ -179,7 +179,7 @@ public class UserRouteDAOImpl implements UserRouteDAO {
                         .append(filter.getCondition()).append(" '")
                         .append(filter.getValues().get(0)).append("'");
             } else {
-                sb.append("users_routes.").append(filter.getField()).append(" IN (");
+                sb.append("orders.").append(filter.getField()).append(" IN (");
 
                 sb.append(filter.getValues().stream()
                         .map(Object::toString)
@@ -223,7 +223,7 @@ public class UserRouteDAOImpl implements UserRouteDAO {
                         resultSet.getInt("route_seats_total")
                 );
 
-                UserRoute userRoute = new UserRoute(
+                Order userRoute = new Order(
                         resultSet.getInt("id"),
                         user,
                         route,
@@ -248,11 +248,11 @@ public class UserRouteDAOImpl implements UserRouteDAO {
     }
 
     @Override
-    public UserRoute get(int id) throws DBException {
+    public Order get(int id) throws DBException {
 
         logger.trace("#get(id): {}", id);
 
-        UserRoute userRoute = null;
+        Order order = null;
 
         DBManager dbManager = DBManager.getInstance();
         Connection connection = dbManager.getConnection();
@@ -293,7 +293,7 @@ public class UserRouteDAOImpl implements UserRouteDAO {
                         resultSet.getInt("route_seats_total")
                 );
 
-                userRoute = new UserRoute(
+                order = new Order(
                         resultSet.getInt("id"),
                         user,
                         route,
@@ -311,13 +311,13 @@ public class UserRouteDAOImpl implements UserRouteDAO {
             DBManager.closeConnection(connection);
         }
 
-        return userRoute;
+        return order;
     }
 
     @Override
-    public void add(UserRoute userRoute) throws DBException {
+    public void add(Order order) throws DBException {
 
-        logger.trace("#add(userRoute): {}", userRoute);
+        logger.trace("#add(order): {}", order);
 
         DBManager dbManager = DBManager.getInstance();
         Connection connection = dbManager.getConnection();
@@ -327,15 +327,15 @@ public class UserRouteDAOImpl implements UserRouteDAO {
         try {
             preparedStatement = connection.prepareStatement(SQL_ADD_USERROUTE);
             int l = 0;
-            preparedStatement.setInt(++l, userRoute.getUser().getId());
-            preparedStatement.setInt(++l, userRoute.getRoute().getId());
-            preparedStatement.setInt(++l, userRoute.getSeats());
-            preparedStatement.setString(++l, userRoute.getDate_reserve());
+            preparedStatement.setInt(++l, order.getUser().getId());
+            preparedStatement.setInt(++l, order.getRoute().getId());
+            preparedStatement.setInt(++l, order.getSeats());
+            preparedStatement.setString(++l, order.getDate_reserve());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            logger.error("SQLException while add(userRoute): {}", e.getMessage());
-            throw new DBException("SQLException while add(userRoute)!", e);
+            logger.error("SQLException while add(order): {}", e.getMessage());
+            throw new DBException("SQLException while add(order)!", e);
         } finally {
             DBManager.closePreparedStatement(preparedStatement);
             DBManager.closeConnection(connection);
@@ -343,9 +343,9 @@ public class UserRouteDAOImpl implements UserRouteDAO {
     }
 
     @Override
-    public void update(int id, UserRoute userRoute) throws DBException {
+    public void update(int id, Order order) throws DBException {
 
-        logger.trace("#update(id, userRoute): {} -- {}", id, userRoute);
+        logger.trace("#update(id, order): {} -- {}", id, order);
 
         DBManager dbManager = DBManager.getInstance();
         Connection connection = dbManager.getConnection();
@@ -356,15 +356,15 @@ public class UserRouteDAOImpl implements UserRouteDAO {
             preparedStatement = connection.prepareStatement(SQL_UPDATE_USERROUTE);
 
             int l = 0;
-            preparedStatement.setInt(++l, userRoute.getUser().getId());
-            preparedStatement.setInt(++l, userRoute.getRoute().getId());
-            preparedStatement.setInt(++l, userRoute.getSeats());
+            preparedStatement.setInt(++l, order.getUser().getId());
+            preparedStatement.setInt(++l, order.getRoute().getId());
+            preparedStatement.setInt(++l, order.getSeats());
             preparedStatement.setInt(++l, id);
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            logger.error("SQLException while update(id, userRoute): {}", e.getMessage());
-            throw new DBException("SQLException while update(id, userRoute)!", e);
+            logger.error("SQLException while update(id, order): {}", e.getMessage());
+            throw new DBException("SQLException while update(id, order)!", e);
         } finally {
             DBManager.closePreparedStatement(preparedStatement);
             DBManager.closeConnection(connection);

@@ -1,4 +1,4 @@
-drop table if exists routes, stations, users_routes, users;
+drop table if exists routes, stations, orders, users;
 
 ######################################
 # USERS
@@ -10,7 +10,6 @@ create table users
     id       int auto_increment
         primary key,
     name     VARCHAR(50)  null,
-    email    VARCHAR(100) null,
     password VARCHAR(255) null,
     isadmin  boolean      not null default 0
 
@@ -192,9 +191,9 @@ VALUES (5, 3, 'A06', '2022-10-20 01:45:54', '2022-10-20 13:45:00', 60, 200);
 
 
 ######################################
-# USERS_ROUTES
+# orders
 
-CREATE TABLE users_routes
+CREATE TABLE orders
 (
     id           int unsigned NOT NULL AUTO_INCREMENT KEY,
     user_id      int          NOT NULL,
@@ -211,29 +210,29 @@ CREATE TABLE users_routes
 # SELECT user_id,
 #        route_id,
 #        seats
-# FROM users_routes;
+# FROM orders;
 
-# INSERT INTO users_routes (user_id, route_id, seats)
+# INSERT INTO orders (user_id, route_id, seats)
 # VALUES (?, ?, ?);
 
-# UPDATE users_routes
+# UPDATE orders
 # SET user_id  = ?,
 #     route_id = ?,
 #     seats    = ?
 # WHERE user_id = ?
 #   AND route_id = ?;
 
-INSERT INTO users_routes (user_id, route_id, seats, date_reserve)
+INSERT INTO orders (user_id, route_id, seats, date_reserve)
 VALUES (1, 1, 1, '2022-09-23 12:45:54');
 
-INSERT INTO users_routes (user_id, route_id, seats, date_reserve)
+INSERT INTO orders (user_id, route_id, seats, date_reserve)
 VALUES (3, 1, 2, '2022-09-24 12:45:54');
 
-INSERT INTO users_routes (user_id, route_id, seats, date_reserve)
+INSERT INTO orders (user_id, route_id, seats, date_reserve)
 VALUES (2, 2, 1, '2022-09-25 12:45:54');
 
-INSERT INTO users_routes (user_id, route_id, seats, date_reserve)
+INSERT INTO orders (user_id, route_id, seats, date_reserve)
 VALUES (2, 4, 4, '2022-09-27 12:45:54');
 
-INSERT INTO users_routes (user_id, route_id, seats, date_reserve)
+INSERT INTO orders (user_id, route_id, seats, date_reserve)
 VALUES (3, 4, 10, '2022-09-27 12:45:54');

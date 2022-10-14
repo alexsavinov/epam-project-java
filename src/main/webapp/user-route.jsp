@@ -50,19 +50,19 @@
         <div class="form-group mb-1">
             <label for="id" class="form-label">id</label>
             <input type="text" class="form-control" aria-label="id" id="id" name="id" disabled
-                   value="${userRoute.getId()}">
+                   value="${order.getId()}">
         </div>
 
         <div class="form-group mb-1">
             <label for="seats" class="form-label">Seats reserved</label>
             <input type="number" class="form-control" aria-label="seats"
-                   id="seats" name="seats" value="${userRoute.getSeats()}">
+                   id="seats" name="seats" value="${order.getSeats()}">
         </div>
 
         <div class="form-group mb-1">
             <label for="date_reserve" class="form-label">Date of reserve</label>
             <input type="text" class="form-control" aria-label="date_reserve"
-                   id="date_reserve" name="date_reserve" value="${userRoute.getDate_reserve()}">
+                   id="date_reserve" name="date_reserve" value="${order.getDate_reserve()}">
         </div>
 
         <div class="form-group mb-1">
@@ -70,7 +70,7 @@
             <select class="form-control" id="user" name="user" onchange="updateUser();">
                 <c:forEach var="user" items="${users}">
                     <option value="${user.getId()}"
-                            <c:if test="${user.getId() eq userRoute.getUser().getId()}">selected</c:if>>
+                            <c:if test="${user.getId() eq order.getUser().getId()}">selected</c:if>>
                             ${user.getName()}
                     </option>
                 </c:forEach>
@@ -82,7 +82,7 @@
             <select class="form-control" id="route" name="route" onchange="updateRoute();">
                 <c:forEach var="route" items="${routes}">
                     <option value="${route.getId()}"
-                            <c:if test="${route.getId() eq userRoute.getRoute().getId()}">selected</c:if>>
+                            <c:if test="${route.getId() eq order.getRoute().getId()}">selected</c:if>>
                             ${route.getName()}
                     </option>
                 </c:forEach>
@@ -97,13 +97,13 @@
             <div class="mb-1">
                 <label for="train_number" class="form-label">id</label>
                 <input type="text" class="form-control" placeholder="user_id" aria-label="user_id"
-                       id="user_id" name="user_id" value="${userRoute.getUser().getId()}" disabled>
+                       id="user_id" name="user_id" value="${order.getUser().getId()}" disabled>
             </div>
 
             <div class="mb-1">
                 <label for="user_name" class="form-label">name</label>
                 <input type="text" class="form-control" placeholder="user_name" aria-label="user_name"
-                       id="user_name" name="user_name" value="${userRoute.getUser().getName()}" disabled>
+                       id="user_name" name="user_name" value="${order.getUser().getName()}" disabled>
             </div>
         </div>
 
@@ -115,33 +115,33 @@
             <div class="mb-1">
                 <label for="train_number" class="form-label">Train number</label>
                 <input type="text" class="form-control" placeholder="Train number" aria-label="train_number"
-                       id="train_number" name="train_number" value="${userRoute.getRoute().getTrain_number()}" disabled>
+                       id="train_number" name="train_number" value="${order.getRoute().getTrain_number()}" disabled>
             </div>
 
             <div class="form-group mb-1">
                 <label for="station_departure">Station departure</label>
                 <input type="text" class="form-control" aria-label="station_departure"
-                       id="station_departure" name="station_departure" value="${userRoute.getRoute().getStation_departure().getName()}" disabled>
+                       id="station_departure" name="station_departure" value="${order.getRoute().getStation_departure().getName()}" disabled>
             </div>
 
             <div class="mb-1">
                 <label for="date_departure" class="form-label">Date departure</label>
                 <input type="datetime-local" class="form-control" aria-label="date_departure" onchange="updateTime();"
-                       id="date_departure" name="date_departure" value="${userRoute.getRoute().getDate_departure()}"
-                       max="${userRoute.getRoute().getDate_arrival()}" disabled>
+                       id="date_departure" name="date_departure" value="${order.getRoute().getDate_departure()}"
+                       max="${order.getRoute().getDate_arrival()}" disabled>
             </div>
 
             <div class="form-group mb-1">
                 <label for="station_arrival">Station arrival</label>
                 <input type="text" class="form-control" aria-label="station_arrival"
-                       id="station_arrival" name="station_arrival" value="${userRoute.getRoute().getStation_arrival().getName()}" disabled>
+                       id="station_arrival" name="station_arrival" value="${order.getRoute().getStation_arrival().getName()}" disabled>
             </div>
 
             <div class="mb-1">
                 <label for="date_arrival" class="form-label">Date arrival</label>
                 <input type="datetime-local" class="form-control" aria-label="date_arrival" onchange="updateTime();"
-                       id="date_arrival" name="date_arrival" value="${userRoute.getRoute().getDate_arrival()}"
-                       min="${userRoute.getRoute().getDate_departure()}" disabled>
+                       id="date_arrival" name="date_arrival" value="${order.getRoute().getDate_arrival()}"
+                       min="${order.getRoute().getDate_departure()}" disabled>
             </div>
 
             <div class="mb-1">
@@ -153,27 +153,27 @@
             <div class="mb-1">
                 <label for="travel_cost" class="form-label">Travel cost</label>
                 <input type="number" class="form-control" aria-label="travel_cost"
-                       id="travel_cost" name="travel_cost" value="${userRoute.getRoute().getTravel_cost()}" disabled>
+                       id="travel_cost" name="travel_cost" value="${order.getRoute().getTravel_cost()}" disabled>
             </div>
 
             <div class="mb-1">
                 <label for="seats_available" class="form-label">Seats available</label>
                 <input type="number" class="form-control" aria-label="seats_available"
-                       id="seats_available" name="seats_available" value="${userRoute.getRoute().getSeats_available()}"
+                       id="seats_available" name="seats_available" value="${order.getRoute().getSeats_available()}"
                        disabled>
             </div>
 
             <div class="mb-1">
                 <label for="seats_total" class="form-label">Seats total</label>
                 <input type="number" class="form-control" aria-label="seats_total"
-                       id="seats_total" name="seats_total" value="${userRoute.getRoute().getSeats_total()}" disabled>
+                       id="seats_total" name="seats_total" value="${order.getRoute().getSeats_total()}" disabled>
             </div>
         </div>
 
 
         <div class="form-group mt-3">
             <button type="submit" class="btn">Save</button>
-            <a class="btn btn-outline-secondary" href="/users-routes/delete/${userRoute.getId()}">Delete</a>
+            <a class="btn btn-outline-secondary" href="/users-routes/delete/${order.getId()}">Delete</a>
         </div>
     </form>
 

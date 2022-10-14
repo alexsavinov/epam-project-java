@@ -23,8 +23,3 @@ The result of the search is a list of trains, each string of which contains:
 
 If the user is registered in the system, he must be able to buy a ticket
 for the selected route on the specified date (subject to availability).
-
-
-=====================
-    INSTALL
-=====================

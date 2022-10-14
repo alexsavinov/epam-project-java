@@ -107,6 +107,8 @@ public class AuthServlet extends HttpServlet {
                 request.setAttribute("errors", "401 Unauthorized");
                 response.sendRedirect("/");
             } else {
+                logger.warn("User logged in: {}", user.getName());
+
                 request.getSession().setAttribute("isAuthorized", true);
                 request.getSession().setAttribute("isAdmin", user.getIsAdmin());
                 request.getSession().setAttribute("userid", user.getId());
@@ -129,13 +131,15 @@ public class AuthServlet extends HttpServlet {
     protected void doPostLogout(HttpServletRequest request, HttpServletResponse response)
             throws ControllerException {
 
-        request.setAttribute("messages", "You are logged out!");
-        request.getSession().setAttribute("isAuthorized", false);
-        request.getSession().setAttribute("userid", null);
-        request.getSession().setAttribute("username", null);
-        request.getSession().setAttribute("isAdmin", null);
+        String username = (String) request.getSession().getAttribute("username");
+        request.getSession().removeAttribute("isAuthorized");
+        request.getSession().removeAttribute("userid");
+        request.getSession().removeAttribute("username");
+        request.getSession().removeAttribute("isAdmin");
+        request.getSession().removeAttribute("routes");
 
         try {
+            logger.warn("User logged out: {}", username);
             response.sendRedirect("/");
         } catch (IOException e) {
             logger.error("IOException. Error during redirect!  {}", e.getMessage());

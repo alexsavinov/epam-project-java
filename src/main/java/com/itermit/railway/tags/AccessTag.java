@@ -11,6 +11,7 @@ public class AccessTag extends TagSupport {
 
     private static final String ROLE_ADMIN = "admin";
     private static final String ROLE_GUEST = "guest";
+    private static final String ROLE_USER = "user";
     private static final String ROLE_AUTHORIZED = "authorized";
     private static final Logger logger = LogManager.getLogger(AccessTag.class);
     private String role;
@@ -41,6 +42,11 @@ public class AccessTag extends TagSupport {
                     break;
                 case ROLE_GUEST:
                     if (!isAuthorized) {
+                        out.print(modifier);
+                    }
+                    break;
+                case ROLE_USER:
+                    if (isAuthorized && !isAdmin) {
                         out.print(modifier);
                     }
                     break;

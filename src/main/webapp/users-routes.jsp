@@ -47,51 +47,51 @@
             </thead>
 
             <tbody>
-            <c:forEach var="userRoute" items="${userRoutes}">
-                <tr id="selectBox_${userRoute.getId()}"
-                    onclick="goByUrl('/users-routes/edit/${userRoute.getId()}');">
+            <c:forEach var="order" items="${userRoutes}">
+                <tr id="selectBox_${order.getId()}"
+                    onclick="goByUrl('/users-routes/edit/${order.getId()}');">
 
                     <th scope="row">
-                            ${userRoute.getId()}
+                            ${order.getId()}
                     </th>
                     <td>
-                            ${userRoute.getSeats()}
+                            ${order.getSeats()}
                     </td>
                     <td>
-                            ${userRoute.getDate_reserve()}
+                            ${order.getDate_reserve()}
                     </td>
                     <td>
-                            ${userRoute.getUser().getId()}
+                            ${order.getUser().getId()}
                     </td>
                     <td>
-                            ${userRoute.getUser().getName()}
+                            ${order.getUser().getName()}
                     </td>
                     <td>
-                            ${userRoute.getRoute().getId()}
+                            ${order.getRoute().getId()}
                     </td>
                     <td>
-                            ${userRoute.getRoute().getTrain_number()}
+                            ${order.getRoute().getTrain_number()}
                     </td>
                     <td>
-                            ${userRoute.getRoute().getStation_departure().getName()}
+                            ${order.getRoute().getStation_departure().getName()}
                     </td>
                     <td>
-                            ${userRoute.getRoute().getDate_departure()}
+                            ${order.getRoute().getDate_departure()}
                     </td>
                     <td>
-                            ${userRoute.getRoute().getStation_arrival().getName()}
+                            ${order.getRoute().getStation_arrival().getName()}
                     </td>
                     <td>
-                            ${userRoute.getRoute().getDate_arrival()}
+                            ${order.getRoute().getDate_arrival()}
                     </td>
                     <td>
-                            ${userRoute.getRoute().getTravel_time()}
+                            ${order.getRoute().getTravel_time()}
                     </td>
                     <td>
-                            ${userRoute.getRoute().getTravel_cost()}
+                            ${order.getRoute().getTravel_cost()}
                     </td>
                     <td>
-                            ${userRoute.getRoute().getSeats_total()}
+                            ${order.getRoute().getSeats_total()}
                     </td>
                 </tr>
             </c:forEach>

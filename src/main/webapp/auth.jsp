@@ -25,19 +25,21 @@
             <label for="name" class="form-label">
                 <fmt:message key='auth_jsp.username'/>
             </label>
-            <input type="text" class="form-control" placeholder="Username"
-                   aria-label="name" id="name" name="name">
+            <input type="text" class="form-control" placeholder="Name"
+                   aria-label="name" id="name" name="name" required>
         </div>
 
         <div class="mb-1">
             <label for="password" class="form-label">
                 <fmt:message key='auth_jsp.password'/>
             </label>
-            <input type="password" class="form-control" id="password" name="password">
+            <input type="password" class="form-control" id="password" name="password"
+                   placeholder="Password" required>
         </div>
 
         <div class="form-group">
-            <button type="submit" class="btn mt-3 <customTags:access role="authorized" modifier="disabled"/>">
+            <button type="submit"
+                    class="btn mt-3 _btn_form <customTags:access role="authorized" modifier="disabled"/>">
                 <fmt:message key='auth_jsp.btn.login'/>
             </button>
         </div>

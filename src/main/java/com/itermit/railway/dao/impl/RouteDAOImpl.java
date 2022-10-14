@@ -36,7 +36,7 @@ public class RouteDAOImpl implements RouteDAO {
             "FROM routes " +
             "LEFT JOIN stations s_a ON s_a.id = routes.station_arrival_id " +
             "LEFT JOIN stations s_d ON s_d.id = routes.station_departure_id " +
-            "LEFT JOIN users_routes ur ON routes.id = ur.route_id group by routes.id";
+            "LEFT JOIN orders ur ON routes.id = ur.route_id group by routes.id";
     private static final String SQL_GET_ROUTE_BY_ID = "SELECT " +
             "routes.id, " +
             "routes.train_number, " +
@@ -53,7 +53,7 @@ public class RouteDAOImpl implements RouteDAO {
             "FROM routes " +
             "LEFT JOIN stations s_a ON s_a.id = routes.station_arrival_id " +
             "LEFT JOIN stations s_d ON s_d.id = routes.station_departure_id " +
-            "LEFT JOIN users_routes ur ON routes.id = ur.route_id " +
+            "LEFT JOIN orders ur ON routes.id = ur.route_id " +
             "WHERE routes.id = ? " +
             "GROUP BY routes.id ";
     private static final String SQL_ADD_ROUTE = "INSERT INTO routes (train_number, station_departure_id, station_arrival_id, date_departure, date_arrival, travel_cost, seats_total) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -153,7 +153,7 @@ public class RouteDAOImpl implements RouteDAO {
 
             if (hasJoin) {
                 SQL_TOTAL_ROWS = "SELECT COUNT(*) total_rows FROM (SELECT seats_total from routes " +
-                        "LEFT JOIN users_routes ur ON routes.id = ur.route_id  " +
+                        "LEFT JOIN orders ur ON routes.id = ur.route_id  " +
                         "WHERE 1=1 " +
                         "group by routes.id HAVING 2=2) as t";
             }

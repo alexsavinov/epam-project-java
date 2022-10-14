@@ -5,13 +5,13 @@ package com.itermit.railway.controller;
 
 import com.itermit.railway.dao.RouteDAO;
 import com.itermit.railway.dao.StationDAO;
-import com.itermit.railway.dao.UserRouteDAO;
+import com.itermit.railway.dao.OrderDAO;
+import com.itermit.railway.dao.entity.Order;
 import com.itermit.railway.dao.entity.Route;
 import com.itermit.railway.dao.entity.Station;
-import com.itermit.railway.dao.entity.UserRoute;
+import com.itermit.railway.dao.impl.OrderDAOImpl;
 import com.itermit.railway.dao.impl.RouteDAOImpl;
 import com.itermit.railway.dao.impl.StationDAOImpl;
-import com.itermit.railway.dao.impl.UserRouteDAOImpl;
 import com.itermit.railway.db.DBException;
 import com.itermit.railway.utils.FilterQuery;
 import com.itermit.railway.utils.Paginator;
@@ -191,21 +191,21 @@ public class SearchServlet extends HttpServlet {
 
 
         RouteDAO routeDAO = new RouteDAOImpl();
-        UserRouteDAO userRouteDAO = new UserRouteDAOImpl();
+        OrderDAO orderDAO = new OrderDAOImpl();
 
         try {
             Route route = routeDAO.get(id);
 
-//            ArrayList<UserRoute> userRoutes = userRouteDAO.getAll();
+//            ArrayList<Order> userRoutes = orderDAO.getAll();
 
             ArrayList<FilterQuery> filters = FilterQuery.getList();
             FilterQuery.addFilter(filters, "route_id", route.getId());
-            ArrayList<UserRoute> userRoutesByRoute = userRouteDAO.getFiltered(filters);
+            ArrayList<Order> userRoutesByRoute = orderDAO.getFiltered(filters);
 
             filters = FilterQuery.getList();
             FilterQuery.addFilter(filters, "user_id", userid);
             FilterQuery.addFilter(filters, "route_id", route.getId());
-            ArrayList<UserRoute> userRoutesByCurrentUser = userRouteDAO.getFiltered(filters);
+            ArrayList<Order> userRoutesByCurrentUser = orderDAO.getFiltered(filters);
 
             request.setAttribute("route", route);
 //            request.setAttribute("userRoutes", userRoutes);
@@ -443,9 +443,9 @@ public class SearchServlet extends HttpServlet {
 
         logger.info("doPostSearchReserve seats_reserve -- " + seats_reserve);
 
-//        UserRouteDAO userRouteDAO = new UserRouteDAOImpl();
+//        OrderDAO userRouteDAO = new OrderDAOImpl();
 //        try {
-//            UserRoute userRoute = new UserRoute(
+//            Order userRoute = new Order(
 //                    (int) request.getSession().getAttribute("userid"),
 //                    id,
 //                    seats_reserve);

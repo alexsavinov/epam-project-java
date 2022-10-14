@@ -1,5 +1,5 @@
 <div class="header shadow-sm">
-    <nav class="navbar navbar-expand-lg fs-5 navbar-light">
+    <nav class="navbar navbar-expand-md fs-5 navbar-light">
         <div class="container-fluid">
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarToggler"
                     aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
@@ -9,7 +9,7 @@
 
                 <%-- LOGO --%>
                 <div class="d-flex me-3 align-items-center">
-                    <em class="fa fa-ticket fa-2xl m-1 me-3 d-none d-lg-flex"></em>
+                    <em class="fa fa-ticket fa-2xl m-1 me-3 d-none d-md-flex"></em>
                     <a class="navbar-brand fw-bolder _main-color4" href="/">railway.itermit.com</a>
                 </div>
 
@@ -30,22 +30,24 @@
                 <%-- LOGIN / LOGOUT --%>
                 <div class="d-flex align-items-start flex-column flex-lg-row align-items-stretch">
                     <div class="<customTags:access role="authorized" modifier="d-none"/>">
-                        <a class="btn btn-outline-secondary d-flex flex-row align-items-center shadow-sm m-1 ms-0"
+                        <a class="btn _btn_logout btn-outline-secondary d-flex flex-row align-items-center shadow-sm m-1 ms-0"
                            href="/login">
                             <em class="fa fa-sign-in me-2"></em>
-                            <div><fmt:message key='header_jspf.btn.login'/></div>
+                            <div>
+                                <fmt:message key='header_jspf.btn.login'/>
+                            </div>
                         </a>
                     </div>
 
                     <div class="d-flex <customTags:access role="guest" modifier="d-none"/>">
-                        <a class="btn btn-outline-secondary m-1 ms-0" href="/profile">
+                        <a class="btn _btn_form btn-outline-secondary m-1 ms-0" href="/profile">
                             <em class="far fa-user"></em>
                             ${username}
                         </a>
                     </div>
 
                     <div class="d-flex <customTags:access role="guest" modifier="d-none"/>">
-                        <a class="btn btn-outline-secondary m-1 ms-0 d-flex flex-row align-items-center shadow-sm"
+                        <a class="btn _btn_logout btn-outline-secondary m-1 ms-0 d-flex flex-row align-items-center shadow-sm"
                            href="/logout">
                             <em class="fa fa-sign-out me-2"></em>
                             <div><fmt:message key='header_jspf.btn.logout'/></div>
@@ -59,8 +61,8 @@
                 <form class="m-0" action="/parts/changeLocale.jsp" method="post" id="changeLocale">
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <c:forEach items="${applicationScope.locales}" var="locale">
-                            <label <c:if test="${locale.key ne currentLocale}"> class="btn btn-secondary"</c:if>
-                                    <c:if test="${locale.key eq currentLocale}"> class="btn btn-secondary active"</c:if>>
+                            <label <c:if test="${locale.key ne currentLocale}"> class="btn btn-secondary _btn_lang"</c:if>
+                                    <c:if test="${locale.key eq currentLocale}"> class="btn btn-secondary _btn_lang active"</c:if>>
                                 <input type="radio" name="locale" id="${locale.key}" autocomplete="off"
                                        value="${locale.key}"
                                        onclick="submit()"
