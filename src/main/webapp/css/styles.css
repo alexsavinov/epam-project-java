@@ -107,7 +107,7 @@ a:hover {
 .btn {
     background-color: var(--main-color2);
     /*background-color: var(--main-color3);*/
-    /*color: var(--main-color1);*/
+    color: var(--main-color1);
 }
 
 ._btn_lang {
@@ -192,6 +192,7 @@ nav .navbar-nav li a:hover {
 ._input-number {
     height: 38px;
     width: 134px;
+    /*width: 130px;*/
 }
 
 ._input-daterange {

@@ -88,7 +88,7 @@ public class SearchServlet extends HttpServlet {
             if (action != null && !action.isEmpty()) {
                 if (action.equals("reset")) {
                     /* [POST] SEARCH -- RESET */
-                    doPostReset(request, response);
+                    doPostReset(request);
                 } else if (action.equals("search")) {
                     /* [POST] SEARCH -- SEARCH JSON */
                     doPostSearchJson(request, response);
@@ -119,12 +119,7 @@ public class SearchServlet extends HttpServlet {
 
         String dateRange = String.valueOf(session.getAttribute("daterange"));
         if (dateRange == null) {
-            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.ENGLISH);
-
-            String dateStart = dateTimeFormatter.format(LocalDateTime.now().minusMonths(1));
-            String dateFinish = dateTimeFormatter.format(LocalDateTime.now().plusMonths(1));
-
-            session.setAttribute("daterange", new StringBuilder(dateStart).append(" - ").append(dateFinish));
+            session.setAttribute("daterange", getDefaultDaterange());
         }
 
         StationDAO stationDAO = new StationDAOImpl();
@@ -152,6 +147,16 @@ public class SearchServlet extends HttpServlet {
 
 
         request.getRequestDispatcher("/search.jsp").forward(request, response);
+    }
+
+    private static String getDefaultDaterange() {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.ENGLISH);
+
+        String dateStart = dateTimeFormatter.format(LocalDateTime.now().minusMonths(1));
+        String dateFinish = dateTimeFormatter.format(LocalDateTime.now().plusMonths(1));
+
+        String daterange1 = new StringBuilder(dateStart).append(" - ").append(dateFinish).toString();
+        return daterange1;
     }
 
 
@@ -405,19 +410,22 @@ public class SearchServlet extends HttpServlet {
 
     }
 
-    protected void doPostReset(HttpServletRequest request, HttpServletResponse response) throws
-            ServletException, IOException {
+    protected void doPostReset(HttpServletRequest request) {
 
-        logger.info("doPostReset RESET");
+        logger.trace("#doPostReset(request).");
 
-        request.getSession().removeAttribute("daterange");
-        request.getSession().setAttribute("station_departure_id", 0);
-        request.getSession().setAttribute("station_arrival_id", 0);
-        request.getSession().removeAttribute("cost_min");
-        request.getSession().removeAttribute("cost_max");
-        request.getSession().removeAttribute("min_seats");
-        request.getSession().removeAttribute("travel_time_min");
-        request.getSession().removeAttribute("travel_time_max");
+        HttpSession session= request.getSession();
+
+        session.setAttribute("daterange", getDefaultDaterange());
+        session.setAttribute("station_departure_id", 0);
+        session.setAttribute("station_arrival_id", 0);
+        session.removeAttribute("cost_min");
+        session.removeAttribute("cost_max");
+        session.removeAttribute("min_seats");
+        session.removeAttribute("travel_time_min");
+        session.removeAttribute("travel_time_max");
+        session.removeAttribute("orders");
+        session.removeAttribute("routes");
 
 
 //        request.getRequestDispatcher("/search.jsp").forward(request, response);
