@@ -1,7 +1,8 @@
 package com.itermit.railway.dao.impl;
 
+import com.itermit.railway.command.CommandContainer;
 import com.itermit.railway.dao.UserDAO;
-import com.itermit.railway.dao.entity.User;
+import com.itermit.railway.db.entity.User;
 import com.itermit.railway.db.DBException;
 import com.itermit.railway.db.DBManager;
 import org.apache.logging.log4j.LogManager;
@@ -12,9 +13,12 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 public class UserDAOImpl implements UserDAO {
 
+    private DBManager dbManager;
+    private static UserDAOImpl instance;
     private static final Logger logger = LogManager.getLogger(UserDAOImpl.class);
     private static final String SQL_GET_ALL_USERS = "select id, name, password, isadmin from users";
     private static final String SQL_GET_USER_BY_CREDENTIALS = "select id, name, password, isadmin from users where name = ? and password = ?";
@@ -23,20 +27,28 @@ public class UserDAOImpl implements UserDAO {
     private static final String SQL_UPDATE_USER = "UPDATE users set name = ?, password = ?, isadmin = ? where id = ?";
     private static final String SQL_DELETE_USER = "DELETE FROM users WHERE id = ?";
 
+    public static synchronized UserDAOImpl getInstance() {
+        if (instance == null) {
+            instance = new UserDAOImpl();
+        }
+        return instance;
+    }
+
+    private UserDAOImpl() {
+        dbManager = DBManager.getInstance();
+    }
+
     @Override
     public User get(int id) throws DBException {
 
-        logger.trace("#get(id): {}", id);
+        logger.debug("#get(id): {}", id);
 
         User user = null;
-
-        DBManager dbManager = DBManager.getInstance();
-        Connection connection = dbManager.getConnection();
 
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
 
-        try {
+        try (Connection connection = dbManager.getConnection()) {
             preparedStatement = connection.prepareStatement(SQL_GET_USER_BY_ID);
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
@@ -49,12 +61,11 @@ public class UserDAOImpl implements UserDAO {
                         .build();
             }
         } catch (SQLException e) {
-            logger.error("SQLException while get(id): {}", e.getMessage());
-            throw new DBException("SQLException while get(id)!", e);
+            String errorMessage = CommandContainer.getErrorMessage("Cannot find user.", e);
+            throw new DBException(errorMessage, e);
         } finally {
             DBManager.closeResultSet(resultSet);
             DBManager.closePreparedStatement(preparedStatement);
-            DBManager.closeConnection(connection);
         }
 
         return user;
@@ -63,15 +74,12 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User get(User user) throws DBException {
 
-        logger.trace("#get(user): {}", user);
-
-        DBManager dbManager = DBManager.getInstance();
-        Connection connection = dbManager.getConnection();
+        logger.debug("#get(user): {}", user);
 
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
 
-        try {
+        try (Connection connection = dbManager.getConnection()) {
             preparedStatement = connection.prepareStatement(SQL_GET_USER_BY_CREDENTIALS);
             int l = 0;
             preparedStatement.setString(++l, user.getName());
@@ -86,14 +94,12 @@ public class UserDAOImpl implements UserDAO {
                         .withIsAdmin(resultSet.getBoolean(User.F_ISADMIN))
                         .build();
             }
-
         } catch (SQLException e) {
-            logger.error("SQLException while get(user): {}", e.getMessage());
-            throw new DBException("SQLException while get(user)!", e);
+            String errorMessage = CommandContainer.getErrorMessage("SQLException while get(user)!", e);
+            throw new DBException(errorMessage, e);
         } finally {
             DBManager.closeResultSet(resultSet);
             DBManager.closePreparedStatement(preparedStatement);
-            DBManager.closeConnection(connection);
         }
 
         return user;
@@ -102,17 +108,14 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public ArrayList<User> getAll() throws DBException {
 
-        logger.trace("#getAll()");
+        logger.debug("#getAll()");
 
         ArrayList<User> users = new ArrayList<>();
-
-        DBManager dbManager = DBManager.getInstance();
-        Connection connection = dbManager.getConnection();
 
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
 
-        try {
+        try (Connection connection = dbManager.getConnection()) {
             preparedStatement = connection.prepareStatement(SQL_GET_ALL_USERS);
             resultSet = preparedStatement.executeQuery();
 
@@ -126,12 +129,11 @@ public class UserDAOImpl implements UserDAO {
             }
 
         } catch (SQLException e) {
-            logger.error("SQLException while getAll(): {}", e.getMessage());
-            throw new DBException("SQLException while getAll()!", e);
+            String errorMessage = CommandContainer.getErrorMessage("SQLException while getAll()!", e);
+            throw new DBException(errorMessage, e);
         } finally {
             DBManager.closeResultSet(resultSet);
             DBManager.closePreparedStatement(preparedStatement);
-            DBManager.closeConnection(connection);
         }
 
         return users;
@@ -140,13 +142,11 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public void add(User user) throws DBException {
 
-        logger.trace("#add(user): {}", user);
-
-        DBManager dbManager = DBManager.getInstance();
-        Connection connection = dbManager.getConnection();
+        logger.debug("#add(user): {}", user);
 
         PreparedStatement preparedStatement = null;
-        try {
+
+        try (Connection connection = dbManager.getConnection()) {
             preparedStatement = connection.prepareStatement(SQL_ADD_USER);
             int l = 0;
             preparedStatement.setString(++l, user.getName());
@@ -154,11 +154,10 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.setBoolean(++l, user.getIsAdmin());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            logger.error("SQLException while add(user): {}", e.getMessage());
-            throw new DBException("SQLException while add(user)!", e);
+            String errorMessage = CommandContainer.getErrorMessage("SQLException while add(user)!", e);
+            throw new DBException(errorMessage, e);
         } finally {
             DBManager.closePreparedStatement(preparedStatement);
-            DBManager.closeConnection(connection);
         }
 
     }
@@ -166,14 +165,11 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public void update(int id, User user) throws DBException {
 
-        logger.trace("#update(id, user): {} -- {}", id, user);
-
-        DBManager dbManager = DBManager.getInstance();
-        Connection connection = dbManager.getConnection();
+        logger.debug("#update(id, user): {} -- {}", id, user);
 
         PreparedStatement preparedStatement = null;
 
-        try {
+        try (Connection connection = dbManager.getConnection()) {
             preparedStatement = connection.prepareStatement(SQL_UPDATE_USER);
 
             int l = 0;
@@ -185,11 +181,10 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
-            logger.error("SQLException while update(id, user): {}", e.getMessage());
-            throw new DBException("SQLException while update(id, user)!", e);
+            String errorMessage = CommandContainer.getErrorMessage("SQLException while update(id, user)!", e);
+            throw new DBException(errorMessage, e);
         } finally {
             DBManager.closePreparedStatement(preparedStatement);
-            DBManager.closeConnection(connection);
         }
 
     }
@@ -197,24 +192,25 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public void delete(int id) throws DBException {
 
-        logger.trace("#delete(id): {}", id);
+        logger.debug("#delete(id): {}", id);
 
-        DBManager dbManager = DBManager.getInstance();
-        Connection connection = dbManager.getConnection();
+        if (id == 1) {
+            logger.error("SQLException while delete(id): cannot delete admin!");
+            throw new DBException("SQLException while delete(id): cannot delete admin!", null);
+        }
 
         PreparedStatement preparedStatement = null;
 
-        try {
+        try (Connection connection = dbManager.getConnection()) {
             preparedStatement = connection.prepareStatement(SQL_DELETE_USER);
             int l = 0;
             preparedStatement.setInt(++l, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            logger.error("SQLException while delete(id): {}", e.getMessage());
-            throw new DBException("SQLException while delete(id)!", e);
+            String errorMessage = CommandContainer.getErrorMessage("SQLException while delete(id)!", e);
+            throw new DBException(errorMessage, e);
         } finally {
             DBManager.closePreparedStatement(preparedStatement);
-            DBManager.closeConnection(connection);
         }
 
     }

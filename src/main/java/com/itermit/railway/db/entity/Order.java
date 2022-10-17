@@ -1,4 +1,4 @@
-package com.itermit.railway.dao.entity;
+package com.itermit.railway.db.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -10,34 +10,33 @@ public class Order implements Serializable {
     private User user;
     private Route route;
     private int seats;
-    private String date_reserve;
+    private String dateReserve;
 
-    public Order(int id, User user, Route route, int seats, String date_reserve) {
+    public Order(int id, User user, Route route, int seats, String dateReserve) {
         this.id = id;
         this.user = user;
         this.route = route;
         this.seats = seats;
-        this.date_reserve = date_reserve;
+        this.dateReserve = dateReserve;
     }
 
-    public Order(int user_id, int route_id, int seats) {
-        this.id = 0;
-        this.user = new User.Builder().withId(user_id).build();
-        this.route = new Route(route_id);
+    public Order(int userId, int routeId, int seats) {
+        this.user = new User.Builder().withId(userId).build();
+        this.route = new Route(routeId);
         this.seats = seats;
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(
                 "yyyy-MM-dd hh:mm:ss",
                 Locale.ENGLISH);
-        this.date_reserve = dateTimeFormatter.format(LocalDateTime.now());
+        this.dateReserve = dateTimeFormatter.format(LocalDateTime.now());
     }
 
-    public String getDate_reserve() {
-        return date_reserve;
+    public String getDateReserve() {
+        return dateReserve;
     }
 
-    public void setDate_reserve(String date_reserve) {
-        this.date_reserve = date_reserve;
+    public void setDateReserve(String dateReserve) {
+        this.dateReserve = dateReserve;
     }
 
     public int getId() {

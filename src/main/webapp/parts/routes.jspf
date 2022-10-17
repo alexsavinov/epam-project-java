@@ -5,7 +5,7 @@
                 ${orders_tittle}
         </div>
     </c:if>
-    <%--        <a class="btn btn-sm btn-outline-secondary mt-2 mb-1 shadow-sm" href="/users-routes/add">--%>
+    <%--        <a class="btn btn-sm btn-outline-secondary mt-2 mb-1 shadow-sm" href="/orders/add">--%>
     <%--            <i class="fa fa-plus-circle" aria-hidden="true"></i>--%>
     <%--            Add ${url}--%>
     <%--        </a>--%>
@@ -14,7 +14,7 @@
     <%--    <div> param.orders ${param.orders} </div>--%>
     <%--    <div> orders ${orders} </div>--%>
 
-    <table class="table table-striped table-hover p-5 mt-3">
+    <table class="table table-striped table-hover p-5 mt-3" aria-describedby="Routes">
         <thead>
         <tr>
             <%--            <th scope="col">id</th>--%>
@@ -37,34 +37,34 @@
         <c:forEach var="route" items="${routes}">
 
             <tr id="selectBox_${route.getId()}"
-                onclick="goByUrl('/search/reserve/${route.getId()}');">
+                onclick="goByUrl('/reserve/${route.getId()}');">
 
                 <th scope="row">
-                    <c:out value="${route.getTrain_number()}"/>
+                    <c:out value="${route.getTrainNumber()}"/>
                 </th>
                 <td>
-                        ${route.getStation_departure().getName()}
+                        ${route.getStationDeparture().getName()}
                 </td>
                 <td>
-                        ${route.getDate_departure()}
+                        ${route.getDateDeparture()}
                 </td>
                 <td>
-                        ${route.getTravel_time()}
+                        ${route.getTravelTime()}
                 </td>
                 <td>
-                        ${route.getStation_arrival().getName()}
+                        ${route.getStationArrival().getName()}
                 </td>
                 <td>
-                        ${route.getDate_arrival()}
+                        ${route.getDateArrival()}
                 </td>
                 <td>
-                        ${route.getTravel_cost()}
+                        ${route.getTravelCost()}
                 </td>
                 <td>
-                        ${route.getSeats_total()}
+                        ${route.getSeatsTotal()}
                 </td>
                 <td>
-                        ${route.getSeats_available()}
+                        ${route.getSeatsAvailable()}
                 </td>
 
             </tr>

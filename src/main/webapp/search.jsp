@@ -22,14 +22,28 @@
             <div class="d-flex flex-column align-items-start flex-md-row">
                 <div class="d-flex flex-column flex-lg-row justify-content-between">
 
-                    <%-- Daterange --%>
-                    <div class="form-group mt-1 me-lg-3 mb-3 ms-1">
-                        <label for="daterange" class="form-label">
-                            Date range
-                        </label>
-                        <input type="text" class="form-control _input-daterange"
-                               id="daterange" name="daterange" aria-label="daterange"
-                               value="${sessionScope.daterange}" required>
+                    <%-- Daterange, Train number  --%>
+                    <div class="d-flex flex-column border rounded p-1 me-md-3 mb-3">
+
+                        <%-- Daterange --%>
+                        <div class="form-group me-lg-3 mb-1 ms-1">
+                            <label for="daterange" class="form-label">
+                                Date range
+                            </label>
+                            <input type="text" class="form-control _input-daterange"
+                                   id="daterange" name="daterange" aria-label="daterange"
+                                   value="${sessionScope.daterange}" required>
+                        </div>
+
+                        <%-- Train number --%>
+                            <div class="form-group me-lg-3 mb-1 ms-1">
+                                <label for="train_number" class="form-label">
+                                    Train number
+                                </label>
+                                <input type="text" class="form-control _input-train-number"
+                                       id="train_number" name="train_number" aria-label="train_number"
+                                       value="${sessionScope.train_number}">
+                            </div>
                     </div>
 
                     <%-- Stations --%>
@@ -76,7 +90,7 @@
 
 
                 <div class="d-flex flex-column flex-xxl-row justify-content-between">
-                    <div class="d-flex flex-column border rounded p-1 me-md-3 mb-3">
+                    <div class="d-flex flex-column p-1 me-md-3 mb-2">
 
                         <%-- Travel cost --%>
                         <div class="form-group d-flex flex-column mb-1">
@@ -98,7 +112,6 @@
                                         <em class="fa fa-xmark fa-2l"></em>
                                     </button>
                                 </div>
-
 
                                 <%-- cost_max--%>
                                 <label for="cost_max" class="form-label ms-2 me-2 mt-1">
@@ -122,7 +135,7 @@
                         </div>
 
                         <%-- Travel time --%>
-                        <div class="form-group d-flex flex-column mb-1">
+                        <div class="form-group d-flex flex-column mb-3 mb-lg-0">
 
                             <div>
                                 <label class="form-label">Travel time (in hours) from:</label>

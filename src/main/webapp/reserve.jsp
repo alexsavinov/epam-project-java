@@ -73,7 +73,7 @@
             <div class="mb-1">
                 <label for="train_number" class="form-label">Train number</label>
                 <input type="text" class="form-control" placeholder="Train number" aria-label="train_number"
-                       id="train_number" name="train_number" value="${route.getTrain_number()}" disabled>
+                       id="train_number" name="train_number" value="${route.getTrainNumber()}" disabled>
             </div>
 
             <%-- station_departure --%>
@@ -81,7 +81,7 @@
                 <label for="station_departure">Station departure</label>
                 <input type="text" class="form-control" placeholder="Station departure" aria-label="station_departure"
                        id="station_departure" name="station_departure"
-                       value="${route.getStation_departure().getName()}" disabled>
+                       value="${route.getStationDeparture().getName()}" disabled>
             </div>
 
             <%-- date_departure --%>
@@ -90,7 +90,7 @@
                 <input type="datetime-local" class="form-control" aria-label="date_departure"
                        id="date_departure" name="date_departure"
                        onchange="updateTime();"
-                       value="${route.getDate_departure()}" max="${route.getDate_arrival()}" disabled>
+                       value="${route.getDateDeparture()}" max="${route.getDateArrival()}" disabled>
             </div>
 
             <%-- station_arrival --%>
@@ -98,7 +98,7 @@
                 <label for="station_arrival">Station arrival</label>
                 <input type="text" class="form-control" placeholder="Station arrival" aria-label="station_arrival"
                        id="station_arrival" name="station_arrival"
-                       value="${route.getStation_arrival().getName()}" disabled>
+                       value="${route.getStationArrival().getName()}" disabled>
             </div>
 
             <%-- date_arrival --%>
@@ -107,20 +107,20 @@
                 <input type="datetime-local" class="form-control" aria-label="date_arrival"
                        id="date_arrival" name="date_arrival"
                        onchange="updateTime();"
-                       value="${route.getDate_arrival()}" min="${route.getDate_departure()}" disabled>
+                       value="${route.getDateArrival()}" min="${route.getDateDeparture()}" disabled>
             </div>
 
             <%--        <div class="mb-1">--%>
             <%--            <label for="travel_time" class="form-label">Travel time</label>--%>
             <%--            <div>11</div>--%>
             <%--            <input type="text" class="form-control" aria-label="travel_time"--%>
-            <%--                   id="travel_time" name="travel_time" value="${route.getTravel_time()}" disabled>--%>
+            <%--                   id="travel_time" name="travel_time" value="${route.getTravelTime()}" disabled>--%>
             <%--        </div>--%>
 
             <%--        <div class="mb-1">--%>
             <%--            <label for="travel_cost" class="form-label">Travel cost</label>--%>
             <%--            <input type="number" class="form-control" aria-label="travel_cost"--%>
-            <%--                   id="travel_cost" name="travel_cost" value="${route.getTravel_cost()}">--%>
+            <%--                   id="travel_cost" name="travel_cost" value="${route.getTravelCost()}">--%>
             <%--        </div>--%>
 
             <%-- seats_available --%>
@@ -128,7 +128,7 @@
                 <label for="seats_available" class="form-label">Seats available</label>
                 <input type="number" class="form-control" aria-label="seats_available"
                        id="seats_available" name="seats_available"
-                       value="${route.getSeats_available()}" disabled>
+                       value="${route.getSeatsAvailable()}" disabled>
             </div>
 
             <%-- seats_total --%>
@@ -136,7 +136,7 @@
                 <label for="seats_total" class="form-label">Seats total</label>
                 <input type="number" class="form-control" aria-label="seats_total"
                        id="seats_total" name="seats_total"
-                       value="${route.getSeats_total()}" disabled>
+                       value="${route.getSeatsTotal()}" disabled>
             </div>
 
             <%-- seats_reserve --%>
@@ -155,12 +155,12 @@
         </form>
 
         <%-- piechart --%>
-<%--        <div id="piechart" class="ms-5 mt-5" style="width: 400px; height: 500px;"></div>--%>
+        <%--        <div id="piechart" class="ms-5 mt-5" style="width: 400px; height: 500px;"></div>--%>
         <div id="piechart" class="ms-5 mt-5 w-50"></div>
 
     </div>
 
-    <%--    <%@ include file="/parts/users-routes.jsp">--%>
+    <%--    <%@ include file="/parts/orders.jsp">--%>
     <%--        <jsp:param name="orders" value="${userRoutes}"/>--%>
     <%--    </jsp:include>--%>
 
@@ -169,7 +169,7 @@
         <% request.setAttribute("orders_tittle", "Orders by route");%>
 
         <div class="mt-5">
-            <%@ include file="/parts/users-routesjspf"/>
+            <%@ include file="/parts/orders.jspf" %>
         </div>
     </c:if>
 
@@ -178,7 +178,7 @@
         <% request.setAttribute("orders_tittle", "Orders by logged user"); %>
 
         <div class="mt-5">
-            <%@ include file="/parts/users-routesjspf"/>
+            <%@ include file="/parts/orders.jspf" %>
         </div>
     </c:if>
 
@@ -187,7 +187,7 @@
         <% request.setAttribute("orders_tittle", "Orders all");%>
 
         <div class="mt-5">
-            <%@ include file="/parts/users-routesjspf"/>
+            <%@ include file="/parts/orders.jspf" %>
         </div>
     </c:if>
 

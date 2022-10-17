@@ -25,8 +25,7 @@
             Add ${url}
         </a>
 
-        <table class="table table-striped table-hover p-5 mt-3">
-            <caption>Users</caption>
+        <table class="table table-striped table-hover p-5 mt-3" aria-describedby="Users">
             <thead>
             <tr>
                 <th scope="col">id</th>

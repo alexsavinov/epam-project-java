@@ -1,4 +1,4 @@
-package com.itermit.railway.dao.entity;
+package com.itermit.railway.db.entity;
 
 import java.io.Serializable;
 

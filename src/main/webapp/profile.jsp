@@ -23,7 +23,7 @@
         </a>
         <a class="btn btn-outline-secondary mb-2 shadow-sm" href="/stations">Stations</a>
         <a class="btn btn-outline-secondary mb-2 shadow-sm" href="/routes">Routes</a>
-        <a class="btn btn-outline-secondary mb-2 shadow-sm" href="/users-routes">Users routes</a>
+        <a class="btn btn-outline-secondary mb-2 shadow-sm" href="/orders">Orders</a>
     </div>
 
     <%@ include file="/parts/message.jspf" %>

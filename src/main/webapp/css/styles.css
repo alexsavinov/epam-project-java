@@ -195,6 +195,10 @@ nav .navbar-nav li a:hover {
     /*width: 130px;*/
 }
 
+._input-train-number {
+    width: 302px;
+}
+
 ._input-daterange {
     width: 302px;
 }

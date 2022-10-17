@@ -127,8 +127,8 @@ function showPopover(element) {
 }
 
 // DATE RANGE settings
-var startDate = new Date();
-var endDate = new Date();
+const startDate = new Date();
+const endDate = new Date();
 startDate.setMonth(endDate.getMonth() - 2);
 endDate.setMonth(endDate.getMonth() + 2);
 $(function () {
@@ -144,6 +144,7 @@ $(function () {
 });
 
 function goBack(url) {
+    console.log('url=', url)
     if (url) {
         window.location.href = url;
     } else {
@@ -304,7 +305,7 @@ function submitForm() {
                     routes.removeChild(routes.lastChild);
                 }
 
-                divWrapper = document.createElement("div");
+                const divWrapper = document.createElement("div");
                 divWrapper.classList.add('_wrapper-table');
                 routes.appendChild(divWrapper);
 
@@ -334,7 +335,7 @@ function submitForm() {
 
                 let tr, td, th;
 
-                for (var i = 0; i < res.data.length; i++) {
+                for (let i = 0; i < res.data.length; i++) {
                     tr = document.createElement('tr');
                     tr.setAttribute("onclick", 'changeFunc("/search/reserve/' + i + '")');
                     tr.id = 'row' + i;

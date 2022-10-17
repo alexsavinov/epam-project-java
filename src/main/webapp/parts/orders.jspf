@@ -5,7 +5,7 @@
                 ${orders_tittle}
         </div>
     </c:if>
-    <%--        <a class="btn btn-sm btn-outline-secondary mt-2 mb-1 shadow-sm" href="/users-routes/add">--%>
+    <%--        <a class="btn btn-sm btn-outline-secondary mt-2 mb-1 shadow-sm" href="/orders/add">--%>
     <%--            <i class="fa fa-plus-circle" aria-hidden="true"></i>--%>
     <%--            Add ${url}--%>
     <%--        </a>--%>
@@ -14,7 +14,7 @@
     <%--    <div> param.orders ${param.orders} </div>--%>
     <%--    <div> orders ${orders} </div>--%>
 
-    <table class="table table-striped table-hover p-5 mt-3">
+    <table class="table table-striped table-hover p-5 mt-3" aria-describedby="Orders">
         <thead>
         <tr>
             <th scope="col">id</th>
@@ -40,7 +40,7 @@
                         ${order.getSeats()}
                 </td>
                 <td>
-                        ${order.getDate_reserve()}
+                        ${order.getDateReserve()}
                 </td>
                 <td>
                         ${order.getUser().getName()}
@@ -49,19 +49,19 @@
                         ${order.getRoute().getName()}
                 </td>
                 <td>
-                        ${order.getRoute().getDate_departure()}
+                        ${order.getRoute().getDateDeparture()}
                 </td>
                 <td>
-                        ${order.getRoute().getTravel_time()}
+                        ${order.getRoute().getTravelTime()}
                 </td>
                 <td>
-                        ${order.getRoute().getDate_arrival()}
+                        ${order.getRoute().getDateArrival()}
                 </td>
                 <td>
-                        ${order.getRoute().getTravel_cost()}
+                        ${order.getRoute().getTravelCost()}
                 </td>
                 <td>
-                        ${order.getRoute().getSeats_total()}
+                        ${order.getRoute().getSeatsTotal()}
                 </td>
             </tr>
         </c:forEach>

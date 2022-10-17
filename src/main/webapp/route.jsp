@@ -91,7 +91,7 @@
         <div class="mb-1">
             <label for="train_number" class="form-label">Train number</label>
             <input type="text" class="form-control" placeholder="Train number" aria-label="train_number"
-                   id="train_number" name="train_number" value="${route.getTrain_number()}">
+                   id="train_number" name="train_number" value="${route.getTrainNumber()}">
         </div>
 
         <div class="form-group mb-1">
@@ -99,7 +99,7 @@
             <select class="form-control" id="station_departure" name="station_departure">
                 <c:forEach var="station" items="${stations}">
                     <option value="${station.getId()}"
-                            <c:if test="${station.getId() eq route.getStation_departure().getId()}">selected</c:if>>
+                            <c:if test="${station.getId() eq route.getStationDeparture().getId()}">selected</c:if>>
                             ${station.getName()}
                     </option>
                 </c:forEach>
@@ -111,8 +111,8 @@
             <input type="datetime-local" class="form-control" aria-label="date_departure"
                    onchange="updateTime();"
                    id="date_departure" name="date_departure"
-                   value="${route.getDate_departure()}"
-                   max="${route.getDate_arrival()}">
+                   value="${route.getDateDeparture()}"
+                   max="${route.getTravelTime()}">
         </div>
 
         <div class="form-group mb-1">
@@ -120,7 +120,7 @@
             <select class="form-control" id="station_arrival" name="station_arrival">
                 <c:forEach var="station" items="${stations}">
                     <option value="${station.getId()}"
-                            <c:if test="${station.getId() eq route.getStation_arrival().getId()}">selected</c:if>>
+                            <c:if test="${station.getId() eq route.getStationArrival().getId()}">selected</c:if>>
                             ${station.getName()}
                     </option>
                 </c:forEach>
@@ -131,36 +131,36 @@
             <label for="date_arrival" class="form-label">Date arrival</label>
             <input type="datetime-local" class="form-control" aria-label="date_arrival" onchange="updateTime();"
                    id="date_arrival" name="date_arrival"
-                   value="${route.getDate_arrival()}"
-                   min="${route.getDate_departure()}">
+                   value="${route.getDateArrival()}"
+                   min="${route.getDateDeparture()}">
         </div>
 
         <%--        <div class="mb-1">--%>
         <%--            <label for="travel_time" class="form-label">Travel time</label>--%>
         <%--            <div>11</div>--%>
         <%--            <input type="text" class="form-control" aria-label="travel_time"--%>
-        <%--                   id="travel_time" name="travel_time" value="${route.getTravel_time()}" disabled>--%>
+        <%--                   id="travel_time" name="travel_time" value="${route.getTravelTime()}" disabled>--%>
         <%--        </div>--%>
 
         <div class="mb-1">
             <label for="travel_cost" class="form-label">Travel cost</label>
             <input type="number" class="form-control" aria-label="travel_cost"
                    id="travel_cost" name="travel_cost"
-                   value="${route.getTravel_cost()}">
+                   value="${route.getTravelCost()}">
         </div>
 
         <div class="mb-1">
             <label for="seats_available" class="form-label">Seats available</label>
             <input type="number" class="form-control" aria-label="seats_available"
                    id="seats_available" name="seats_available"
-                   value="${route.getSeats_available()}" disabled>
+                   value="${route.getSeatsAvailable()}" disabled>
         </div>
 
         <div class="mb-1">
             <label for="seats_total" class="form-label">Seats total</label>
             <input type="number" class="form-control" aria-label="seats_total"
                    id="seats_total" name="seats_total"
-                   value="${route.getSeats_total()}">
+                   value="${route.getSeatsTotal()}">
         </div>
 
         <div class="form-group mt-3">
@@ -173,34 +173,34 @@
 
     </form>
 
-    <%--    <%@ include file="/parts/users-routesjspf">--%>
+    <%--    <%@ include file="/parts/ordersjspf">--%>
     <%--        <jsp:param name="orders" value="${userRoutes}"/>--%>
     <%--    </jsp:include>--%>
 
-    <c:if test="${not empty userRoutesByRoute and userRoutesByRoute.size() ge 0}">
-        <% request.setAttribute("orders", request.getAttribute("userRoutesByRoute"));%>
+    <c:if test="${not empty ordersByRoute and ordersByRoute.size() ge 0}">
+        <% request.setAttribute("orders", request.getAttribute("ordersByRoute"));%>
         <% request.setAttribute("orders_tittle", "Orders by route");%>
 
         <div class="mt-5">
-            <%@ include file="/parts/users-routesjspf"/>
+            <%@ include file="/parts/orders.jspf" %>
         </div>
     </c:if>
 
-    <c:if test="${not empty userRoutesByCurrentUser and userRoutesByCurrentUser.size() ge 0}">
-        <% request.setAttribute("orders", request.getAttribute("userRoutesByCurrentUser"));%>
+    <c:if test="${not empty ordersByCurrentUser and ordersByCurrentUser.size() ge 0}">
+        <% request.setAttribute("orders", request.getAttribute("ordersByCurrentUser"));%>
         <% request.setAttribute("orders_tittle", "Orders by logged user"); %>
 
         <div class="mt-5">
-            <%@ include file="/parts/users-routesjspf"/>
+            <%@ include file="/parts/orders.jspf" %>
         </div>
     </c:if>
 
-    <c:if test="${not empty userRoutes and userRoutes.size() ge 0}">
-        <% request.setAttribute("orders", request.getAttribute("userRoutes"));%>
+    <c:if test="${not empty orders and orders.size() ge 0}">
+        <% request.setAttribute("orders", request.getAttribute("orders"));%>
         <% request.setAttribute("orders_tittle", "Orders all");%>
 
         <div class="mt-5">
-            <%@ include file="/parts/users-routesjspf"/>
+            <%@ include file="/parts/orders.jspf" %>
         </div>
     </c:if>
 

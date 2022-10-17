@@ -25,37 +25,25 @@
             Add ${url}
         </a>
 
-        <table class="table table-striped table-hover p-5">
-            <caption>Stations</caption>
+        <table class="table table-striped table-hover p-5" aria-describedby="Stations">
             <thead>
             <tr>
                 <th scope="col">id</th>
                 <th scope="col">Name</th>
-                <%--                <th scope="col">Action</th>--%>
             </tr>
             </thead>
             <tbody>
 
             <c:forEach var="station" items="${stations}">
-
-                <tr id="selectBox_${station.getId()}" onclick="goByUrl('/stations/edit/${station.getId()}');">
-                        <th scope="row">
-<%--                            <a href="/stations/edit/${station.getId()}">--%>
-                                    ${station.getId()}
-<%--                            </a>--%>
-                        </th>
-                        <td>
-<%--                            <a href="/stations/edit/${station.getId()}">--%>
-                                    ${station.getName()}
-<%--                            </a>--%>
-                        </td>
-                            <%--                    <td>--%>
-                            <%--                        <a class="btn btn-sm btn-outline-secondary"--%>
-                            <%--                           href="/stations/delete/${station.getId()}">Delete</a>--%>
-                            <%--                    </td>--%>
+                <tr id="selectBox_${station.getId()}"
+                    onclick="goByUrl('/stations/edit/${station.getId()}');">
+                    <th scope="row">
+                            ${station.getId()}
+                    </th>
+                    <td>
+                            ${station.getName()}
+                    </td>
                 </tr>
-                    </a>
-
             </c:forEach>
 
             </tbody>

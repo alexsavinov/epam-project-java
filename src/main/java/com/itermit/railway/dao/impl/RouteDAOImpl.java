@@ -1,9 +1,8 @@
 package com.itermit.railway.dao.impl;
 
 import com.itermit.railway.dao.RouteDAO;
-import com.itermit.railway.dao.entity.Route;
-import com.itermit.railway.dao.entity.Station;
-import com.itermit.railway.dao.entity.User;
+import com.itermit.railway.db.entity.Route;
+import com.itermit.railway.db.entity.Station;
 import com.itermit.railway.db.DBException;
 import com.itermit.railway.db.DBManager;
 import com.itermit.railway.utils.FilterQuery;
@@ -19,6 +18,9 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class RouteDAOImpl implements RouteDAO {
+
+    private DBManager dbManager;
+    private static RouteDAOImpl instance;
     private static final Logger logger = LogManager.getLogger(RouteDAOImpl.class);
     private static final String SQL_GET_ALL_ROUTES = "SELECT " +
             "routes.id, " +
@@ -48,6 +50,23 @@ public class RouteDAOImpl implements RouteDAO {
             "routes.date_arrival, " +
             "routes.travel_cost, " +
             "routes.seats_total, " +
+            "routes.seats_reserved " +
+            "FROM routes " +
+            "LEFT JOIN stations s_a ON s_a.id = routes.station_arrival_id " +
+            "LEFT JOIN stations s_d ON s_d.id = routes.station_departure_id " +
+            "WHERE routes.id = ?";
+
+    private static final String SQL_GET_ROUTE_BY_ID___ = "SELECT " +
+            "routes.id, " +
+            "routes.train_number, " +
+            "routes.station_departure_id, " +
+            "s_d.name as station_departure_name, " +
+            "routes.station_arrival_id, " +
+            "s_a.name as station_arrival_name, " +
+            "routes.date_departure, " +
+            "routes.date_arrival, " +
+            "routes.travel_cost, " +
+            "routes.seats_total, " +
             "sum(ur.seats) as seats_reserved, " +
             "routes.seats_total - COALESCE(sum(ur.seats), 0) as seats_available " +
             "FROM routes " +
@@ -63,52 +82,82 @@ public class RouteDAOImpl implements RouteDAO {
     private static final String SQL_GET_TOTAL_ROWS = "SELECT COUNT(*) total_rows FROM routes";
 
 
+    public static synchronized RouteDAOImpl getInstance() {
+        if (instance == null) {
+            instance = new RouteDAOImpl();
+        }
+        return instance;
+    }
+
+    private RouteDAOImpl() {
+        dbManager = DBManager.getInstance();
+    }
+
     @Override
     public ArrayList<Route> getAll() throws DBException {
 
-        logger.trace("#getAll()");
+        logger.debug("#getAll()");
 
         ArrayList<Route> routes = new ArrayList<>();
-
-        DBManager dbManager = DBManager.getInstance();
-        Connection connection = dbManager.getConnection();
 
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
 
-        try {
+        try (Connection connection = dbManager.getConnection()) {
             preparedStatement = connection.prepareStatement(SQL_GET_ALL_ROUTES);
             resultSet = preparedStatement.executeQuery();
 
+
             while (resultSet.next()) {
-                Route route = new Route(
-                        resultSet.getInt("id"),
-                        resultSet.getString("train_number"),
-                        new Station.Builder()
-                                .withId(resultSet.getInt("station_departure_id"))
-                                .withName(resultSet.getString("station_departure_name"))
-                                .build(),
-                        new Station.Builder()
-                                .withId(resultSet.getInt("station_arrival_id"))
-                                .withName(resultSet.getString("station_arrival_name"))
-                                .build(),
-                        resultSet.getString("date_departure"),
-                        resultSet.getString("date_arrival"),
-//                    resultSet.getInt("travel_time"),
-                        resultSet.getInt("travel_cost"),
-                        resultSet.getInt("seats_available"),
-                        resultSet.getInt("seats_total")
-                );
+                Station stationArrival = new Station.Builder()
+                        .withId(resultSet.getInt("station_departure_id"))
+                        .withName(resultSet.getString("station_departure_name"))
+                        .build();
+
+                Station stationDeparture = new Station.Builder()
+                        .withId(resultSet.getInt("station_arrival_id"))
+                        .withName(resultSet.getString("station_arrival_name"))
+                        .build();
+
+                Route route = new Route.Builder()
+                        .withId(resultSet.getInt("id"))
+                        .withTrainNumber(resultSet.getString("train_number"))
+                        .withStationDeparture(stationDeparture)
+                        .withStationArrival(stationArrival)
+                        .withDateDeparture(resultSet.getString("date_departure"))
+                        .withDateArrival(resultSet.getString("date_arrival"))
+                        .withTravelCost(resultSet.getInt("travel_cost"))
+                        .withSeatsReserved(resultSet.getInt("seats_reserved"))
+                        .witheatsTotal(resultSet.getInt("seats_total"))
+                        .build();
+
+
+//                Route route = new Route(
+//                        resultSet.getInt("id"),
+//                        resultSet.getString("train_number"),
+//                        new Station.Builder()
+//                                .withId(resultSet.getInt("station_departure_id"))
+//                                .withName(resultSet.getString("station_departure_name"))
+//                                .build(),
+//                        new Station.Builder()
+//                                .withId(resultSet.getInt("station_arrival_id"))
+//                                .withName(resultSet.getString("station_arrival_name"))
+//                                .build(),
+//                        resultSet.getString("date_departure"),
+//                        resultSet.getString("date_arrival"),
+////                    resultSet.getInt("travel_time"),
+//                        resultSet.getInt("travel_cost"),
+//                        resultSet.getInt("seats_available"),
+//                        resultSet.getInt("seats_total")
+//                );
                 routes.add(route);
             }
-
         } catch (SQLException e) {
             logger.error("SQLException while getAll(): {}", e.getMessage());
             throw new DBException("SQLException while getAll()!", e);
         } finally {
             DBManager.closeResultSet(resultSet);
             DBManager.closePreparedStatement(preparedStatement);
-            DBManager.closeConnection(connection);
         }
 
         return routes;
@@ -119,18 +168,15 @@ public class RouteDAOImpl implements RouteDAO {
 
         logger.info("filters: " + filters);
 
-        logger.trace("#getAll()");
+        logger.debug("#getAll()");
 
         ArrayList<Route> routes = new ArrayList<>();
-
-        DBManager dbManager = DBManager.getInstance();
-        Connection connection = dbManager.getConnection();
 
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
         Paginator paginator = null;
 
-        try {
+        try (Connection connection = dbManager.getConnection()) {
             preparedStatement = connection.prepareStatement(SQL_GET_ALL_ROUTES);
             resultSet = preparedStatement.executeQuery();
 
@@ -222,7 +268,6 @@ public class RouteDAOImpl implements RouteDAO {
                             .append(filter.getCondition()).append(" '")
                             .append(filter.getValues().get(0)).append("'");
 
-
                 } else if (filter.getField().equals("seats_available")) {
 
                     sbAfter.append(" HAVING routes.seats_total - COALESCE(sum(ur.seats), 0) ")
@@ -272,31 +317,31 @@ public class RouteDAOImpl implements RouteDAO {
 
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Route route = new Route(
-                        resultSet.getInt("id"),
-                        resultSet.getString("train_number"),
-                        new Station.Builder()
-                                .withId(resultSet.getInt("station_departure_id"))
-                                .withName(resultSet.getString("station_departure_name"))
-                                .build(),
-                        new Station.Builder()
-                                .withId(resultSet.getInt("station_arrival_id"))
-                                .withName(resultSet.getString("station_arrival_name"))
-                                .build(),
-                        resultSet.getString("date_departure"),
-                        resultSet.getString("date_arrival"),
-//                    resultSet.getInt("travel_time"),
-                        resultSet.getInt("travel_cost"),
-                        resultSet.getInt("seats_available"),
-                        resultSet.getInt("seats_total")
-                );
+                Station stationArrival = new Station.Builder()
+                        .withId(resultSet.getInt("station_departure_id"))
+                        .withName(resultSet.getString("station_departure_name"))
+                        .build();
+
+                Station stationDeparture = new Station.Builder()
+                        .withId(resultSet.getInt("station_arrival_id"))
+                        .withName(resultSet.getString("station_arrival_name"))
+                        .build();
+
+                Route route = new Route.Builder()
+                        .withId(resultSet.getInt("id"))
+                        .withTrainNumber(resultSet.getString("train_number"))
+                        .withStationDeparture(stationDeparture)
+                        .withStationArrival(stationArrival)
+                        .withDateDeparture(resultSet.getString("date_departure"))
+                        .withDateArrival(resultSet.getString("date_arrival"))
+                        .withTravelCost(resultSet.getInt("travel_cost"))
+                        .withSeatsReserved(resultSet.getInt("seats_reserved"))
+                        .witheatsTotal(resultSet.getInt("seats_total"))
+                        .build();
+
                 routes.add(route);
 
-
-//
-//            logger.info("! id: " + Route.getId() + "; name: " + Route.getName());
             }
-
 
             /* Pagination */
 //        new Paginator(1, 1, 1, 1, routes);
@@ -327,7 +372,6 @@ public class RouteDAOImpl implements RouteDAO {
         } finally {
             DBManager.closeResultSet(resultSet);
             DBManager.closePreparedStatement(preparedStatement);
-            DBManager.closeConnection(connection);
         }
 
 //        return Routes;
@@ -337,39 +381,59 @@ public class RouteDAOImpl implements RouteDAO {
     @Override
     public Route get(int id) throws DBException {
 
-        logger.trace("#get(id): {}", id);
+        logger.debug("#get(id): {}", id);
 
         Route route = null;
-
-        DBManager dbManager = DBManager.getInstance();
-        Connection connection = dbManager.getConnection();
 
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
 
-        try {
+        try (Connection connection = dbManager.getConnection()) {
             preparedStatement = connection.prepareStatement(SQL_GET_ROUTE_BY_ID);
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                route = new Route(
-                        resultSet.getInt("id"),
-                        resultSet.getString("train_number"),
-                        new Station.Builder()
-                                .withId(resultSet.getInt("station_departure_id"))
-                                .withName(resultSet.getString("station_departure_name"))
-                                .build(),
-                        new Station.Builder()
-                                .withId(resultSet.getInt("station_arrival_id"))
-                                .withName(resultSet.getString("station_arrival_name"))
-                                .build(),
-                        resultSet.getString("date_departure"),
-                        resultSet.getString("date_arrival"),
-//                    resultSet.getInt("travel_time"),
-                        resultSet.getInt("travel_cost"),
-                        resultSet.getInt("seats_available"),
-                        resultSet.getInt("seats_total")
-                );
+                Station stationArrival = new Station.Builder()
+                        .withId(resultSet.getInt("station_departure_id"))
+                        .withName(resultSet.getString("station_departure_name"))
+                        .build();
+
+                Station stationDeparture = new Station.Builder()
+                        .withId(resultSet.getInt("station_arrival_id"))
+                        .withName(resultSet.getString("station_arrival_name"))
+                        .build();
+
+                route = new Route.Builder()
+                        .withId(resultSet.getInt("id"))
+                        .withTrainNumber(resultSet.getString("train_number"))
+                        .withStationDeparture(stationDeparture)
+                        .withStationArrival(stationArrival)
+                        .withDateDeparture(resultSet.getString("date_departure"))
+                        .withDateArrival(resultSet.getString("date_arrival"))
+                        .withTravelCost(resultSet.getInt("travel_cost"))
+                        .withSeatsReserved(resultSet.getInt("seats_reserved"))
+                        .witheatsTotal(resultSet.getInt("seats_total"))
+                        .build();
+
+
+//                route = new Route(
+//                        resultSet.getInt("id"),
+//                        resultSet.getString("train_number"),
+//                        new Station.Builder()
+//                                .withId(resultSet.getInt("station_departure_id"))
+//                                .withName(resultSet.getString("station_departure_name"))
+//                                .build(),
+//                        new Station.Builder()
+//                                .withId(resultSet.getInt("station_arrival_id"))
+//                                .withName(resultSet.getString("station_arrival_name"))
+//                                .build(),
+//                        resultSet.getString("date_departure"),
+//                        resultSet.getString("date_arrival"),
+////                    resultSet.getInt("travel_time"),
+//                        resultSet.getInt("travel_cost"),
+//                        resultSet.getInt("seats_available"),
+//                        resultSet.getInt("seats_total")
+//                );
             }
         } catch (SQLException e) {
             logger.error("SQLException while get(id): {}", e.getMessage());
@@ -377,7 +441,6 @@ public class RouteDAOImpl implements RouteDAO {
         } finally {
             DBManager.closeResultSet(resultSet);
             DBManager.closePreparedStatement(preparedStatement);
-            DBManager.closeConnection(connection);
         }
 
         return route;
@@ -386,55 +449,48 @@ public class RouteDAOImpl implements RouteDAO {
     @Override
     public void add(Route route) throws DBException {
 
-        logger.trace("#add(route): {}", route);
-
-        DBManager dbManager = DBManager.getInstance();
-        Connection connection = dbManager.getConnection();
+        logger.debug("#add(route): {}", route);
 
         PreparedStatement preparedStatement = null;
 
-        try {
+        try (Connection connection = dbManager.getConnection()) {
             preparedStatement = connection.prepareStatement(SQL_ADD_ROUTE);
             int l = 0;
-            preparedStatement.setString(++l, route.getTrain_number());
-            preparedStatement.setInt(++l, route.getStation_departure().getId());
-            preparedStatement.setInt(++l, route.getStation_arrival().getId());
-            preparedStatement.setString(++l, route.getDate_departure());
-            preparedStatement.setString(++l, route.getDate_arrival());
-            preparedStatement.setInt(++l, route.getTravel_cost());
-            preparedStatement.setInt(++l, route.getSeats_total());
+            preparedStatement.setString(++l, route.getTrainNumber());
+            preparedStatement.setInt(++l, route.getStationDeparture().getId());
+            preparedStatement.setInt(++l, route.getStationArrival().getId());
+            preparedStatement.setString(++l, route.getDateDeparture());
+            preparedStatement.setString(++l, route.getDateArrival());
+            preparedStatement.setInt(++l, route.getTravelCost());
+            preparedStatement.setInt(++l, route.getSeatsTotal());
 
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            logger.error("SQLException while add(station): {}", e.getMessage());
-            throw new DBException("SQLException while add(station)!", e);
+            logger.error("SQLException while add(route): {}", e.getMessage());
+            throw new DBException("SQLException while add(route)!", e);
         } finally {
             DBManager.closePreparedStatement(preparedStatement);
-            DBManager.closeConnection(connection);
         }
     }
 
     @Override
     public void update(int id, Route route) throws DBException {
 
-        logger.trace("#update(id, route): {} -- {}", id, route);
-
-        DBManager dbManager = DBManager.getInstance();
-        Connection connection = dbManager.getConnection();
+        logger.debug("#update(id, route): {} -- {}", id, route);
 
         PreparedStatement preparedStatement = null;
 
-        try {
+        try (Connection connection = dbManager.getConnection()) {
             preparedStatement = connection.prepareStatement(SQL_UPDATE_ROUTE);
 
             int l = 0;
-            preparedStatement.setString(++l, route.getTrain_number());
-            preparedStatement.setInt(++l, route.getStation_departure().getId());
-            preparedStatement.setInt(++l, route.getStation_arrival().getId());
-            preparedStatement.setString(++l, route.getDate_departure());
-            preparedStatement.setString(++l, route.getDate_arrival());
-            preparedStatement.setInt(++l, route.getTravel_cost());
-            preparedStatement.setInt(++l, route.getSeats_total());
+            preparedStatement.setString(++l, route.getTrainNumber());
+            preparedStatement.setInt(++l, route.getStationDeparture().getId());
+            preparedStatement.setInt(++l, route.getStationArrival().getId());
+            preparedStatement.setString(++l, route.getDateDeparture());
+            preparedStatement.setString(++l, route.getDateArrival());
+            preparedStatement.setInt(++l, route.getTravelCost());
+            preparedStatement.setInt(++l, route.getSeatsTotal());
             preparedStatement.setInt(++l, id);
 
             preparedStatement.executeUpdate();
@@ -443,21 +499,17 @@ public class RouteDAOImpl implements RouteDAO {
             throw new DBException("SQLException while update(id, route)!", e);
         } finally {
             DBManager.closePreparedStatement(preparedStatement);
-            DBManager.closeConnection(connection);
         }
     }
 
     @Override
     public void delete(int id) throws DBException {
 
-        logger.trace("#delete(id): {}", id);
-
-        DBManager dbManager = DBManager.getInstance();
-        Connection connection = dbManager.getConnection();
+        logger.debug("#delete(id): {}", id);
 
         PreparedStatement preparedStatement = null;
 
-        try {
+        try (Connection connection = dbManager.getConnection()) {
             preparedStatement = connection.prepareStatement(SQL_DELETE_ROUTE);
             int l = 0;
             preparedStatement.setInt(++l, id);
@@ -467,7 +519,6 @@ public class RouteDAOImpl implements RouteDAO {
             throw new DBException("SQLException while delete(id)!", e);
         } finally {
             DBManager.closePreparedStatement(preparedStatement);
-            DBManager.closeConnection(connection);
         }
     }
 

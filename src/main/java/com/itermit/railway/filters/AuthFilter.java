@@ -40,20 +40,25 @@ public class AuthFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
 
-        logger.trace("#doFilter(servletRequest, servletResponse, filterChain). active: {}", active);
+//        logger.debug("#doFilter(servletRequest, servletResponse, filterChain). active: {}", active);
 
         HttpServletRequest httpReq = (HttpServletRequest) servletRequest;
         HttpServletResponse httpResp = (HttpServletResponse) servletResponse;
         HttpSession session = httpReq.getSession();
 
         if (active.equals(true)) {
-            logger.info("httpReq.getRequestURI(): {}", httpReq.getRequestURI());
+//            logger.info("httpReq.getRequestURI(): {}", httpReq.getRequestURI());
 
             isAuthorized = (Boolean) session.getAttribute("isAuthorized");
             isAuthorized = isAuthorized != null && isAuthorized;
 
             /* REDIRECTS to login page (no access) */
-            if (httpReq.getRequestURI().equals("/profile")) {
+            if (httpReq.getRequestURI().equals("/profile")
+                    || httpReq.getRequestURI().startsWith("/users")
+                    || httpReq.getRequestURI().startsWith("/routes")
+                    || httpReq.getRequestURI().startsWith("/orders")
+                    || httpReq.getRequestURI().startsWith("/stations")) {
+
                 if (isAuthorized.equals(false)) {
                     logger.error("NOT Authorized -> redirecting to /login");
                     httpResp.sendRedirect("/login");

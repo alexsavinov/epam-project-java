@@ -35,7 +35,7 @@ public class EncodingFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
 
-        logger.trace("#doFilter(servletRequest, servletResponse, filterChain). active: {}", active);
+//        logger.debug("#doFilter(servletRequest, servletResponse, filterChain). active: {}", active);
 
         HttpServletRequest httpReq = (HttpServletRequest) servletRequest;
         HttpServletResponse httpResp = (HttpServletResponse) servletResponse;
@@ -54,7 +54,7 @@ public class EncodingFilter implements Filter {
                 httpResp.setCharacterEncoding(encoding);
             }
 
-            logger.info("encoding: {}", encoding);
+//            logger.info("encoding: {}", encoding);
         }
 
         filterChain.doFilter(servletRequest, servletResponse);

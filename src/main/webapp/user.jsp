@@ -44,7 +44,7 @@
 
         <div class="mb-1">
             <label for="id" class="form-label">id</label>
-            <input type="text" class="form-control" aria-label="id" id="id" name="id" disabled
+            <input type="text" class="form-control" aria-label="id" id="id" name="id" readonly
                    value="${user.getId()}">
         </div>
 
@@ -54,8 +54,8 @@
                    value="${user.getName()}">
 
             <label for="password" class="form-label mt-1">Password</label>
-            <input type="password" class="form-control" placeholder="Username" aria-label="name" id="password"
-                   name="password" value="${user.getPassword()}">
+            <input type="password" class="form-control" placeholder="Password" aria-label="name" id="password"
+                   name="password" value="">
 
             <div class="form-check mt-3">
 
@@ -74,10 +74,10 @@
 
         </div>
 
-        <div class="form-group mt-3">
-            <img src="/images/image.jpg" alt="avatar" style="width: 150px">
-            <input type="file" name="file" value="asdfasdfasd" />
-        </div>
+<%--        <div class="form-group mt-3">--%>
+<%--            <img src="/images/image.jpg" alt="avatar" style="width: 150px">--%>
+<%--            <input type="file" name="file" value="asdfasdfasd" />--%>
+<%--        </div>--%>
 
         <div class="form-group mt-3">
             <button type="submit" class="btn">Save</button>

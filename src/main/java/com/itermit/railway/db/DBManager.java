@@ -18,6 +18,7 @@ import java.sql.*;
 public class DBManager {
 
     private static DBManager instance;
+    private final DataSource dataSource;
     private static final Logger logger = LogManager.getLogger(DBManager.class);
 
     /*
@@ -25,7 +26,7 @@ public class DBManager {
      */
     public static synchronized DBManager getInstance() {
 
-        logger.trace("#DBManager getInstance().");
+        logger.debug("#DBManager getInstance().");
 
         if (instance == null) {
             instance = new DBManager();
@@ -34,35 +35,31 @@ public class DBManager {
     }
 
     private DBManager() {
+        try {
+            Context initContext = new InitialContext();
+            Context envContext  = (Context)initContext.lookup("java:/comp/env");
+            dataSource = (DataSource)envContext.lookup("jdbc/sql-connector-pool");
+        } catch (NamingException e) {
+            throw new IllegalStateException("Cannot obtain a data source", e);
+        }
     }
 
     /*
      * Creates connection to DB
      */
-    public Connection getConnection() throws DBException {
+    public Connection getConnection() throws SQLException {
 
         logger.trace("#getConnection().");
 
         Connection connection;
-        DataSource ds;
 
         try {
-            InitialContext initialContext = new InitialContext();
-            Context context = (Context) initialContext.lookup("java:comp/env");
-            ds = (DataSource) context.lookup("jdbc/sql-connector-pool");
-        } catch (NamingException e) {
-            logger.error("NamingException while getConnection(): {}", e.getMessage());
-            throw new DBException("NamingException while getConnection()!", e);
-        }
-
-        try {
-            connection = ds.getConnection();
+            connection = dataSource.getConnection();
+            logger.warn("connection: {}", connection);
         } catch (SQLException e) {
             logger.error("SQLException while getConnection(): {}", e.getMessage());
-            throw new DBException("SQLException while getConnection()!", e);
+            throw new SQLException("SQLException while getConnection()!", e);
         }
-
-        logger.warn("connection: {}", connection);
 
         return connection;
     }

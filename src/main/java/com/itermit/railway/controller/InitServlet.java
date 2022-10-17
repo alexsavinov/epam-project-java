@@ -16,8 +16,8 @@ import java.util.Objects;
 import static javax.servlet.RequestDispatcher.*;
 
 
-//@WebServlet(name = "InitServlet", value = "/InitServlet")
-@WebServlet(name = "InitServlet", urlPatterns = {"/error"})
+@WebServlet(name = "InitServlet",
+        urlPatterns = {"/error"})
 public class InitServlet extends HttpServlet {
 
     private static final Logger logger = LogManager.getLogger(InitServlet.class);
@@ -25,7 +25,7 @@ public class InitServlet extends HttpServlet {
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
 
-        logger.trace("#doGet(request, response)");
+        logger.debug("#doGet(request, response)");
 
         if (request.getRequestURI().equals("/error")) {
             response.setContentType("text/html");
@@ -48,7 +48,7 @@ public class InitServlet extends HttpServlet {
 
             String error = (String) Objects.requireNonNull(request.getAttribute("error"));
             if (!error.isEmpty()) {
-                logger.error(error);
+//                logger.error(error);
                 out.write("<h2>" + error + "</h2>");
             }
             out.println("</body></html>");

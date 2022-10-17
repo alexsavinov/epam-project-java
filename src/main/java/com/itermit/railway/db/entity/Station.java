@@ -1,4 +1,4 @@
-package com.itermit.railway.dao.entity;
+package com.itermit.railway.db.entity;
 
 import java.io.Serializable;
 
@@ -11,11 +11,6 @@ public class Station implements Serializable {
     private String name;
 
     private Station() {
-    }
-
-    public Station(int id, String name) {
-        this.id = id;
-        this.name = name;
     }
 
     public int getId() {
@@ -53,12 +48,13 @@ public class Station implements Serializable {
             station.setId(id);
             return this;
         }
+
         public Builder withName(String name) {
             station.setName(name);
             return this;
         }
 
-        public Station build(){
+        public Station build() {
             return station;
         }
     }

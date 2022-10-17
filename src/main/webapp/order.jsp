@@ -6,7 +6,7 @@
 <head>
     <%@ include file="/parts/head.jspf" %>
 
-    <title>Railway ticket office - User route</title>
+    <title>Railway ticket office - Order</title>
 </head>
 <body onload="updateTime();">
 
@@ -20,7 +20,7 @@
 
 
     <div class="ms-5 h3 _main-color1">
-        User route
+        Order
         <c:choose>
             <c:when test="${action == 'add'}">
                 (add)
@@ -61,8 +61,8 @@
 
         <div class="form-group mb-1">
             <label for="date_reserve" class="form-label">Date of reserve</label>
-            <input type="text" class="form-control" aria-label="date_reserve"
-                   id="date_reserve" name="date_reserve" value="${order.getDate_reserve()}">
+            <input type="datetime-local" class="form-control" aria-label="date_reserve"
+                   id="date_reserve" name="date_reserve" value="${order.getDateReserve()}">
         </div>
 
         <div class="form-group mb-1">
@@ -115,33 +115,33 @@
             <div class="mb-1">
                 <label for="train_number" class="form-label">Train number</label>
                 <input type="text" class="form-control" placeholder="Train number" aria-label="train_number"
-                       id="train_number" name="train_number" value="${order.getRoute().getTrain_number()}" disabled>
+                       id="train_number" name="train_number" value="${order.getRoute().getTrainNumber()}" disabled>
             </div>
 
             <div class="form-group mb-1">
                 <label for="station_departure">Station departure</label>
                 <input type="text" class="form-control" aria-label="station_departure"
-                       id="station_departure" name="station_departure" value="${order.getRoute().getStation_departure().getName()}" disabled>
+                       id="station_departure" name="station_departure" value="${order.getRoute().getStationDeparture().getName()}" disabled>
             </div>
 
             <div class="mb-1">
                 <label for="date_departure" class="form-label">Date departure</label>
                 <input type="datetime-local" class="form-control" aria-label="date_departure" onchange="updateTime();"
-                       id="date_departure" name="date_departure" value="${order.getRoute().getDate_departure()}"
-                       max="${order.getRoute().getDate_arrival()}" disabled>
+                       id="date_departure" name="date_departure" value="${order.getRoute().getDateDeparture()}"
+                       max="${order.getRoute().getDateArrival()}" disabled>
             </div>
 
             <div class="form-group mb-1">
                 <label for="station_arrival">Station arrival</label>
                 <input type="text" class="form-control" aria-label="station_arrival"
-                       id="station_arrival" name="station_arrival" value="${order.getRoute().getStation_arrival().getName()}" disabled>
+                       id="station_arrival" name="station_arrival" value="${order.getRoute().getStationArrival().getName()}" disabled>
             </div>
 
             <div class="mb-1">
                 <label for="date_arrival" class="form-label">Date arrival</label>
                 <input type="datetime-local" class="form-control" aria-label="date_arrival" onchange="updateTime();"
-                       id="date_arrival" name="date_arrival" value="${order.getRoute().getDate_arrival()}"
-                       min="${order.getRoute().getDate_departure()}" disabled>
+                       id="date_arrival" name="date_arrival" value="${order.getRoute().getDateArrival()}"
+                       min="${order.getRoute().getDateDeparture()}" disabled>
             </div>
 
             <div class="mb-1">
@@ -153,27 +153,27 @@
             <div class="mb-1">
                 <label for="travel_cost" class="form-label">Travel cost</label>
                 <input type="number" class="form-control" aria-label="travel_cost"
-                       id="travel_cost" name="travel_cost" value="${order.getRoute().getTravel_cost()}" disabled>
+                       id="travel_cost" name="travel_cost" value="${order.getRoute().getTravelCost()}" disabled>
             </div>
 
             <div class="mb-1">
                 <label for="seats_available" class="form-label">Seats available</label>
                 <input type="number" class="form-control" aria-label="seats_available"
-                       id="seats_available" name="seats_available" value="${order.getRoute().getSeats_available()}"
+                       id="seats_available" name="seats_available" value="${order.getRoute().getSeatsAvailable()}"
                        disabled>
             </div>
 
             <div class="mb-1">
                 <label for="seats_total" class="form-label">Seats total</label>
                 <input type="number" class="form-control" aria-label="seats_total"
-                       id="seats_total" name="seats_total" value="${order.getRoute().getSeats_total()}" disabled>
+                       id="seats_total" name="seats_total" value="${order.getRoute().getSeatsTotal()}" disabled>
             </div>
         </div>
 
 
         <div class="form-group mt-3">
             <button type="submit" class="btn">Save</button>
-            <a class="btn btn-outline-secondary" href="/users-routes/delete/${order.getId()}">Delete</a>
+            <a class="btn btn-outline-secondary" href="/orders/delete/${order.getId()}">Delete</a>
         </div>
     </form>
 

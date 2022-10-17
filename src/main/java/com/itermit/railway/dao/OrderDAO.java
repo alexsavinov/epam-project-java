@@ -1,7 +1,7 @@
 package com.itermit.railway.dao;
 
 
-import com.itermit.railway.dao.entity.Order;
+import com.itermit.railway.db.entity.Order;
 import com.itermit.railway.db.DBException;
 import com.itermit.railway.utils.FilterQuery;
 

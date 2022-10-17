@@ -2,8 +2,8 @@ package com.itermit.railway.dao.impl;
 
 
 import com.itermit.railway.dao.StationDAO;
-import com.itermit.railway.dao.entity.Station;
-import com.itermit.railway.dao.entity.User;
+import com.itermit.railway.db.entity.Station;
+import com.itermit.railway.db.entity.User;
 import com.itermit.railway.db.DBException;
 import com.itermit.railway.db.DBManager;
 import org.apache.logging.log4j.LogManager;
@@ -16,29 +16,38 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class StationDAOImpl implements StationDAO {
+    private DBManager dbManager;
+    private static StationDAOImpl instance;
     private static final Logger logger = LogManager.getLogger(StationDAOImpl.class);
-
     private static final String SQL_GET_ALL_STATIONS = "SELECT id, name FROM stations";
     private static final String SQL_GET_STATIONS_BY_ID = "SELECT id, name FROM stations WHERE id = ?";
     private static final String SQL_ADD_STATION = "INSERT INTO stations (name) VALUES (?)";
     private static final String SQL_UPDATE_STATION = "UPDATE stations SET name = ? WHERE id = ?";
     private static final String SQL_DELETE_STATION = "DELETE FROM stations WHERE id = ?";
 
+    public static synchronized StationDAOImpl getInstance() {
+        if (instance == null) {
+            instance = new StationDAOImpl();
+        }
+        return instance;
+    }
+
+    private StationDAOImpl() {
+        dbManager = DBManager.getInstance();
+    }
 
     @Override
     public ArrayList<Station> getAll() throws DBException {
 
-        logger.trace("#getAll()");
+        logger.debug("#getAll()");
 
         ArrayList<Station> stations = new ArrayList<>();
-
-        DBManager dbManager = DBManager.getInstance();
-        Connection connection = dbManager.getConnection();
 
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
 
-        try {
+        try (Connection connection = dbManager.getConnection()) {
+            logger.trace(SQL_GET_ALL_STATIONS);
             preparedStatement = connection.prepareStatement(SQL_GET_ALL_STATIONS);
             resultSet = preparedStatement.executeQuery();
 
@@ -51,11 +60,10 @@ public class StationDAOImpl implements StationDAO {
 
         } catch (SQLException e) {
             logger.error("SQLException while getAll(): {}", e.getMessage());
-            throw new DBException("SQLException while getAll()!", e);
+            throw new DBException("Cannot get items!", e);
         } finally {
             DBManager.closeResultSet(resultSet);
             DBManager.closePreparedStatement(preparedStatement);
-            DBManager.closeConnection(connection);
         }
 
         return stations;
@@ -64,19 +72,18 @@ public class StationDAOImpl implements StationDAO {
     @Override
     public Station get(int id) throws DBException {
 
-        logger.trace("#get(id): {}", id);
+        logger.debug("#get(id): {}", id);
 
         Station station = null;
-
-        DBManager dbManager = DBManager.getInstance();
-        Connection connection = dbManager.getConnection();
 
         ResultSet resultSet = null;
         PreparedStatement preparedStatement = null;
 
-        try {
+        try (Connection connection = dbManager.getConnection()) {
+            logger.trace(SQL_GET_STATIONS_BY_ID);
             preparedStatement = connection.prepareStatement(SQL_GET_STATIONS_BY_ID);
-            preparedStatement.setInt(1, id);
+            int l = 0;
+            preparedStatement.setInt(++l, id);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
                 station = new Station.Builder()
@@ -86,11 +93,10 @@ public class StationDAOImpl implements StationDAO {
             }
         } catch (SQLException e) {
             logger.error("SQLException while get(id): {}", e.getMessage());
-            throw new DBException("SQLException while get(id)!", e);
+            throw new DBException("Cannot get item!", e);
         } finally {
             DBManager.closeResultSet(resultSet);
             DBManager.closePreparedStatement(preparedStatement);
-            DBManager.closeConnection(connection);
         }
 
         return station;
@@ -99,75 +105,61 @@ public class StationDAOImpl implements StationDAO {
     @Override
     public void add(Station station) throws DBException {
 
-        logger.trace("#add(station): {}", station);
-
-        DBManager dbManager = DBManager.getInstance();
-        Connection connection = dbManager.getConnection();
+        logger.debug("#add(station): {}", station);
 
         PreparedStatement preparedStatement = null;
-        try {
+        try (Connection connection = dbManager.getConnection()) {
+            logger.trace(SQL_UPDATE_STATION);
             preparedStatement = connection.prepareStatement(SQL_ADD_STATION);
             int l = 0;
             preparedStatement.setString(++l, station.getName());
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
             logger.error("SQLException while add(station): {}", e.getMessage());
-            throw new DBException("SQLException while add(station)!", e);
+            throw new DBException("Cannot add item!", e);
         } finally {
             DBManager.closePreparedStatement(preparedStatement);
-            DBManager.closeConnection(connection);
         }
     }
 
     @Override
     public void update(int id, Station station) throws DBException {
 
-        logger.trace("#update(id, user): {} -- {}", id, station);
-
-        DBManager dbManager = DBManager.getInstance();
-        Connection connection = dbManager.getConnection();
+        logger.debug("#update(id, station): {} -- {}", id, station);
 
         PreparedStatement preparedStatement = null;
-
-        try {
+        try (Connection connection = dbManager.getConnection()) {
+            logger.trace(SQL_UPDATE_STATION);
             preparedStatement = connection.prepareStatement(SQL_UPDATE_STATION);
-
             int l = 0;
             preparedStatement.setString(++l, station.getName());
             preparedStatement.setInt(++l, id);
-
             preparedStatement.executeUpdate();
-
         } catch (SQLException e) {
-            logger.error("SQLException while update(id, user): {}", e.getMessage());
-            throw new DBException("SQLException while update(id, user)!", e);
+            logger.error("SQLException while update(id, station): {}", e.getMessage());
+            throw new DBException("Cannot update item!", e);
         } finally {
             DBManager.closePreparedStatement(preparedStatement);
-            DBManager.closeConnection(connection);
         }
     }
 
     @Override
     public void delete(int id) throws DBException {
 
-        logger.trace("#delete(id): {}", id);
-
-        DBManager dbManager = DBManager.getInstance();
-        Connection connection = dbManager.getConnection();
+        logger.debug("#delete(id): {}", id);
 
         PreparedStatement preparedStatement = null;
-
-        try {
+        try (Connection connection = dbManager.getConnection()) {
+            logger.trace(SQL_DELETE_STATION);
             preparedStatement = connection.prepareStatement(SQL_DELETE_STATION);
             int l = 0;
             preparedStatement.setInt(++l, id);
             preparedStatement.executeUpdate();
         } catch (SQLException e) {
-            logger.error("SQLException while update(id, user): {}", e.getMessage());
-            throw new DBException("SQLException while update(id, user)!", e);
+            logger.error("SQLException while delete(id): {}", e.getMessage());
+            throw new DBException("Cannot delete item!", e);
         } finally {
             DBManager.closePreparedStatement(preparedStatement);
-            DBManager.closeConnection(connection);
         }
     }
 

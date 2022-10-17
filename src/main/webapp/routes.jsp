@@ -27,8 +27,7 @@
             Add ${url}
         </a>
 
-        <table class="table table-striped table-hover p-5 mt-3">
-            <caption>Routes</caption>
+        <table class="table table-striped table-hover p-5 mt-3" aria-describedby="Routes">
             <thead>
             <tr>
                 <th scope="col">id</th>
@@ -51,31 +50,31 @@
                             ${route.getId()}
                     </th>
                     <td>
-                            ${route.getTrain_number()}
+                            ${route.getTrainNumber()}
                     </td>
                     <td>
-                            ${route.getStation_departure().getName()}
+                            ${route.getStationDeparture().getName()}
                     </td>
                     <td>
-                            ${route.getDate_departure()}
+                            ${route.getDateDeparture()}
                     </td>
                     <td>
-                            ${route.getStation_arrival().getName()}
+                            ${route.getTravelTime()}
                     </td>
                     <td>
-                            ${route.getDate_arrival()}
+                            ${route.getStationArrival().getName()}
                     </td>
                     <td>
-                            ${route.getTravel_time()}
+                            ${route.getDateArrival()}
                     </td>
                     <td>
-                            ${route.getTravel_cost()}
+                            ${route.getTravelCost()}
                     </td>
                     <td>
-                            ${route.getSeats_total()}
+                            ${route.getSeatsTotal()}
                     </td>
                     <td>
-                            ${route.getSeats_available()}
+                            ${route.getSeatsAvailable()}
                     </td>
                 </tr>
             </c:forEach>
@@ -83,8 +82,6 @@
         </table>
 
     </div>
-
-    <div class="divider"></div>
 
     <%@ include file="/parts/footer.jspf" %>
 

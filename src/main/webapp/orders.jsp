@@ -1,4 +1,4 @@
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+    <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE html>
@@ -20,13 +20,12 @@
 
     <div class="_wrapper-table">
 
-        <a class="btn btn-sm btn-outline-secondary mt-2 mb-1 shadow-sm" href="/users-routes/add">
+        <a class="btn btn-sm btn-outline-secondary mt-2 mb-1 shadow-sm" href="/orders/add">
             <i class="fa fa-plus-circle" aria-hidden="true"></i>
             Add ${url}
         </a>
 
-        <table class="table table-striped table-hover p-5 mt-3">
-            <caption>Users routes</caption>
+        <table class="table table-striped table-hover p-5 mt-3" aria-describedby="Orders">
             <thead>
             <tr>
                 <th scope="col">id</th>
@@ -47,9 +46,9 @@
             </thead>
 
             <tbody>
-            <c:forEach var="order" items="${userRoutes}">
+            <c:forEach var="order" items="${orders}">
                 <tr id="selectBox_${order.getId()}"
-                    onclick="goByUrl('/users-routes/edit/${order.getId()}');">
+                    onclick="goByUrl('/orders/edit/${order.getId()}');">
 
                     <th scope="row">
                             ${order.getId()}
@@ -58,7 +57,7 @@
                             ${order.getSeats()}
                     </td>
                     <td>
-                            ${order.getDate_reserve()}
+                            ${order.getDateReserve()}
                     </td>
                     <td>
                             ${order.getUser().getId()}
@@ -70,28 +69,28 @@
                             ${order.getRoute().getId()}
                     </td>
                     <td>
-                            ${order.getRoute().getTrain_number()}
+                            ${order.getRoute().getTrainNumber()}
                     </td>
                     <td>
-                            ${order.getRoute().getStation_departure().getName()}
+                            ${order.getRoute().getStationDeparture().getName()}
                     </td>
                     <td>
-                            ${order.getRoute().getDate_departure()}
+                            ${order.getRoute().getDateDeparture()}
                     </td>
                     <td>
-                            ${order.getRoute().getStation_arrival().getName()}
+                            ${order.getRoute().getStationArrival().getName()}
                     </td>
                     <td>
-                            ${order.getRoute().getDate_arrival()}
+                            ${order.getRoute().getDateArrival()}
                     </td>
                     <td>
-                            ${order.getRoute().getTravel_time()}
+                            ${order.getRoute().getTravelTime()}
                     </td>
                     <td>
-                            ${order.getRoute().getTravel_cost()}
+                            ${order.getRoute().getTravelCost()}
                     </td>
                     <td>
-                            ${order.getRoute().getSeats_total()}
+                            ${order.getRoute().getSeatsTotal()}
                     </td>
                 </tr>
             </c:forEach>
