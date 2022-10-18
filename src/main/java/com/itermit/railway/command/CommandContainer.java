@@ -47,6 +47,21 @@ public class CommandContainer {
         commands.put("routeAddGet", new RouteAddGetCommand());
         commands.put("routeAddPost", new RouteAddPostCommand());
         commands.put("routeDelete", new RouteDeleteCommand());
+        /* OrderServlet */
+        commands.put("ordersList", new OrdersListCommand());
+        commands.put("orderEditGet", new OrderEditGetCommand());
+        commands.put("orderEditPost", new OrderEditPostCommand());
+        commands.put("orderAddGet", new OrderAddGetCommand());
+        commands.put("orderAddPost", new OrderAddPostCommand());
+        commands.put("orderDelete", new OrderDeleteCommand());
+
+        /* ReserveServlet */
+        commands.put("reservesList", new ReservesListCommand());
+//        commands.put("reserveEditGet", new ReserveEditGetCommand());
+//        commands.put("reserveEditPost", new ReserveEditPostCommand());
+//        commands.put("reserveAddGet", new ReserveAddGetCommand());
+        commands.put("reserveAddPost", new ReserveAddPostCommand());
+        commands.put("reserveDelete", new ReserveDeleteCommand());
     }
 
     private CommandContainer() {

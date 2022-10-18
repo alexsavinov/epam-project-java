@@ -1,3 +1,5 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
 <div class="_wrapper-table">
 
     <c:if test="${orders_tittle ne null}">
@@ -28,16 +30,18 @@
             <th scope="col">Arrival</th>
             <th scope="col">Date/time arrival</th>
             <th scope="col">Travel cost</th>
-            <th scope="col">Seats total</th>
+            <th scope="col">Seats reserved</th>
             <th scope="col">Seats available</th>
+            <th scope="col">Seats total</th>
+            <th scope="col">Action</th>
         </tr>
         </thead>
 
         <tbody>
         <c:forEach var="route" items="${routes}">
-
-            <tr id="selectBox_${route.getId()}"
-                onclick="goByUrl('/reserve/${route.getId()}');">
+            <tr>
+                    <%--            >--%>
+                    <%--                onclick="goByUrl('/reserve/add/${route.getId()}');"--%>
 
                 <th scope="row">
                     <c:out value="${route.getTrainNumber()}"/>
@@ -61,10 +65,22 @@
                         ${route.getTravelCost()}
                 </td>
                 <td>
-                        ${route.getSeatsTotal()}
+                        ${route.getSeatsReserved()}
                 </td>
                 <td>
                         ${route.getSeatsAvailable()}
+                </td>
+                <td>
+                        ${route.getSeatsTotal()}
+                </td>
+                <td>
+                    <button type="button"
+                            class="btn btn-outline-secondary _btn_form"
+                            data-bs-toggle="modal"
+                            data-bs-target="#exampleModal"
+                            onclick='setValue("route_id", ${route.getId()})'>
+                        Reserve
+                    </button>
                 </td>
 
             </tr>
@@ -72,6 +88,18 @@
         </c:forEach>
         </tbody>
     </table>
+
+    <%@ include file="/parts/reserve.jspf" %>
+
+    <%--                    <tr id="selectBox_${route.getId()}"--%>
+
+    <%--        <jsp:include page="file.jsp" >--%>
+    <%--            <jsp:param name="firstname" value="Chaitanya" />--%>
+    <%--        </jsp:include>--%>
+    <%--                </div>--%>
+
+    <%-- RESERVE --%>
+
 
     <%@ include file="/parts/pagination.jspf" %>
 

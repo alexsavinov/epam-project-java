@@ -11,10 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(name = "SearchServlet", urlPatterns = {"/search"})
-public class SearchServlet extends HttpServlet {
+@WebServlet(name = "ReserveServlet",
+        urlPatterns = {"/reserves", "/reserves/delete/*", "/reserves/edit/*", "/reserves/add"})
+public class ReserveServlet extends HttpServlet {
 
-    private static final Logger logger = LogManager.getLogger(SearchServlet.class);
+    private static final Logger logger = LogManager.getLogger(ReserveServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -22,17 +23,28 @@ public class SearchServlet extends HttpServlet {
 
         logger.debug("#doGet(request, response).  {}", request.getRequestURI());
 
-        String commandName;
+        String commandName = null;
 
-        if (request.getRequestURI().equals("/search")) {
+        if (request.getRequestURI().equals("/reserves")) {
 
-            commandName = "searchGet";
+            commandName = "reservesList";
+
+        } else if (request.getRequestURI().contains("/reserves/delete")) {
+
+            doPost(request, response);
+
+        } else if (request.getRequestURI().startsWith("/reserves/edit")) {
+
+            commandName = "reserveEditGet";
+
+        } else if (request.getRequestURI().contains("/reserves/add")) {
+
+            commandName = "reserveAddGet";
 
         } else {
             request.setAttribute("error", "UNHANDLED request: " + request.getRequestURI());
             request.getRequestDispatcher("/error").forward(request, response);
-            logger.error("doGet UNHANDLED request!  {}", request.getRequestURI());
-            return;
+            logger.error("UNHANDLED request!  {}", request.getRequestURI());
         }
 
         CommandContainer.runCommand(request, response, commandName);
@@ -46,20 +58,18 @@ public class SearchServlet extends HttpServlet {
 
         String commandName = null;
 
-        if (request.getRequestURI().equals("/search")) {
+        if (request.getRequestURI().contains("/reserves/edit")) {
 
-            String action = request.getParameter("action");
-            logger.trace("doPost > action: {}", action);
+            commandName = "reserveEditPost";
 
-            if (action != null && !action.isEmpty() && action.equals("reset")) {
+        } else if (request.getRequestURI().contains("/reserves/delete")) {
 
-                commandName = "searchReset";
+            commandName = "reserveDelete";
 
-            } else {
+        } else if (request.getRequestURI().equals("/reserves/add")) {
 
-                commandName = "searchPost";
+            commandName = "reserveAddPost";
 
-            }
         } else {
             request.setAttribute("error", "UNHANDLED request: " + request.getRequestURI());
             request.getRequestDispatcher("/error").forward(request, response);
@@ -68,5 +78,4 @@ public class SearchServlet extends HttpServlet {
 
         CommandContainer.runCommand(request, response, commandName);
     }
-
 }

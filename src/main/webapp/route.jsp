@@ -1,13 +1,12 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ include file="/parts/init.jspf" %>
 
+<c:set var="page_title" value="Route (${action})" scope="page"/>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <%@ include file="/parts/head.jspf" %>
-
 
     <head>
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
@@ -41,43 +40,14 @@
             }
         </script>
 
-
-        <title>Railway ticket office - Route</title>
+        <title>Railway ticket office - ${page_title}</title>
     </head>
 <body>
 
 <div class="_wrapper">
     <%@ include file="/parts/header.jspf" %>
-
     <%@ include file="/parts/bodyTop.jspf" %>
-
     <%@ include file="/parts/message.jspf" %>
-
-    <div class="ms-5 h3 _main-color1">
-        Route
-        <c:choose>
-            <c:when test="${action == 'add'}">
-                (add)
-            </c:when>
-            <c:when test="${action == 'edit'}">
-                (edit)
-            </c:when>
-            <c:otherwise>
-                (view)
-            </c:otherwise>
-        </c:choose>
-    </div>
-
-
-<%--    <c:if test="${not empty messages}">--%>
-    <%--        <div class="alert alert-light m-5 shadow alert-dismissible fade show" role="alert">--%>
-    <%--            <i class="fa fa-info-circle fa-2xl me-2"></i>--%>
-    <%--                ${messages}--%>
-    <%--            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>--%>
-    <%--        </div>--%>
-
-    <%--        <c:set var="messages" value="${null}" scope="session"/>--%>
-    <%--    </c:if>--%>
 
     <form class="ms-5 mt-4 border border-1 rounded _form _main-bg-color4 _main-color3 p-3 shadow-lg me-5"
           method="POST">
@@ -204,14 +174,10 @@
         </div>
     </c:if>
 
-
     <div id="piechart" style="width: 900px; height: 500px;"></div>
 
     <%@ include file="/parts/footer.jspf" %>
-
-
 </div>
-
 
 <%@ include file="/parts/bodyBottom.jspf" %>
 

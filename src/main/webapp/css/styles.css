@@ -124,6 +124,16 @@ a:hover {
     /*background-color: var(--main-color3);*/
 }
 
+._btn_profile {
+    width: 140px;
+    height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    font-size: 20px;
+}
+
+
 .alert {
     /*background-color: var(--main-color4-light);*/
     /*border: 2px dotted var(--main-color4);*/
@@ -142,12 +152,15 @@ nav .navbar-nav li a:hover {
     background-color: var(--main-color2);
 }
 
-
 .fa-search {
     color: var(--main-color4);
 }
 
 .fa-ticket {
+    color: var(--main-color4);
+}
+
+._btn_profile {
     color: var(--main-color4);
 }
 
@@ -214,6 +227,20 @@ nav .navbar-nav li a:hover {
     margin-right: 50px;
 }
 
-.btn {
-    /*max-width: 100px;*/
+._wrapper-profile {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin-top: 20px;
 }
+
+._wrapper-profile-btn {
+    width: initial;
+    max-width: 80%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    column-gap: 30px;
+    row-gap: 30px;
+}
+

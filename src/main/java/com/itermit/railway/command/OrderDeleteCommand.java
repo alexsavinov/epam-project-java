@@ -1,6 +1,6 @@
 package com.itermit.railway.command;
 
-import com.itermit.railway.dao.impl.StationDAOImpl;
+import com.itermit.railway.dao.impl.OrderDAOImpl;
 import com.itermit.railway.db.DBException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class StationDeleteCommand implements Command {
+public class OrderDeleteCommand implements Command {
 
-    private static final Logger logger = LogManager.getLogger(StationDeleteCommand.class);
+    private static final Logger logger = LogManager.getLogger(OrderDeleteCommand.class);
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
@@ -21,17 +21,17 @@ public class StationDeleteCommand implements Command {
 
         int id = CommandContainer.getIdFromRequest(request);
 
-        StationDAOImpl.getInstance().delete(id);
+        OrderDAOImpl.getInstance().delete(id);
 
-        request.getSession().setAttribute("messages", "Station deleted!");
-        request.getSession().setAttribute("url", "/stations");
+        request.getSession().setAttribute("messages", "Order deleted!");
+        request.getSession().setAttribute("url", "/profile");
         request.setAttribute("action", "delete");
 
         try {
-            response.sendRedirect("/stations");
+            response.sendRedirect("/orders");
         } catch (IOException e) {
             logger.error("IOException. Error redirecting! {}", e.getMessage());
-            throw new DBException("Error redirecting /stations!", e);
+            throw new DBException("Error redirecting /orders!", e);
         }
 
         return null;

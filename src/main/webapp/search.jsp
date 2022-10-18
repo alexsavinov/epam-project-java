@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="/parts/init.jspf" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -12,7 +12,7 @@
 <div class="_wrapper">
     <%@ include file="/parts/header.jspf" %>
 
-    <div class="ms-5 mt-5 h3 _main-color1">
+    <div class="ms-5 mt-3 h3 _main-color4">
         Search
     </div>
     <%--    align-items-start align-items-sm-center--%>
@@ -36,14 +36,14 @@
                         </div>
 
                         <%-- Train number --%>
-                            <div class="form-group me-lg-3 mb-1 ms-1">
-                                <label for="train_number" class="form-label">
-                                    Train number
-                                </label>
-                                <input type="text" class="form-control _input-train-number"
-                                       id="train_number" name="train_number" aria-label="train_number"
-                                       value="${sessionScope.train_number}">
-                            </div>
+                        <div class="form-group me-lg-3 mb-1 ms-1">
+                            <label for="train_number" class="form-label">
+                                Train number
+                            </label>
+                            <input type="text" class="form-control _input-train-number"
+                                   id="train_number" name="train_number" aria-label="train_number"
+                                   value="${sessionScope.train_number}">
+                        </div>
                     </div>
 
                     <%-- Stations --%>
@@ -87,7 +87,6 @@
 
                     </div>
                 </div>
-
 
                 <div class="d-flex flex-column flex-xxl-row justify-content-between">
                     <div class="d-flex flex-column p-1 me-md-3 mb-2">

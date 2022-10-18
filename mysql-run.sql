@@ -79,7 +79,7 @@ CREATE TABLE routes
     date_departure       DATETIME    NULL,
     date_arrival         DATETIME    NULL,
     travel_cost          INT         NULL,
-    seats_reserved      INT         NULL,
+    seats_reserved       INT         NULL,
     seats_total          INT         NULL,
     PRIMARY KEY (id),
     INDEX station_departure_id_idx (station_departure_id ASC) VISIBLE,
@@ -137,7 +137,7 @@ INSERT INTO routes
  travel_cost,
  seats_reserved,
  seats_total)
-VALUES (1, 2, 'A01', '2022-09-23 12:45:56', '2022-09-24 13:45:56', 180, 100, 100);
+VALUES (1, 2, 'A01', '2022-09-23 12:45:56', '2022-09-24 13:45:56', 50, 1, 100);
 
 INSERT INTO routes
 (station_departure_id,
@@ -148,7 +148,7 @@ INSERT INTO routes
  travel_cost,
  seats_reserved,
  seats_total)
-VALUES (2, 4, 'A02', '2022-09-11 12:45:56', '2022-09-12 20:45:00', 30, 150, 150);
+VALUES (2, 4, 'A02', '2022-09-11 12:45:56', '2022-09-12 20:45:00', 35, 1, 150);
 
 INSERT INTO routes
 (station_departure_id,
@@ -159,7 +159,7 @@ INSERT INTO routes
  travel_cost,
  seats_reserved,
  seats_total)
-VALUES (3, 5, 'A03', '2022-09-23 12:45:53', '2022-09-24 13:45:53', 60, 80, 80);
+VALUES (3, 5, 'A03', '2022-09-23 12:45:53', '2022-09-24 13:45:53', 60, 0, 80);
 
 INSERT INTO routes
 (station_departure_id,
@@ -170,7 +170,7 @@ INSERT INTO routes
  travel_cost,
  seats_reserved,
  seats_total)
-VALUES (6, 1, 'A04', '2022-09-05 12:45:54', '2022-09-06 13:45:54', 90, 150, 150);
+VALUES (6, 1, 'A04', '2022-09-05 12:45:54', '2022-09-06 13:45:54', 34, 14, 150);
 
 INSERT INTO routes
 (station_departure_id,
@@ -181,7 +181,7 @@ INSERT INTO routes
  travel_cost,
  seats_reserved,
  seats_total)
-VALUES (5, 4, 'A05', '2022-10-05 12:45:54', '2022-10-16 13:45:00', 150, 95, 95);
+VALUES (5, 4, 'A05', '2022-10-05 12:45:54', '2022-10-16 13:45:00', 22, 0, 95);
 
 
 INSERT INTO routes
@@ -193,7 +193,7 @@ INSERT INTO routes
  travel_cost,
  seats_reserved,
  seats_total)
-VALUES (5, 3, 'A06', '2022-10-20 01:45:54', '2022-10-20 13:45:00', 60, 200, 200);
+VALUES (5, 3, 'A06', '2022-10-20 01:45:54', '2022-10-20 13:45:00', 50, 0, 200);
 
 
 

@@ -1,23 +1,19 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ include file="/parts/init.jspf" %>
+
+<c:set var="page_title" value="Routes" scope="page"/>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <%@ include file="/parts/head.jspf" %>
-    <title>Railway ticket office - Routes</title>
+    <title>Railway ticket office - ${page_title}</title>
 </head>
 <body>
 
 <div class="_wrapper">
     <%@ include file="/parts/header.jspf" %>
-
     <%@ include file="/parts/bodyTop.jspf" %>
-
-    <div class="ms-5 h3 _main-color1">
-        Routes
-    </div>
-
     <%@ include file="/parts/message.jspf" %>
 
     <div class="_wrapper-table">

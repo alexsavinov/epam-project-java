@@ -40,7 +40,7 @@ public class RouteEditPostCommand implements Command {
                 .withDateArrival(dateArrival)
                 .withTravelCost(travelCost)
                 .withSeatsReserved(seatsReserved)
-                .witheatsTotal(seatsTotal)
+                .withSeatsTotal(seatsTotal)
                 .build();
 
         RouteDAOImpl.getInstance().update(id, route);

@@ -12,24 +12,28 @@ public class Order implements Serializable {
     private int seats;
     private String dateReserve;
 
-    public Order(int id, User user, Route route, int seats, String dateReserve) {
-        this.id = id;
-        this.user = user;
-        this.route = route;
-        this.seats = seats;
-        this.dateReserve = dateReserve;
+
+    private Order() {
     }
 
-    public Order(int userId, int routeId, int seats) {
-        this.user = new User.Builder().withId(userId).build();
-        this.route = new Route(routeId);
-        this.seats = seats;
-
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(
-                "yyyy-MM-dd hh:mm:ss",
-                Locale.ENGLISH);
-        this.dateReserve = dateTimeFormatter.format(LocalDateTime.now());
-    }
+//    public Order(int id, User user, Route route, int seats, String dateReserve) {
+//        this.id = id;
+//        this.user = user;
+//        this.route = route;
+//        this.seats = seats;
+//        this.dateReserve = dateReserve;
+//    }
+//
+//    public Order(int userId, int routeId, int seats) {
+//        this.user = new User.Builder().withId(userId).build();
+//        this.route = new Route.Builder().withId(routeId).build();
+//        this.seats = seats;
+//
+//        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(
+//                "yyyy-MM-dd hh:mm:ss",
+//                Locale.ENGLISH);
+//        this.dateReserve = dateTimeFormatter.format(LocalDateTime.now());
+//    }
 
     public String getDateReserve() {
         return dateReserve;
@@ -77,6 +81,52 @@ public class Order implements Serializable {
                 "user=" + user +
                 ", route=" + route +
                 ", seats=" + seats +
+                ", dateReserve=" + dateReserve +
                 '}';
+    }
+
+    public static class Builder {
+        private final Order order;
+
+        public Builder() {
+            order = new Order();
+        }
+
+        public Order.Builder withId(int id) {
+            order.setId(id);
+            return this;
+        }
+
+        public Order.Builder withUser(User user) {
+            order.setUser(user);
+            return this;
+        }
+
+        public Order.Builder withRoute(Route route) {
+            order.setRoute(route);
+            return this;
+        }
+
+        public Order.Builder withSeats(int value) {
+            order.setSeats(value);
+            return this;
+        }
+
+        public Order.Builder withDateReserve(String date) {
+            order.setDateReserve(date);
+            return this;
+        }
+
+        public Order.Builder withDefaultDateReserve() {
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(
+                    "yyyy-MM-dd hh:mm:ss",
+                    Locale.ENGLISH);
+            order.setDateReserve(dateTimeFormatter.format(LocalDateTime.now()));
+            return this;
+        }
+
+        public Order build() {
+            return order;
+        }
     }
 }

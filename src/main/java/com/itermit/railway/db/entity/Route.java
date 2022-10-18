@@ -21,10 +21,6 @@ public class Route implements Serializable {
     private Route() {
     }
 
-    public Route(int id) {
-        this.id = id;
-    }
-
     public String getName() {
         return trainNumber + " ("
                 + stationDeparture.getName() + " - "
@@ -193,7 +189,7 @@ public class Route implements Serializable {
             return this;
         }
 
-        public Route.Builder witheatsTotal(int value) {
+        public Route.Builder withSeatsTotal(int value) {
             route.setSeatsTotal(value);
             return this;
         }

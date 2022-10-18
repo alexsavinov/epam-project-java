@@ -134,15 +134,23 @@ public class OrderDAOImpl implements OrderDAO {
                         .withDateArrival(resultSet.getString("route_date_arrival"))
                         .withTravelCost(resultSet.getInt("route_travel_cost"))
                         .withSeatsReserved(resultSet.getInt("route_seats_reserved"))
-                        .witheatsTotal(resultSet.getInt("route_seats_total"))
+                        .withSeatsTotal(resultSet.getInt("route_seats_total"))
                         .build();
 
-                Order order = new Order(
-                        resultSet.getInt("id"),
-                        user,
-                        route,
-                        resultSet.getInt("seats"),
-                        resultSet.getString("date_reserve"));
+//                Order order = new Order(
+//                        resultSet.getInt("id"),
+//                        user,
+//                        route,
+//                        resultSet.getInt("seats"),
+//                        resultSet.getString("date_reserve"));
+
+                Order order = new Order.Builder()
+                        .withId(resultSet.getInt("id"))
+                        .withUser(user)
+                        .withRoute(route)
+                        .withSeats(resultSet.getInt("seats"))
+                        .withDateReserve(resultSet.getString("date_reserve"))
+                        .build();
 
                 orders.add(order);
 
@@ -166,7 +174,7 @@ public class OrderDAOImpl implements OrderDAO {
 
         logger.trace("filters: " + filters);
 
-        ArrayList<Order> usersRoutes = new ArrayList<>();
+        ArrayList<Order> orders = new ArrayList<>();
 
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -205,8 +213,8 @@ public class OrderDAOImpl implements OrderDAO {
             while (resultSet.next()) {
 
                 User user = new User.Builder()
-                        .withId(resultSet.getInt(User.F_ID))
-                        .withName(resultSet.getString(User.F_NAME))
+                        .withId(resultSet.getInt("user_id"))
+                        .withName(resultSet.getString("user_name"))
                         .build();
 
                 Station stationDeparture = new Station.Builder()
@@ -228,19 +236,19 @@ public class OrderDAOImpl implements OrderDAO {
                         .withDateArrival(resultSet.getString("route_date_arrival"))
                         .withTravelCost(resultSet.getInt("route_travel_cost"))
                         .withSeatsReserved(resultSet.getInt("route_seats_reserved"))
-                        .witheatsTotal(resultSet.getInt("route_seats_total"))
+                        .withSeatsTotal(resultSet.getInt("route_seats_total"))
                         .build();
 
-                Order userRoute = new Order(
-                        resultSet.getInt("id"),
-                        user,
-                        route,
-                        resultSet.getInt("seats"),
-                        resultSet.getString("date_reserve"));
+                Order order = new Order.Builder()
+                        .withId(resultSet.getInt("id"))
+                        .withUser(user)
+                        .withRoute(route)
+                        .withSeats(resultSet.getInt("seats"))
+                        .withDateReserve(resultSet.getString("date_reserve"))
+                        .build();
 
-                usersRoutes.add(userRoute);
+                orders.add(order);
 
-                //            logger.info("! id: " + Route.getId() + "; name: " + Route.getName());
             }
 
         } catch (SQLException e) {
@@ -251,7 +259,7 @@ public class OrderDAOImpl implements OrderDAO {
             DBManager.closePreparedStatement(preparedStatement);
         }
 
-        return usersRoutes;
+        return orders;
     }
 
     @Override
@@ -294,16 +302,16 @@ public class OrderDAOImpl implements OrderDAO {
                         .withDateArrival(resultSet.getString("route_date_arrival"))
                         .withTravelCost(resultSet.getInt("route_travel_cost"))
                         .withSeatsReserved(resultSet.getInt("route_seats_reserved"))
-                        .witheatsTotal(resultSet.getInt("route_seats_total"))
+                        .withSeatsTotal(resultSet.getInt("route_seats_total"))
                         .build();
 
-                order = new Order(
-                        resultSet.getInt("id"),
-                        user,
-                        route,
-                        resultSet.getInt("seats"),
-                        resultSet.getString("date_reserve")
-                );
+                order = new Order.Builder()
+                        .withId(resultSet.getInt("id"))
+                        .withUser(user)
+                        .withRoute(route)
+                        .withSeats(resultSet.getInt("seats"))
+                        .withDateReserve(resultSet.getString("date_reserve"))
+                        .build();
             }
 
         } catch (SQLException e) {

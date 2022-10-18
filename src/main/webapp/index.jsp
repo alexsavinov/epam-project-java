@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ include file="/parts/init.jspf" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -17,13 +18,13 @@
 
         <div class="m-3 _main-content">
 
-            <div class="display-5 m-2 w-90 text-center _main-color1 ">
+            <div class="display-6 m-2 w-90 text-center _main-color4 h-2 mt-5 fw-bold">
                 <fmt:message key='index_jsp.welcome.head1'/>
             </div>
 
             <div class="m-5">
 
-                <div class="display-6 mb-5 text-center border-1 border-dark">
+                <div class="display-6 mb-5 text-center _main-color4">
                     <fmt:message key='index_jsp.welcome.head2'/>
                 </div>
 

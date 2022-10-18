@@ -1,4 +1,5 @@
-<%@ include file="/parts/head.jspf" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ include file="/parts/init.jspf" %>
 
 <tagFile:checkLocale locale="${param.locale}"/>
 

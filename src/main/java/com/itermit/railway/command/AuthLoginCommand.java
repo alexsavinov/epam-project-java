@@ -28,8 +28,7 @@ public class AuthLoginCommand implements Command {
         String name = request.getParameter("name");
         String password = request.getParameter("password");
 
-        String hex = null;
-        hex = passwordEncrypt(password);
+        String hex = passwordEncrypt(password);
         logger.warn("password (SHA-256): {}", hex);
 
         User user = UserDAOImpl.getInstance().get(
@@ -37,20 +36,24 @@ public class AuthLoginCommand implements Command {
 
         if (user.getId() == 0) {
             logger.warn("401 Unauthorized");
-            request.setAttribute("errors", "401 Unauthorized");
-            try {
-                response.sendRedirect("/");
-            } catch (IOException e) {
-                logger.error("IOException. Error redirecting! {}", e.getMessage());
-                throw new DBException("Error redirecting!", e);
-            }
+            /* display message on the same page */
+            request.getSession().setAttribute("errors", "Login or password incorrect!");
         } else {
             logger.warn("User logged in: {}", user.getName());
             request.getSession().setAttribute("isAuthorized", true);
             request.getSession().setAttribute("isAdmin", user.getIsAdmin());
             request.getSession().setAttribute("userid", user.getId());
             request.getSession().setAttribute("username", user.getName());
+
+                logger.info("user {}", user);
+                logger.info("user.getId() {}", user.getId());
+            String userId = String.valueOf(request.getSession().getAttribute("userid"));
+            if (userId != null) {
+                logger.info("userId {}", userId);
+
+            }
         }
+
         try {
             response.sendRedirect("/profile");
         } catch (IOException e) {
@@ -61,6 +64,9 @@ public class AuthLoginCommand implements Command {
         return null;
     }
 
+    /*
+     * Returns encrypted string
+     */
     protected static String passwordEncrypt(String password) throws DBException {
 
         MessageDigest md;

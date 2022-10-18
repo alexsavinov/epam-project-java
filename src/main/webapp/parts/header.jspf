@@ -1,3 +1,5 @@
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
 <div class="header shadow-sm">
     <nav class="navbar navbar-expand-md fs-5 navbar-light">
         <div class="container-fluid">
@@ -60,7 +62,7 @@
                 <%-- CHANGE LOCALE --%>
                 <tagFile:checkLocale locale=""/>
 
-                <form class="m-0" action="/parts/changeLocale.jsp" method="post" id="changeLocale">
+                <form class="m-0" action="/changeLocale.jsp" method="post" id="changeLocale">
                     <div class="btn-group btn-group-toggle" data-toggle="buttons">
                         <c:forEach items="${applicationScope.locales}" var="locale">
                             <label <c:if

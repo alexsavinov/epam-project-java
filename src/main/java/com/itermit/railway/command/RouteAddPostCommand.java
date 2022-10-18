@@ -38,7 +38,7 @@ public class RouteAddPostCommand implements Command {
                 .withDateArrival(dateArrival)
                 .withTravelCost(travelCost)
                 .withSeatsReserved(seatsReserved)
-                .witheatsTotal(seatsTotal)
+                .withSeatsTotal(seatsTotal)
                 .build();
 
 //        Route route = new Route(

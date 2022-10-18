@@ -128,7 +128,7 @@ public class RouteDAOImpl implements RouteDAO {
                         .withDateArrival(resultSet.getString("date_arrival"))
                         .withTravelCost(resultSet.getInt("travel_cost"))
                         .withSeatsReserved(resultSet.getInt("seats_reserved"))
-                        .witheatsTotal(resultSet.getInt("seats_total"))
+                        .withSeatsTotal(resultSet.getInt("seats_total"))
                         .build();
 
 
@@ -336,7 +336,7 @@ public class RouteDAOImpl implements RouteDAO {
                         .withDateArrival(resultSet.getString("date_arrival"))
                         .withTravelCost(resultSet.getInt("travel_cost"))
                         .withSeatsReserved(resultSet.getInt("seats_reserved"))
-                        .witheatsTotal(resultSet.getInt("seats_total"))
+                        .withSeatsTotal(resultSet.getInt("seats_total"))
                         .build();
 
                 routes.add(route);
@@ -412,7 +412,7 @@ public class RouteDAOImpl implements RouteDAO {
                         .withDateArrival(resultSet.getString("date_arrival"))
                         .withTravelCost(resultSet.getInt("travel_cost"))
                         .withSeatsReserved(resultSet.getInt("seats_reserved"))
-                        .witheatsTotal(resultSet.getInt("seats_total"))
+                        .withSeatsTotal(resultSet.getInt("seats_total"))
                         .build();
 
 

@@ -8,8 +8,8 @@
     <Appenders>
 
         <RollingFile name="fileLogger"
-                     fileName="${basePath}/app.log"
-                     filePattern="${basePath}/app-%d{yyyy-MM-dd}.log.gz">
+                     fileName="${basePath}\app.log"
+                     filePattern="${basePath}\app-%d{yyyy-MM-dd}.log.gz">
 
             <PatternLayout>
                 <pattern>

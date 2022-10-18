@@ -12,7 +12,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Objects;
 
-
 /*
  * Filter for check user permission to page.
  * If user has no access then redirect to Login page.
@@ -52,8 +51,9 @@ public class AuthFilter implements Filter {
             isAuthorized = (Boolean) session.getAttribute("isAuthorized");
             isAuthorized = isAuthorized != null && isAuthorized;
 
-            /* REDIRECTS to login page (no access) */
+            /* REDIRECTS unauthorized users to login page (no access) */
             if (httpReq.getRequestURI().equals("/profile")
+                    || httpReq.getRequestURI().startsWith("/reserves")
                     || httpReq.getRequestURI().startsWith("/users")
                     || httpReq.getRequestURI().startsWith("/routes")
                     || httpReq.getRequestURI().startsWith("/orders")

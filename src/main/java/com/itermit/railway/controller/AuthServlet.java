@@ -46,6 +46,7 @@ public class AuthServlet extends HttpServlet {
         logger.debug("#doPost(request, response).  {}", request.getRequestURI());
 
         String commandName = null;
+
         if (request.getRequestURI().equals("/login")) {
 
             commandName = "authLogin";
@@ -61,7 +62,6 @@ public class AuthServlet extends HttpServlet {
         }
 
         CommandContainer.runCommand(request, response, commandName);
-
     }
 
 }

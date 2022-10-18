@@ -1,3 +1,10 @@
+
+function setValue(id, value) {
+
+    document.getElementById(id).value = value;
+
+}
+
 function setEmpty(id) {
 
     const element = document.getElementById(id);
