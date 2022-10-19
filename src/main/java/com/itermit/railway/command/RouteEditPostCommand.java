@@ -29,7 +29,7 @@ public class RouteEditPostCommand implements Command {
         String dateDeparture = CommandContainer.getStringFromRequest(request, "date_departure");
         String dateArrival = CommandContainer.getStringFromRequest(request, "date_arrival");
         int travelCost = CommandContainer.getIntegerFromRequest(request, "travel_cost");
-        int seatsReserved = CommandContainer.getIntegerFromRequest(request, "seats_available");
+        int seatsReserved = CommandContainer.getIntegerFromRequest(request, "seats_reserved");
         int seatsTotal = CommandContainer.getIntegerFromRequest(request, "seats_total");
 
         Route route = new Route.Builder()

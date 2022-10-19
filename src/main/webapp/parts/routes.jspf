@@ -7,22 +7,10 @@
                 ${orders_tittle}
         </div>
     </c:if>
-    <%--        <a class="btn btn-sm btn-outline-secondary mt-2 mb-1 shadow-sm" href="/orders/add">--%>
-    <%--            <i class="fa fa-plus-circle" aria-hidden="true"></i>--%>
-    <%--            Add ${url}--%>
-    <%--        </a>--%>
-
-
-    <%--    <div> param.orders ${param.orders} </div>--%>
-    <%--    <div> orders ${orders} </div>--%>
 
     <table class="table table-striped table-hover p-5 mt-3" aria-describedby="Routes">
         <thead>
         <tr>
-            <%--            <th scope="col">id</th>--%>
-            <%--            <th scope="col">Seats reserved</th>--%>
-            <%--            <th scope="col">Date of reserve</th>--%>
-            <%--            <th scope="col">User</th>--%>
             <th scope="col">Train #</th>
             <th scope="col">Departure</th>
             <th scope="col">Date/time departure</th>
@@ -33,16 +21,16 @@
             <th scope="col">Seats reserved</th>
             <th scope="col">Seats available</th>
             <th scope="col">Seats total</th>
-            <th scope="col">Action</th>
+            <th scope="col" class="<customTags:access role="guest" modifier="d-none"/>">
+                Action
+            </th>
         </tr>
         </thead>
 
         <tbody>
+        <%-- onclick="goByUrl('/reserve/add/${route.getId()}');"--%>
         <c:forEach var="route" items="${routes}">
             <tr>
-                    <%--            >--%>
-                    <%--                onclick="goByUrl('/reserve/add/${route.getId()}');"--%>
-
                 <th scope="row">
                     <c:out value="${route.getTrainNumber()}"/>
                 </th>
@@ -73,35 +61,23 @@
                 <td>
                         ${route.getSeatsTotal()}
                 </td>
-                <td>
+                <td class="<customTags:access role="guest" modifier="d-none"/>">
                     <button type="button"
                             class="btn btn-outline-secondary _btn_form"
                             data-bs-toggle="modal"
-                            data-bs-target="#exampleModal"
-                            onclick='setValue("route_id", ${route.getId()})'>
+                            data-bs-target="#reserveAddModal"
+                            onclick='setValue("route_id", ${route.getId()});
+                                    setAttributeValue("seats", "max", ${route.getSeatsAvailable()});'>
                         Reserve
                     </button>
                 </td>
-
             </tr>
 
         </c:forEach>
         </tbody>
     </table>
 
-    <%@ include file="/parts/reserve.jspf" %>
-
-    <%--                    <tr id="selectBox_${route.getId()}"--%>
-
-    <%--        <jsp:include page="file.jsp" >--%>
-    <%--            <jsp:param name="firstname" value="Chaitanya" />--%>
-    <%--        </jsp:include>--%>
-    <%--                </div>--%>
-
-    <%-- RESERVE --%>
-
-
+    <%@ include file="/parts/reserveAddModal.jspf" %>
     <%@ include file="/parts/pagination.jspf" %>
-
 
 </div>

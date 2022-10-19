@@ -44,7 +44,6 @@
     background-color: var(--main-color4-light);
 }
 
-
 body {
     background-color: var(--main-color3);
     color: var(--main-color1);
@@ -173,6 +172,10 @@ nav .navbar-nav li a:hover {
     color: darkred;
 }
 
+.fa-minus-circle {
+    color: darkred;
+}
+
 .fa-plus-circle {
     color: green;
 }
@@ -244,3 +247,16 @@ nav .navbar-nav li a:hover {
     row-gap: 30px;
 }
 
+
+._page-link {
+    color: var(--main-color4);
+}
+
+.active > ._page-link {
+    background-color: var(--main-color4);
+    border-color: var(--main-color4);
+}
+
+._link-back:hover {
+    color: var(--main-color1-light);
+}

@@ -120,10 +120,10 @@
         </div>
 
         <div class="mb-1">
-            <label for="seats_available" class="form-label">Seats available</label>
-            <input type="number" class="form-control" aria-label="seats_available"
-                   id="seats_available" name="seats_available"
-                   value="${route.getSeatsAvailable()}" disabled>
+            <label for="seats_reserved" class="form-label">Seats reserved</label>
+            <input type="number" class="form-control" aria-label="seats_reserved"
+                   id="seats_reserved" name="seats_reserved"
+                   value="${route.getSeatsReserved()}">
         </div>
 
         <div class="mb-1">

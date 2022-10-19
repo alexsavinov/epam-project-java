@@ -37,8 +37,8 @@
 
             <tbody>
             <c:forEach var="order" items="${reserves}">
-                <tr id="selectBox_${order.getId()}"
-                    onclick="goByUrl('/reserves/edit/${order.getId()}');">
+                <%--                    onclick="goByUrl('/reserves/edit/${order.getId()}');">--%>
+                <tr id="selectBox_${order.getId()}">
                     <th scope="row">
                             ${order.getId()}
                     </th>
@@ -55,16 +55,28 @@
                             ${order.getDateReserve()}
                     </td>
                     <td>
-<%--                        <button type="button"--%>
-<%--                                class="btn btn-outline-secondary _btn_form"--%>
-<%--                                data-bs-toggle="modal"--%>
-<%--                                data-bs-target="#exampleModal"--%>
-<%--                                onclick='setValue("route_id", ${order.getId()})'>--%>
-<%--                            Reserve--%>
-<%--                        </button>--%>
-                        <a class="btn btn-outline-secondary" href="/reserves/delete/${order.getId()}">
+                            <%--                        <a class="btn btn-outline-secondary" href="/reserves/delete/${order.getId()}">--%>
+                            <%--                            Delete--%>
+                            <%--                        </a>--%>
+
+                        <button type="button"
+                                class="btn btn-outline-secondary _btn_form"
+                                data-bs-toggle="modal"
+                                data-bs-target="#reserveDeleteModal"
+                                onclick='setValue("order_id", ${order.getId()});
+                                        setValue("seats", ${order.getSeats()});
+                                        setAttributeValue("seats", "max", ${order.getSeats()});
+                                        '>
                             Delete
-                        </a>
+                        </button>
+                            <%--                                        onclick='setValue("route_id", ${order.getRoute().getId()});'>--%>
+                            <%--                        <button type="button"--%>
+                            <%--                                class="btn btn-outline-secondary _btn_form"--%>
+                            <%--                                data-bs-toggle="modal"--%>
+                            <%--                                data-bs-target="#exampleModal"--%>
+                            <%--                                onclick='setValue("route_id", ${order.getRoute().getId()})'>--%>
+                            <%--                            Reserve--%>
+                            <%--                        </button>--%>
                     </td>
                 </tr>
             </c:forEach>
@@ -72,7 +84,10 @@
 
         </table>
     </div>
-
+    <%--    <jsp:include page="instance.jsp">--%>
+    <%--        <jsp:param name="myVar" value="${instanceVar}"/>--%>
+    <%--    </jsp:include>--%>
+    <%@ include file="/parts/reserveDeleteModal.jspf" %>
     <%@ include file="/parts/message.jspf" %>
     <%@ include file="/parts/footer.jspf" %>
 </div>

@@ -19,9 +19,14 @@ public class ReserveDeleteCommand implements Command {
 
         logger.debug("#execute(request, response).  {}", request.getRequestURI());
 
-        int id = CommandContainer.getIdFromRequest(request);
+//        int id = CommandContainer.getIdFromRequest(request);
 
-        OrderDAOImpl.getInstance().delete(id);
+        int id =  Integer.parseInt(request.getParameter("order_id"));
+        int seats =  Integer.parseInt(request.getParameter("seats"));
+
+//        logger.info(seats);
+
+        OrderDAOImpl.getInstance().deleteReserve(id, seats);
 
         request.getSession().setAttribute("messages", "Reserve deleted!");
 

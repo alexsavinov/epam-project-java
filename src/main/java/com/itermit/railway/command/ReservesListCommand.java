@@ -23,12 +23,6 @@ public class ReservesListCommand implements Command {
 
         logger.debug("#execute(request, response).  {}", request.getRequestURI());
 
-//        logger.info("getAttribute userId", request.getSession().getAttribute("userid"));
-//        logger.info(request.getSession().getAttribute("isAuthorized"));
-//        logger.info(request.getSession().getAttribute("isAdmin"));
-//        logger.info(request.getSession().getAttribute("userid"));
-//        logger.info(request.getSession().getAttribute("username"));
-
         String userId = String.valueOf(request.getSession().getAttribute("userid"));
         if (userId != null) {
             logger.info("userId {}", userId);
@@ -38,9 +32,6 @@ public class ReservesListCommand implements Command {
             ArrayList<Order> reserves = OrderDAOImpl.getInstance().getFiltered(filters);
             request.setAttribute("reserves", reserves);
         }
-
-
-//        ArrayList<Order> reserves = OrderDAOImpl.getInstance().getAll(); // FIXME
 
         try {
             request.getRequestDispatcher("/reserves.jsp").forward(request, response);

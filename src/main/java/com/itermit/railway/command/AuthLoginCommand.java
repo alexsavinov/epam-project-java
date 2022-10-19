@@ -44,13 +44,15 @@ public class AuthLoginCommand implements Command {
             request.getSession().setAttribute("isAdmin", user.getIsAdmin());
             request.getSession().setAttribute("userid", user.getId());
             request.getSession().setAttribute("username", user.getName());
+            request.getSession().removeAttribute("orders");
+            request.getSession().removeAttribute("routes");
 
-                logger.info("user {}", user);
-                logger.info("user.getId() {}", user.getId());
+            logger.info("user {}", user);
+            logger.info("user.getId() {}", user.getId());
+
             String userId = String.valueOf(request.getSession().getAttribute("userid"));
             if (userId != null) {
                 logger.info("userId {}", userId);
-
             }
         }
 

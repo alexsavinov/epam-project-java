@@ -76,10 +76,19 @@ public class RouteDAOImpl implements RouteDAO {
             "WHERE routes.id = ? " +
             "GROUP BY routes.id ";
     private static final String SQL_ADD_ROUTE = "INSERT INTO routes (train_number, station_departure_id, station_arrival_id, date_departure, date_arrival, travel_cost, seats_total) VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-    private static final String SQL_UPDATE_ROUTE = "UPDATE routes SET train_number = ?, station_departure_id = ?, station_arrival_id = ?, date_departure = ?, date_arrival = ?, travel_cost = ?, seats_total = ?  WHERE id = ?";
+    private static final String SQL_UPDATE_ROUTE = "UPDATE routes " +
+            "SET train_number = ?, station_departure_id = ?, station_arrival_id = ?, " +
+            "date_departure = ?, date_arrival = ?, travel_cost = ?, seats_reserved = ?, seats_total = ? " +
+            "WHERE id = ?";
     private static final String SQL_DELETE_ROUTE = "DELETE FROM routes WHERE id = ?";
     private static final String SQL_GET_TOTAL_ROWS = "SELECT COUNT(*) total_rows FROM routes";
+    public static final String SQL_ADD_RESERVE_ROUTE = "UPDATE routes SET seats_reserved = seats_reserved + ? WHERE id = ?";
+    public static final String SQL_REMOVE_RESERVE_ROUTE = "UPDATE routes SET seats_reserved = seats_reserved - ? WHERE id = ?";
+    public static final String SQL_CHECK_RESERVE_ROUTE = "SELECT id " +
+            "FROM routes " +
+            "WHERE id = ? AND (seats_reserved > seats_total " +
+            "   OR seats_reserved < 0 " +
+            "   OR seats_total < 0)";
 
 
     public static synchronized RouteDAOImpl getInstance() {
@@ -490,6 +499,7 @@ public class RouteDAOImpl implements RouteDAO {
             preparedStatement.setString(++l, route.getDateDeparture());
             preparedStatement.setString(++l, route.getDateArrival());
             preparedStatement.setInt(++l, route.getTravelCost());
+            preparedStatement.setInt(++l, route.getSeatsReserved());
             preparedStatement.setInt(++l, route.getSeatsTotal());
             preparedStatement.setInt(++l, id);
 

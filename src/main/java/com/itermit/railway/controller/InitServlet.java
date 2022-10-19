@@ -4,6 +4,7 @@ package com.itermit.railway.controller;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,13 +35,17 @@ public class InitServlet extends HttpServlet {
             try {
                 out = response.getWriter();
 
-                out.println("<html lang='en'><body>");
-                out.write("<h2>Error description</h2>");
-                out.write("<ul>");
-                for (String s : Arrays.asList(ERROR_STATUS_CODE, ERROR_EXCEPTION_TYPE, ERROR_MESSAGE)) {
-                    out.write("<li>" + s + ":" + request.getAttribute(s) + " </li>");
-                }
-                out.write("</ul>");
+                out.println("<html lang='en'>");
+                out.write("<body style='background-color: #D5D6D2; " +
+                        "color: #D5D6D2; margin: 0px; padding: 0px;" +
+                        "font-family: Arial, Helvetica, sans-serif;" +
+                        "'>");
+                out.write("<h1 style='background-color: crimson; padding: 20px'>Error!</h2>");
+//                out.write("<ul>");
+//                for (String s : Arrays.asList(ERROR_STATUS_CODE, ERROR_EXCEPTION_TYPE, ERROR_MESSAGE)) {
+//                    out.write("<li>" + s + ":" + request.getAttribute(s) + " </li>");
+//                }
+//                out.write("</ul>");
             } catch (IOException e) {
                 logger.error("IOException. response.getWriter()!  {}", e.getMessage());
                 return;
@@ -49,7 +54,7 @@ public class InitServlet extends HttpServlet {
             String error = (String) Objects.requireNonNull(request.getAttribute("error"));
             if (!error.isEmpty()) {
 //                logger.error(error);
-                out.write("<h2>" + error + "</h2>");
+                out.write("<h2 style='color: #2F2E33; margin: 20px;'>" + error + "</h2>");
             }
             out.println("</body></html>");
         } else {
@@ -58,6 +63,13 @@ public class InitServlet extends HttpServlet {
             logger.info("request.getRequestURI(): {}", request.getRequestURI());
             logger.error("Unhandled request!  {}", request.getRequestURI());
         }
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        doGet(request, response);
     }
 
 }

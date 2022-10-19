@@ -2,12 +2,15 @@
 
 <div class="d-flex ms-3 me-5 m-3">
 
-    <a class="d-flex text-decoration-none justify-content-start align-items-center " onclick="goBack('${url}');">
+    <a class="d-flex text-decoration-none justify-content-start align-items-center"
+       onclick="goBack('${url}');">
+
         <i class="fa fa-arrow-circle-left fa-2x" aria-hidden="true"></i>
 
-        <div class="ms-3 h3 m-0 p-0 _main-color4">
+        <div class="ms-3 h3 m-0 p-0 _main-color4 _link-back">
             ${page_title}
         </div>
+
     </a>
 
     <% session.removeAttribute("url"); %>

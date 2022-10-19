@@ -137,7 +137,7 @@ INSERT INTO routes
  travel_cost,
  seats_reserved,
  seats_total)
-VALUES (1, 2, 'A01', '2022-09-23 12:45:56', '2022-09-24 13:45:56', 50, 1, 100);
+VALUES (1, 2, 'A01', '2022-09-23 12:45:56', '2022-09-24 13:45:56', 50, 13, 100);
 
 INSERT INTO routes
 (station_departure_id,
@@ -230,7 +230,7 @@ CREATE TABLE orders
 #   AND route_id = ?;
 
 INSERT INTO orders (user_id, route_id, seats, date_reserve)
-VALUES (1, 1, 1, '2022-09-23 12:45:54');
+VALUES (1, 1, 11, '2022-09-23 12:45:54');
 
 INSERT INTO orders (user_id, route_id, seats, date_reserve)
 VALUES (3, 1, 2, '2022-09-24 12:45:54');

@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(name = "ReserveServlet",
-        urlPatterns = {"/reserves", "/reserves/delete/*", "/reserves/edit/*", "/reserves/add"})
+        urlPatterns = {"/reserves", "/reserves/delete", "/reserves/edit/*", "/reserves/add"})
 public class ReserveServlet extends HttpServlet {
 
     private static final Logger logger = LogManager.getLogger(ReserveServlet.class);

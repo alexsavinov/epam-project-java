@@ -164,32 +164,32 @@
     <%--        <jsp:param name="orders" value="${userRoutes}"/>--%>
     <%--    </jsp:include>--%>
 
-    <c:if test="${not empty userRoutesByRoute and userRoutesByRoute.size() ge 0}">
-        <% request.setAttribute("orders", request.getAttribute("userRoutesByRoute"));%>
-        <% request.setAttribute("orders_tittle", "Orders by route");%>
+<%--    <c:if test="${not empty userRoutesByRoute and userRoutesByRoute.size() ge 0}">--%>
+<%--        <% request.setAttribute("orders", request.getAttribute("userRoutesByRoute"));%>--%>
+<%--        <% request.setAttribute("orders_tittle", "Orders by route");%>--%>
 
-        <div class="mt-5">
-            <%@ include file="/parts/orders.jspf" %>
-        </div>
-    </c:if>
+<%--        <div class="mt-5">--%>
+<%--            <%@ include file="/parts/orders.jspf" %>--%>
+<%--        </div>--%>
+<%--    </c:if>--%>
 
-    <c:if test="${not empty userRoutesByCurrentUser and userRoutesByCurrentUser.size() ge 0}">
-        <% request.setAttribute("orders", request.getAttribute("userRoutesByCurrentUser"));%>
-        <% request.setAttribute("orders_tittle", "Orders by logged user"); %>
+<%--    <c:if test="${not empty userRoutesByCurrentUser and userRoutesByCurrentUser.size() ge 0}">--%>
+<%--        <% request.setAttribute("orders", request.getAttribute("userRoutesByCurrentUser"));%>--%>
+<%--        <% request.setAttribute("orders_tittle", "Orders by logged user"); %>--%>
 
-        <div class="mt-5">
-            <%@ include file="/parts/orders.jspf" %>
-        </div>
-    </c:if>
+<%--        <div class="mt-5">--%>
+<%--            <%@ include file="/parts/orders.jspf" %>--%>
+<%--        </div>--%>
+<%--    </c:if>--%>
 
-    <c:if test="${not empty userRoutes and userRoutes.size() ge 0}">
-        <% request.setAttribute("orders", request.getAttribute("userRoutes"));%>
-        <% request.setAttribute("orders_tittle", "Orders all");%>
+<%--    <c:if test="${not empty userRoutes and userRoutes.size() ge 0}">--%>
+<%--        <% request.setAttribute("orders", request.getAttribute("userRoutes"));%>--%>
+<%--        <% request.setAttribute("orders_tittle", "Orders all");%>--%>
 
-        <div class="mt-5">
-            <%@ include file="/parts/orders.jspf" %>
-        </div>
-    </c:if>
+<%--        <div class="mt-5">--%>
+<%--            <%@ include file="/parts/orders.jspf" %>--%>
+<%--        </div>--%>
+<%--    </c:if>--%>
 
 
     <%@ include file="/parts/footer.jspf" %>

@@ -27,15 +27,15 @@ public class ReserveAddPostCommand implements Command {
         int route_id = CommandContainer.getIntegerFromRequest(request, "route_id");
         int seats = CommandContainer.getIntegerFromRequest(request, "seats");
 
-        logger.info("seats {}", seats);
-        logger.info("route_id {}", route_id);
-        logger.info("user_id {}", request.getSession().getAttribute("userid"));
+//        logger.info("seats {}", seats);
+//        logger.info("route_id {}", route_id);
+//        logger.info("user_id {}", request.getSession().getAttribute("userid"));
         int user_id = (int) request.getSession().getAttribute("userid");
 
 
-        Route route = RouteDAOImpl.getInstance().get(route_id);
+//        Route route = RouteDAOImpl.getInstance().get(route_id);
 
-        logger.info("route {}", route);
+//        logger.info("route {}", route);
 
         Order order = new Order.Builder()
                 .withUser(new User.Builder().withId(user_id).build())
@@ -47,7 +47,7 @@ public class ReserveAddPostCommand implements Command {
 
         CommandContainer.runCommand(request, response, "searchReset");
 
-        request.getSession().setAttribute("messages", "Reserve deleted!");
+        request.getSession().setAttribute("messages", "Reserve for " + seats + " seats added!");
 
         try {
             response.sendRedirect("/reserves");

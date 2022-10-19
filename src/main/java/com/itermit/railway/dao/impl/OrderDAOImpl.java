@@ -1,5 +1,6 @@
 package com.itermit.railway.dao.impl;
 
+import com.itermit.railway.command.OrderEditPostCommand;
 import com.itermit.railway.dao.OrderDAO;
 import com.itermit.railway.db.entity.Order;
 import com.itermit.railway.db.entity.Route;
@@ -20,11 +21,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.stream.Collectors;
 
+import static com.itermit.railway.dao.impl.RouteDAOImpl.*;
+
 public class OrderDAOImpl implements OrderDAO {
 
     private DBManager dbManager;
     private static OrderDAOImpl instance;
     private static final Logger logger = LogManager.getLogger(OrderDAOImpl.class);
+    private int seats;
 
     private static final String SQL_GET_ALL_ORDERS = "SELECT " +
             "orders.id, " +
@@ -83,6 +87,9 @@ public class OrderDAOImpl implements OrderDAO {
             "WHERE id = ?";
     private static final String SQL_DELETE_ORDER = "DELETE FROM " +
             "orders WHERE id = ?";
+    private static final String SQL_ADD_RESERVE_ORDER = "UPDATE orders SET seats = seats + ? WHERE id = ?";
+    private static final String SQL_REMOVE_RESERVE_ORDER = "UPDATE orders SET seats = seats - ? WHERE id = ?";
+    public static final String SQL_CHECK_RESERVE_ORDER = "SELECT id FROM orders WHERE id = ? AND seats < 0";
 
     public static synchronized OrderDAOImpl getInstance() {
         if (instance == null) {
@@ -330,20 +337,56 @@ public class OrderDAOImpl implements OrderDAO {
 
         logger.debug("#add(order): {}", order);
 
+        ResultSet resultSet;
         PreparedStatement preparedStatement = null;
+        Connection connection = null;
+        try {
+            /* Set transaction isolation */
+            connection = dbManager.getConnection();
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+            connection.setAutoCommit(false);
 
-        try (Connection connection = dbManager.getConnection()) {
-            preparedStatement = connection.prepareStatement(SQL_ADD_ORDER);
+            preparedStatement = connection.prepareStatement(SQL_ADD_RESERVE_ROUTE);
             int l = 0;
+            preparedStatement.setInt(++l, order.getSeats());
+            preparedStatement.setInt(++l, order.getId());
+            logger.trace(preparedStatement);
+            /* Remove reserved Seats from Route */
+            preparedStatement.executeUpdate();
+
+            preparedStatement = connection.prepareStatement(SQL_CHECK_RESERVE_ROUTE);
+            preparedStatement.setInt(1, order.getId());
+            logger.trace(preparedStatement);
+            /* Check if reserved Seats in Route remains less than Total seats */
+            ResultSet resultSetRoute = preparedStatement.executeQuery();
+            if (resultSetRoute.next()) {
+                /* Rollback */
+                connection.rollback();
+                logger.error("Total seats exceeded for Route (id): {}", order.getId());
+                throw new DBException("Total seats exceeded for Route (id): {}" + order.getId(), null);
+            }
+
+            /* Add new Order */
+            preparedStatement = connection.prepareStatement(SQL_ADD_ORDER);
+            l = 0;
             preparedStatement.setInt(++l, order.getUser().getId());
             preparedStatement.setInt(++l, order.getRoute().getId());
             preparedStatement.setInt(++l, order.getSeats());
             preparedStatement.setString(++l, order.getDateReserve());
-
             logger.trace(preparedStatement);
-
             preparedStatement.executeUpdate();
+
+            /* Commit */
+            connection.commit();
+
         } catch (SQLException e) {
+            try {
+                /* Rollback */
+                connection.rollback();
+            } catch (SQLException ex) {
+                logger.error("SQLException while rollback - add(order): {}", e.getMessage());
+                throw new DBException("SQLException while rollback - add(order)!", e);
+            }
             logger.error("SQLException while add(order): {}", e.getMessage());
             throw new DBException("SQLException while add(order)!", e);
         } finally {
@@ -364,7 +407,6 @@ public class OrderDAOImpl implements OrderDAO {
             SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
             System.out.println(formatter.format(new Date(System.currentTimeMillis())));
 
-
             int l = 0;
             preparedStatement.setInt(++l, order.getUser().getId());
             preparedStatement.setInt(++l, order.getRoute().getId());
@@ -382,23 +424,102 @@ public class OrderDAOImpl implements OrderDAO {
         }
     }
 
+    public void deleteReserve(int id, int seats) throws DBException {
+        this.seats = seats;
+        delete(id);
+    }
+
     @Override
     public void delete(int id) throws DBException {
 
         logger.debug("#delete(id): {}", id);
 
+        ResultSet resultSet;
         PreparedStatement preparedStatement = null;
+        Connection connection = null;
+        try {
+            /* Set transaction isolation */
+            connection = dbManager.getConnection();
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+            connection.setAutoCommit(false);
 
-        try (Connection connection = dbManager.getConnection()) {
-            preparedStatement = connection.prepareStatement(SQL_DELETE_ORDER);
-            int l = 0;
-            preparedStatement.setInt(++l, id);
-            preparedStatement.executeUpdate();
+            preparedStatement = connection.prepareStatement(SQL_GET_ORDER_BY_ID);
+            preparedStatement.setInt(1, id);
+            logger.trace(preparedStatement);
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                int route_id = resultSet.getInt("route_id");
+                int routeSeats = resultSet.getInt("seats");
+                int seatsToRemove = routeSeats;
+                if (this.seats != 0) {
+                    seatsToRemove = this.seats;
+                }
+
+                preparedStatement = connection.prepareStatement(SQL_REMOVE_RESERVE_ROUTE);
+                int l = 0;
+                preparedStatement.setInt(++l, seatsToRemove);
+                preparedStatement.setInt(++l, route_id);
+                logger.trace(preparedStatement);
+                /* Remove reserved Seats from Route */
+                preparedStatement.executeUpdate();
+
+                preparedStatement = connection.prepareStatement(SQL_CHECK_RESERVE_ROUTE);
+                preparedStatement.setInt(1, route_id);
+                /* Check if reserved Seats in Route remains above zero */
+                logger.trace(preparedStatement);
+                ResultSet resultSetRoute = preparedStatement.executeQuery();
+                if (resultSetRoute.next()) {
+                    /* Rollback */
+                    connection.rollback();
+                    logger.error("Not enough reserve to remove from Route (id): {}", route_id);
+                    throw new DBException("Not enough reserve to remove from Route (id): " + route_id, null);
+                }
+
+                logger.info("this.seats {}", this.seats);
+                logger.info("seatsToRemove {}", seatsToRemove);
+
+                if (seatsToRemove == routeSeats) {
+                    /* Seats to remove equals to Total seats in Order - deleting Order */
+                    preparedStatement = connection.prepareStatement(SQL_DELETE_ORDER);
+                    preparedStatement.setInt(1, id);
+                    preparedStatement.executeUpdate();
+                } else {
+                    /* Seats to remove less than Total seats in Order - decreasing Seats in Order */
+                    preparedStatement = connection.prepareStatement(SQL_REMOVE_RESERVE_ORDER);
+                    l = 0;
+                    preparedStatement.setInt(++l, seatsToRemove);
+                    preparedStatement.setInt(++l, id);
+                    preparedStatement.executeUpdate();
+
+                    /* Check if Seats in Order remains above zero */
+                    preparedStatement = connection.prepareStatement(SQL_CHECK_RESERVE_ORDER);
+                    preparedStatement.setInt(1, id);
+                    ResultSet resultSetOrder = preparedStatement.executeQuery();
+                    if (resultSetOrder.next()) {
+                        /* Rollback */
+                        connection.rollback();
+                        logger.error("Not enough reserved Seats to remove from Order (id): {}", id);
+                        throw new DBException("Not enough reserved Seats to remove from Order (id): " + id, null);
+                    }
+                }
+            }
+            /* Commit */
+            connection.commit();
+
         } catch (SQLException e) {
+            try {
+                /* Rollback */
+                connection.rollback();
+            } catch (SQLException ex) {
+                logger.error("SQLException while rollback - delete(id): {}", e.getMessage());
+                throw new DBException("SQLException while rollback - delete(id)!", e);
+            }
             logger.error("SQLException while delete(id): {}", e.getMessage());
             throw new DBException("SQLException while delete(id)!", e);
         } finally {
             DBManager.closePreparedStatement(preparedStatement);
+            DBManager.closeConnection(connection);
         }
     }
 

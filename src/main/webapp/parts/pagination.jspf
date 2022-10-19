@@ -11,7 +11,7 @@
                 <li <c:if test="${sessionScope.paginator.pageIsFirst() eq true}">
                     class="page-item disabled"
                 </c:if>>
-                    <a class="page-link" href="#" tabindex="-1"
+                    <a class="page-link _page-link" href="#" tabindex="-1"
                        onclick="goByPage(1);">
                         &laquo;
                     </a>
@@ -20,7 +20,7 @@
                 <li <c:if test="${sessionScope.paginator.pageIsFirst() eq true}">
                     class="page-item disabled"
                 </c:if>>
-                    <a class="page-link" href="#"
+                    <a class="page-link _page-link" href="#"
                        onclick="goByPage(${sessionScope.paginator.getPrev_page()});">
                         &lsaquo;
                     </a>
@@ -29,7 +29,7 @@
                 <li <c:if test="${sessionScope.paginator.pageIsFirst() eq true}">
                     class="page-item disabled"
                 </c:if>>
-                    <a class="page-link" href="#"
+                    <a class="page-link _page-link" href="#"
                        onclick="goByPage(${sessionScope.paginator.getPrev_page()});">
                         <c:if test="${sessionScope.paginator.pageIsFirst() eq true}">
                             ..
@@ -41,7 +41,7 @@
                 </li>
 
                 <li class="page-item active">
-                    <a class="page-link" href="#">
+                    <a class="page-link _page-link" href="#">
                         ${sessionScope.paginator.getPage()}
                     </a>
                 </li>
@@ -49,7 +49,7 @@
                 <li <c:if test="${sessionScope.paginator.pageIsLast() eq true}">
                     class="page-item disabled"
                 </c:if>>
-                    <a class="page-link" href="#"
+                    <a class="page-link _page-link" href="#"
                        onclick="goByPage(${sessionScope.paginator.getNext_page()});">
                         <c:if test="${sessionScope.paginator.pageIsLast() eq true}">
                             ..
@@ -63,7 +63,7 @@
                 <li <c:if test="${sessionScope.paginator.pageIsLast() eq true}">
                     class="page-item disabled"
                 </c:if>>
-                    <a class="page-link" href="#"
+                    <a class="page-link _page-link" href="#"
                        onclick="goByPage(${sessionScope.paginator.getNext_page()});">
                         &rsaquo;
                     </a>
@@ -72,7 +72,7 @@
                 <li <c:if test="${sessionScope.paginator.pageIsLast() eq true}">
                     class="page-item disabled"
                 </c:if>>
-                    <a class="page-link" href="#"
+                    <a class="page-link _page-link" href="#"
                        onclick="goByPage(${sessionScope.paginator.getPages()});">
                         &raquo;
                     </a>
