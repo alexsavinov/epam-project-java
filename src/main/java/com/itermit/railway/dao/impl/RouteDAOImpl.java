@@ -1,12 +1,15 @@
 package com.itermit.railway.dao.impl;
 
 import com.itermit.railway.dao.RouteDAO;
+import com.itermit.railway.db.entity.Order;
 import com.itermit.railway.db.entity.Route;
 import com.itermit.railway.db.entity.Station;
 import com.itermit.railway.db.DBException;
 import com.itermit.railway.db.DBManager;
+import com.itermit.railway.db.entity.User;
 import com.itermit.railway.utils.FilterQuery;
 import com.itermit.railway.utils.Paginator;
+import com.itermit.railway.utils.QueryMaker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -15,6 +18,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class RouteDAOImpl implements RouteDAO {
@@ -33,12 +37,12 @@ public class RouteDAOImpl implements RouteDAO {
             "routes.date_arrival, " +
             "routes.travel_cost, " +
             "routes.seats_total as seats_total, " +
-            "sum(ur.seats) as seats_reserved, " +
-            "routes.seats_total - COALESCE(sum(ur.seats), 0) as seats_available " +
+            "routes.seats_reserved, " +
+            "routes.seats_total - routes.seats_reserved as seats_available " +
             "FROM routes " +
             "LEFT JOIN stations s_a ON s_a.id = routes.station_arrival_id " +
-            "LEFT JOIN stations s_d ON s_d.id = routes.station_departure_id " +
-            "LEFT JOIN orders ur ON routes.id = ur.route_id group by routes.id";
+            "LEFT JOIN stations s_d ON s_d.id = routes.station_departure_id";
+    //            "LEFT JOIN orders ur ON routes.id = ur.route_id group by routes.id";
     private static final String SQL_GET_ROUTE_BY_ID = "SELECT " +
             "routes.id, " +
             "routes.train_number, " +
@@ -55,51 +59,36 @@ public class RouteDAOImpl implements RouteDAO {
             "LEFT JOIN stations s_a ON s_a.id = routes.station_arrival_id " +
             "LEFT JOIN stations s_d ON s_d.id = routes.station_departure_id " +
             "WHERE routes.id = ?";
-
-    private static final String SQL_GET_ROUTE_BY_ID___ = "SELECT " +
-            "routes.id, " +
-            "routes.train_number, " +
-            "routes.station_departure_id, " +
-            "s_d.name as station_departure_name, " +
-            "routes.station_arrival_id, " +
-            "s_a.name as station_arrival_name, " +
-            "routes.date_departure, " +
-            "routes.date_arrival, " +
-            "routes.travel_cost, " +
-            "routes.seats_total, " +
-            "sum(ur.seats) as seats_reserved, " +
-            "routes.seats_total - COALESCE(sum(ur.seats), 0) as seats_available " +
-            "FROM routes " +
-            "LEFT JOIN stations s_a ON s_a.id = routes.station_arrival_id " +
-            "LEFT JOIN stations s_d ON s_d.id = routes.station_departure_id " +
-            "LEFT JOIN orders ur ON routes.id = ur.route_id " +
-            "WHERE routes.id = ? " +
-            "GROUP BY routes.id ";
-    private static final String SQL_ADD_ROUTE = "INSERT INTO routes (train_number, station_departure_id, station_arrival_id, date_departure, date_arrival, travel_cost, seats_total) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    private static final String SQL_ADD_ROUTE = "INSERT " +
+            "INTO routes (train_number, station_departure_id, station_arrival_id, date_departure, date_arrival, travel_cost,  seats_reserved, seats_total) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String SQL_UPDATE_ROUTE = "UPDATE routes " +
             "SET train_number = ?, station_departure_id = ?, station_arrival_id = ?, " +
             "date_departure = ?, date_arrival = ?, travel_cost = ?, seats_reserved = ?, seats_total = ? " +
             "WHERE id = ?";
     private static final String SQL_DELETE_ROUTE = "DELETE FROM routes WHERE id = ?";
     private static final String SQL_GET_TOTAL_ROWS = "SELECT COUNT(*) total_rows FROM routes";
-    public static final String SQL_ADD_RESERVE_ROUTE = "UPDATE routes SET seats_reserved = seats_reserved + ? WHERE id = ?";
-    public static final String SQL_REMOVE_RESERVE_ROUTE = "UPDATE routes SET seats_reserved = seats_reserved - ? WHERE id = ?";
+    public static final String SQL_ADD_RESERVE_ROUTE = "UPDATE routes " +
+            "SET seats_reserved = seats_reserved + ? " +
+            "WHERE id = ?";
+    public static final String SQL_REMOVE_RESERVE_ROUTE = "UPDATE routes " +
+            "SET seats_reserved = seats_reserved - ? " +
+            "WHERE id = ?";
     public static final String SQL_CHECK_RESERVE_ROUTE = "SELECT id " +
             "FROM routes " +
             "WHERE id = ? AND (seats_reserved > seats_total " +
             "   OR seats_reserved < 0 " +
             "   OR seats_total < 0)";
 
+    private RouteDAOImpl() {
+        dbManager = DBManager.getInstance();
+    }
 
     public static synchronized RouteDAOImpl getInstance() {
         if (instance == null) {
             instance = new RouteDAOImpl();
         }
         return instance;
-    }
-
-    private RouteDAOImpl() {
-        dbManager = DBManager.getInstance();
     }
 
     @Override
@@ -118,12 +107,12 @@ public class RouteDAOImpl implements RouteDAO {
 
 
             while (resultSet.next()) {
-                Station stationArrival = new Station.Builder()
+                Station stationDeparture = new Station.Builder()
                         .withId(resultSet.getInt("station_departure_id"))
                         .withName(resultSet.getString("station_departure_name"))
                         .build();
 
-                Station stationDeparture = new Station.Builder()
+                Station stationArrival = new Station.Builder()
                         .withId(resultSet.getInt("station_arrival_id"))
                         .withName(resultSet.getString("station_arrival_name"))
                         .build();
@@ -172,8 +161,155 @@ public class RouteDAOImpl implements RouteDAO {
         return routes;
     }
 
-    //    public List<Route> getFiltered(List<FilterQuery> filters) throws SQLException {
-    public Paginator getFiltered(ArrayList<FilterQuery> filters) throws DBException {
+    public int getTotalRows(QueryMaker query) throws DBException {
+
+        int totalRows = 0;
+
+
+//        ArrayList<Route> routes = getFiltered(query);
+//        int total_pages = (int) Math.ceil(routes.size() / (float) (Paginator.PAGE_SIZE));
+
+
+        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
+
+
+        try (Connection connection = dbManager.getConnection()) {
+//        StringBuilder sbTotalRows = new StringBuilder(SQL_GET_TOTAL_ROWS);
+//            PreparedStatement psTotalRows = connection.prepareStatement(SQL_GET_TOTAL_ROWS);
+
+//            try (Connection connection = dbManager.getConnection()) {
+//                query.setQueryMain(SQL_GET_ALL_ROUTES);
+            preparedStatement = query.getPreparedStatement(connection);
+
+//            PreparedStatement psTotalRows = connection.prepareStatement(SQL_TOTAL_ROWS);
+
+            ResultSet rsTotalRows = preparedStatement.executeQuery();
+            if (rsTotalRows.next()) {
+                totalRows = rsTotalRows.getInt("total_rows");
+            }
+
+        } catch (SQLException e) {
+            logger.error("SQLException while getFiltered(): {}", e.getMessage());
+            throw new DBException("Error while searching Routes! " + e.getMessage(), e);
+        } finally {
+            DBManager.closeResultSet(resultSet);
+            DBManager.closePreparedStatement(preparedStatement);
+        }
+
+        return totalRows;
+    }
+
+    public Paginator getPaginated(QueryMaker query) throws DBException {
+
+        logger.debug("#getPaginated().");
+
+//
+//        int total_rows = 0;
+//        ResultSet rsTotalRows = psTotalRows.executeQuery();
+//        if (rsTotalRows.next()) {
+//            total_rows = rsTotalRows.getInt("total_rows");
+//        }
+//
+////        int total_pages = total_rows / Paginator.PAGE_SIZE;
+//        int total_pages = (int) Math.ceil(total_rows / (float) (Paginator.PAGE_SIZE));
+//
+//        paginator = new Paginator(Integer.parseInt(pg_page), total_pages, routes);
+
+
+        ArrayList<Route> routes = getFiltered(query);
+////        int total_pages = (int) Math.ceil(routes.size() / (float) (Paginator.PAGE_SIZE));
+//
+//
+//        ResultSet resultSet = null;
+//        PreparedStatement preparedStatement = null;
+//
+//
+//        try (Connection connection = dbManager.getConnection()) {
+////        StringBuilder sbTotalRows = new StringBuilder(SQL_GET_TOTAL_ROWS);
+//            PreparedStatement psTotalRows = connection.prepareStatement(SQL_GET_TOTAL_ROWS);
+//        } catch (SQLException e) {
+//            logger.error("SQLException while getFiltered(): {}", e.getMessage());
+//            throw new DBException("Error while searching Routes! " + e.getMessage(), e);
+//        } finally {
+//            DBManager.closeResultSet(resultSet);
+//            DBManager.closePreparedStatement(preparedStatement);
+//        }
+
+        query.setQueryMain(SQL_GET_TOTAL_ROWS);
+        query.deleteQueryOffset();
+
+        int totalRows = getTotalRows(query);
+
+        logger.info("totalRows {}", totalRows);
+        logger.info("query {}", query);
+
+        int total_pages = (int) Math.ceil(totalRows / (float) (Paginator.PAGE_SIZE));
+        logger.info("total_pages {}", total_pages);
+        return new Paginator.Builder()
+                .withPage(query.getPage())
+                .withPages(total_pages)
+                .withResults(totalRows)
+                .withData(routes)
+                .build();
+
+    }
+
+    public ArrayList<Route> getFiltered(QueryMaker query) throws DBException {
+
+        logger.debug("#getAll().  {}", query);
+
+        ArrayList<Route> routes = new ArrayList<>();
+
+        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
+
+        try (Connection connection = dbManager.getConnection()) {
+            query.setQueryMain(SQL_GET_ALL_ROUTES);
+            preparedStatement = query.getPreparedStatement(connection);
+
+            logger.info("preparedStatement: {}", preparedStatement);
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+
+                Station stationDeparture = new Station.Builder()
+                        .withId(resultSet.getInt("station_departure_id"))
+                        .withName(resultSet.getString("station_departure_name"))
+                        .build();
+
+                Station stationArrival = new Station.Builder()
+                        .withId(resultSet.getInt("station_arrival_id"))
+                        .withName(resultSet.getString("station_arrival_name"))
+                        .build();
+
+                Route route = new Route.Builder()
+                        .withId(resultSet.getInt("id"))
+                        .withTrainNumber(resultSet.getString("train_number"))
+                        .withStationDeparture(stationDeparture)
+                        .withStationArrival(stationArrival)
+                        .withDateDeparture(resultSet.getString("date_departure"))
+                        .withDateArrival(resultSet.getString("date_arrival"))
+                        .withTravelCost(resultSet.getInt("travel_cost"))
+                        .withSeatsReserved(resultSet.getInt("seats_reserved"))
+                        .withSeatsTotal(resultSet.getInt("seats_total"))
+                        .build();
+
+                routes.add(route);
+            }
+        } catch (SQLException e) {
+            logger.error("SQLException while getFiltered(): {}", e.getMessage());
+            throw new DBException("Error while searching Routes! " + e.getMessage(), e);
+        } finally {
+            DBManager.closeResultSet(resultSet);
+            DBManager.closePreparedStatement(preparedStatement);
+        }
+
+        return routes;
+    }
+
+    public Paginator getFiltered1(ArrayList<FilterQuery> filters) throws DBException {
 
         logger.info("filters: " + filters);
 
@@ -318,20 +454,20 @@ public class RouteDAOImpl implements RouteDAO {
                 SQL_TOTAL_ROWS = SQL_TOTAL_ROWS.replace("HAVING 2=2", sbHaving);
             }
 
-            logger.info("getFiltered -- SQL_GET_ALL_USERSROUTES_FILTERED: " + sb);
-//        logger.info("getFiltered -- sbTotalRows: " + sbTotalRows);
-            logger.info("getFiltered -- SQL_TOTAL_ROWS: " + SQL_TOTAL_ROWS);
+            logger.info("getFiltered1 -- SQL_GET_ALL_USERSROUTES_FILTERED: " + sb);
+//        logger.info("getFiltered1 -- sbTotalRows: " + sbTotalRows);
+            logger.info("getFiltered1 -- SQL_TOTAL_ROWS: " + SQL_TOTAL_ROWS);
 
             preparedStatement = connection.prepareStatement(sb.toString());
 
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                Station stationArrival = new Station.Builder()
+                Station stationDeparture = new Station.Builder()
                         .withId(resultSet.getInt("station_departure_id"))
                         .withName(resultSet.getString("station_departure_name"))
                         .build();
 
-                Station stationDeparture = new Station.Builder()
+                Station stationArrival = new Station.Builder()
                         .withId(resultSet.getInt("station_arrival_id"))
                         .withName(resultSet.getString("station_arrival_name"))
                         .build();
@@ -367,7 +503,12 @@ public class RouteDAOImpl implements RouteDAO {
 //        int total_pages = total_rows / Paginator.PAGE_SIZE;
             int total_pages = (int) Math.ceil(total_rows / (float) (Paginator.PAGE_SIZE));
 
-            paginator = new Paginator(Integer.parseInt(pg_page), total_pages, routes);
+//            paginator = new Paginator(Integer.parseInt(pg_page), total_pages, routes);
+            paginator = new Paginator.Builder()
+                    .withPage(Integer.parseInt(pg_page))
+                    .withPages(total_pages)
+                    .withData(routes)
+                    .build();
 
             logger.info("!== pg_page: " + pg_page);
             logger.info("!++ total_rows: " + total_rows);
@@ -402,12 +543,12 @@ public class RouteDAOImpl implements RouteDAO {
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                Station stationArrival = new Station.Builder()
+                Station stationDeparture = new Station.Builder()
                         .withId(resultSet.getInt("station_departure_id"))
                         .withName(resultSet.getString("station_departure_name"))
                         .build();
 
-                Station stationDeparture = new Station.Builder()
+                Station stationArrival = new Station.Builder()
                         .withId(resultSet.getInt("station_arrival_id"))
                         .withName(resultSet.getString("station_arrival_name"))
                         .build();
@@ -471,6 +612,7 @@ public class RouteDAOImpl implements RouteDAO {
             preparedStatement.setString(++l, route.getDateDeparture());
             preparedStatement.setString(++l, route.getDateArrival());
             preparedStatement.setInt(++l, route.getTravelCost());
+            preparedStatement.setInt(++l, route.getSeatsReserved());
             preparedStatement.setInt(++l, route.getSeatsTotal());
 
             preparedStatement.executeUpdate();

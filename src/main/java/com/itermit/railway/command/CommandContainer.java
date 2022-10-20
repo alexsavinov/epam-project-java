@@ -1,5 +1,17 @@
 package com.itermit.railway.command;
 
+import com.itermit.railway.command.Auth.AuthLoginCommand;
+import com.itermit.railway.command.Auth.AuthLogoutCommand;
+import com.itermit.railway.command.Order.*;
+import com.itermit.railway.command.Reserve.ReserveAddPostCommand;
+import com.itermit.railway.command.Reserve.ReserveDeleteCommand;
+import com.itermit.railway.command.Reserve.ReservesListCommand;
+import com.itermit.railway.command.Route.*;
+import com.itermit.railway.command.Search.SearchGetCommand;
+import com.itermit.railway.command.Search.SearchPostCommand;
+import com.itermit.railway.command.Search.SearchResetCommand;
+import com.itermit.railway.command.Station.*;
+import com.itermit.railway.command.User.*;
 import com.itermit.railway.db.DBException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

@@ -2,19 +2,25 @@ package com.itermit.railway.utils;
 
 public class Paginator {
 
-    public static int PAGE_SIZE = 2;
+    public static int PAGE_SIZE = 2; // TODO: store setting in props file
     int page;
     int pages;
+    int results;
     Object data;
 
-    public Paginator(int page, int pages, Object data) {
-        this.page = page;
-        this.pages = pages;
-        this.data = data;
+    private Paginator() {
     }
 
     public int getPage() {
         return page;
+    }
+
+    public int getResults() {
+        return results;
+    }
+
+    public void setResults(int results) {
+        this.results = results;
     }
 
     public boolean pageIsFirst() {
@@ -30,10 +36,6 @@ public class Paginator {
     }
 
     public int getNext_page() {
-
-//        if (page + 1 >= pages) {
-//            return 0;
-//        }
         return Math.min(page + 1, pages);
     }
 
@@ -66,5 +68,37 @@ public class Paginator {
                 ", pages=" + pages +
                 ", data=" + data +
                 '}';
+    }
+
+    public static class Builder {
+        private final Paginator paginator;
+
+        public Builder() {
+            paginator = new Paginator();
+        }
+
+        public Paginator.Builder withPage(int page) {
+            paginator.setPage(page);
+            return this;
+        }
+
+        public Paginator.Builder withPages(int pages) {
+            paginator.setPages(pages);
+            return this;
+        }
+
+        public Paginator.Builder withResults(int results) {
+            paginator.setResults(results);
+            return this;
+        }
+
+        public Paginator.Builder withData(Object data) {
+            paginator.setData(data);
+            return this;
+        }
+
+        public Paginator build() {
+            return paginator;
+        }
     }
 }

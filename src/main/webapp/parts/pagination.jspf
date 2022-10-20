@@ -6,7 +6,7 @@
 
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-end">
-                <input type="hidden" id="pg_page" name="pg_page" value="0"/>
+<%--                <input type="hidden" id="pg_page" name="pg_page" value="0"/>--%>
 
                 <li <c:if test="${sessionScope.paginator.pageIsFirst() eq true}">
                     class="page-item disabled"

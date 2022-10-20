@@ -16,7 +16,7 @@ public class FilterQuery implements Serializable {
 
     public FilterQuery(String field, String condition) {
         this.field = field;
-        this.values = new ArrayList<>();
+//        this.value = new ArrayList<>();
         this.condition = condition;
     }
 
@@ -100,4 +100,6 @@ public class FilterQuery implements Serializable {
                 ", values=" + values +
                 '}';
     }
+
 }
+

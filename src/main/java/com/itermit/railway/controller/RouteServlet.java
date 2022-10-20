@@ -182,12 +182,12 @@ public class RouteServlet extends HttpServlet {
 //
 //            ArrayList<FilterQuery> filters = FilterQuery.getList();
 //            FilterQuery.addFilter(filters, "route_id", route.getId());
-////            ArrayList<Order> ordersByRoute = OrderDAOImpl.getInstance().getFiltered(filters);
+////            ArrayList<Order> ordersByRoute = OrderDAOImpl.getInstance().getFiltered1(filters);
 //
 //            filters = FilterQuery.getList();
 //            FilterQuery.addFilter(filters, "user_id", request.getSession().getAttribute("userid"));
 //            FilterQuery.addFilter(filters, "route_id", route.getId());
-////            ArrayList<Order> ordersByCurrentUser = OrderDAOImpl.getInstance().getFiltered(filters);
+////            ArrayList<Order> ordersByCurrentUser = OrderDAOImpl.getInstance().getFiltered1(filters);
 //
 //            request.setAttribute("route", route);
 //            request.setAttribute("stations", stations);

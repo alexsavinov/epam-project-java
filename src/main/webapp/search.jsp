@@ -242,23 +242,31 @@
                 </button>
             </div>
 
+            <%-- Sorting --%>
+            <input type="hidden" id="sort_train_number" name="sort_train_number"
+                   value="${sessionScope.sort_train_number}"/>
+
+            <%-- Pagination --%>
+            <input type="hidden" id="pg_page" name="pg_page" value="0"/>
+
         </div>
     </form>
 
     <div id="routes">
-        <c:if test="${not empty routes and routes.size() ge 0}">
-            <% request.setAttribute("orders", request.getSession().getAttribute("routes"));%>
-            <% request.setAttribute("orders_tittle", "Routes found:");%>
-
-            <div class="mt-4">
-                <%@ include file="/parts/routes.jspf" %>
+        <div class="mt-4">
+            <div class="h3 ms-5 _main-color1">
+                Routes found: ${paginator.getResults()}
             </div>
-        </c:if>
+            <c:if test="${routes ne null and not empty routes and routes.size() ge 0}">
+                <% request.setAttribute("routes", request.getSession().getAttribute("routes"));%>
+                <%@ include file="/parts/routes.jspf" %>
+            </c:if>
+        </div>
     </div>
 
     <%@ include file="/parts/message.jspf" %>
 
-    <%@ include file="/parts/footer.jspf" %>
+<%--    <%@ include file="/parts/footer.jspf" %>--%>
 
 </div>
 

@@ -1,6 +1,5 @@
 package com.itermit.railway.dao.impl;
 
-import com.itermit.railway.command.OrderEditPostCommand;
 import com.itermit.railway.dao.OrderDAO;
 import com.itermit.railway.db.entity.Order;
 import com.itermit.railway.db.entity.Route;
@@ -9,6 +8,8 @@ import com.itermit.railway.db.entity.User;
 import com.itermit.railway.db.DBException;
 import com.itermit.railway.db.DBManager;
 import com.itermit.railway.utils.FilterQuery;
+import com.itermit.railway.utils.Paginator;
+import com.itermit.railway.utils.QueryMaker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -75,9 +76,7 @@ public class OrderDAOImpl implements OrderDAO {
             "LEFT JOIN routes ON orders.route_id = routes.id " +
             "LEFT JOIN stations s_a ON routes.station_arrival_id = s_a.id " +
             "LEFT JOIN stations s_d ON routes.station_departure_id = s_d.id " +
-//            "LEFT JOIN orders ur ON routes.id = ur.route_id " +
             "WHERE orders.id = ?";
-//            "GROUP BY routes.id ";
 
     private static final String SQL_ADD_ORDER = "INSERT " +
             "INTO orders (user_id, route_id, seats, date_reserve) " +
@@ -85,8 +84,7 @@ public class OrderDAOImpl implements OrderDAO {
     private static final String SQL_UPDATE_ORDER = "UPDATE " +
             "orders SET user_id = ?, route_id = ?, seats = ?, date_reserve = ? " +
             "WHERE id = ?";
-    private static final String SQL_DELETE_ORDER = "DELETE FROM " +
-            "orders WHERE id = ?";
+    private static final String SQL_DELETE_ORDER = "DELETE FROM orders WHERE id = ?";
     private static final String SQL_ADD_RESERVE_ORDER = "UPDATE orders SET seats = seats + ? WHERE id = ?";
     private static final String SQL_REMOVE_RESERVE_ORDER = "UPDATE orders SET seats = seats - ? WHERE id = ?";
     public static final String SQL_CHECK_RESERVE_ORDER = "SELECT id FROM orders WHERE id = ? AND seats < 0";
@@ -144,13 +142,6 @@ public class OrderDAOImpl implements OrderDAO {
                         .withSeatsTotal(resultSet.getInt("route_seats_total"))
                         .build();
 
-//                Order order = new Order(
-//                        resultSet.getInt("id"),
-//                        user,
-//                        route,
-//                        resultSet.getInt("seats"),
-//                        resultSet.getString("date_reserve"));
-
                 Order order = new Order.Builder()
                         .withId(resultSet.getInt("id"))
                         .withUser(user)
@@ -161,12 +152,11 @@ public class OrderDAOImpl implements OrderDAO {
 
                 orders.add(order);
 
-                //            logger.info("! id: " + Route.getId() + "; name: " + Route.getName());
             }
 
         } catch (SQLException e) {
             logger.error("SQLException while getAll(): {}", e.getMessage());
-            throw new DBException("SQLException while getAll()!", e);
+            throw new DBException("DB Error getting orders()!", e);
         } finally {
             DBManager.closePreparedStatement(preparedStatement);
             DBManager.closeResultSet(resultSet);
@@ -175,9 +165,94 @@ public class OrderDAOImpl implements OrderDAO {
         return orders;
     }
 
-    public ArrayList<Order> getFiltered(ArrayList<FilterQuery> filters) throws DBException {
+    public Paginator getPaginated(QueryMaker query) throws DBException {
 
-        logger.debug("#getFiltered()");
+        ArrayList<Order> orders = getFiltered(query);
+
+//        String pg_page = "0";
+        int total_pages = (int) Math.ceil(orders.size() / (float) (Paginator.PAGE_SIZE));
+//        Paginator paginator = new Paginator(0, total_pages, orders);
+
+        return new Paginator.Builder()
+                .withPages(total_pages)
+                .withData(orders)
+                .build();
+
+    }
+
+    public ArrayList<Order> getFiltered(QueryMaker query) throws DBException {
+
+        logger.debug("#getFiltered(query).");
+
+        ArrayList<Order> orders = new ArrayList<>();
+
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try (Connection connection = dbManager.getConnection()) {
+
+            query.setQueryMain(SQL_GET_ALL_ORDERS);
+            preparedStatement = query.getPreparedStatement(connection);
+
+//            logger.warn("preparedStatement: {}", preparedStatement);
+
+            resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+
+                User user = new User.Builder()
+                        .withId(resultSet.getInt("user_id"))
+                        .withName(resultSet.getString("user_name"))
+                        .build();
+
+                Station stationDeparture = new Station.Builder()
+                        .withId(resultSet.getInt("station_departure_id"))
+                        .withName(resultSet.getString("station_departure_name"))
+                        .build();
+
+                Station stationArrival = new Station.Builder()
+                        .withId(resultSet.getInt("station_arrival_id"))
+                        .withName(resultSet.getString("station_arrival_name"))
+                        .build();
+
+                Route route = new Route.Builder()
+                        .withId(resultSet.getInt("route_id"))
+                        .withTrainNumber(resultSet.getString("route_train_number"))
+                        .withStationDeparture(stationDeparture)
+                        .withStationArrival(stationArrival)
+                        .withDateDeparture(resultSet.getString("route_date_departure"))
+                        .withDateArrival(resultSet.getString("route_date_arrival"))
+                        .withTravelCost(resultSet.getInt("route_travel_cost"))
+                        .withSeatsReserved(resultSet.getInt("route_seats_reserved"))
+                        .withSeatsTotal(resultSet.getInt("route_seats_total"))
+                        .build();
+
+                Order order = new Order.Builder()
+                        .withId(resultSet.getInt("id"))
+                        .withUser(user)
+                        .withRoute(route)
+                        .withSeats(resultSet.getInt("seats"))
+                        .withDateReserve(resultSet.getString("date_reserve"))
+                        .build();
+
+                orders.add(order);
+            }
+//            logger.info("orders: {}", orders);
+        } catch (SQLException e) {
+            logger.error("SQLException while getFiltered1(): {}", e.getMessage());
+            throw new DBException("SQLException while getFiltered1()!", e);
+        } finally {
+            DBManager.closeResultSet(resultSet);
+            DBManager.closePreparedStatement(preparedStatement);
+        }
+
+        return orders;
+
+    }
+
+    public ArrayList<Order> getFiltered1(ArrayList<FilterQuery> filters) throws DBException {
+
+        logger.debug("#getFiltered1()");
 
         logger.trace("filters: " + filters);
 
@@ -210,7 +285,7 @@ public class OrderDAOImpl implements OrderDAO {
             }
 
         }
-        logger.info("getFiltered -- SQL_GET_ALL_USERSROUTES_FILTERED: " + sb);
+        logger.info("getFiltered1 -- SQL_GET_ALL_ORDERS: " + sb);
 
         try (Connection connection = dbManager.getConnection()) {
             preparedStatement = connection.prepareStatement(sb.toString());
@@ -259,8 +334,8 @@ public class OrderDAOImpl implements OrderDAO {
             }
 
         } catch (SQLException e) {
-            logger.error("SQLException while getFiltered(): {}", e.getMessage());
-            throw new DBException("SQLException while getFiltered()!", e);
+            logger.error("SQLException while getFiltered1(): {}", e.getMessage());
+            throw new DBException("SQLException while getFiltered1()!", e);
         } finally {
             DBManager.closeResultSet(resultSet);
             DBManager.closePreparedStatement(preparedStatement);
@@ -346,18 +421,18 @@ public class OrderDAOImpl implements OrderDAO {
             connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             connection.setAutoCommit(false);
 
+            /* Remove reserved Seats from Route */
             preparedStatement = connection.prepareStatement(SQL_ADD_RESERVE_ROUTE);
             int l = 0;
             preparedStatement.setInt(++l, order.getSeats());
             preparedStatement.setInt(++l, order.getId());
             logger.trace(preparedStatement);
-            /* Remove reserved Seats from Route */
             preparedStatement.executeUpdate();
 
+            /* Check if reserved Seats in Route remains less than Total seats */
             preparedStatement = connection.prepareStatement(SQL_CHECK_RESERVE_ROUTE);
             preparedStatement.setInt(1, order.getId());
             logger.trace(preparedStatement);
-            /* Check if reserved Seats in Route remains less than Total seats */
             ResultSet resultSetRoute = preparedStatement.executeQuery();
             if (resultSetRoute.next()) {
                 /* Rollback */
@@ -456,17 +531,17 @@ public class OrderDAOImpl implements OrderDAO {
                     seatsToRemove = this.seats;
                 }
 
+                /* Remove reserved Seats from Route */
                 preparedStatement = connection.prepareStatement(SQL_REMOVE_RESERVE_ROUTE);
                 int l = 0;
                 preparedStatement.setInt(++l, seatsToRemove);
                 preparedStatement.setInt(++l, route_id);
                 logger.trace(preparedStatement);
-                /* Remove reserved Seats from Route */
                 preparedStatement.executeUpdate();
 
+                /* Check if reserved Seats in Route remains above zero */
                 preparedStatement = connection.prepareStatement(SQL_CHECK_RESERVE_ROUTE);
                 preparedStatement.setInt(1, route_id);
-                /* Check if reserved Seats in Route remains above zero */
                 logger.trace(preparedStatement);
                 ResultSet resultSetRoute = preparedStatement.executeQuery();
                 if (resultSetRoute.next()) {
