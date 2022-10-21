@@ -2,8 +2,8 @@ package com.itermit.railway.command.Route;
 
 import com.itermit.railway.command.Command;
 import com.itermit.railway.command.CommandContainer;
-import com.itermit.railway.dao.impl.RouteDAOImpl;
 import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.RouteManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,7 +23,7 @@ public class RouteDeleteCommand implements Command {
 
         int id = CommandContainer.getIdFromRequest(request);
 
-        RouteDAOImpl.getInstance().delete(id);
+        RouteManager.getInstance().delete(id);
 
         request.getSession().setAttribute("messages", "Route deleted!");
         request.getSession().setAttribute("url", "/routes");

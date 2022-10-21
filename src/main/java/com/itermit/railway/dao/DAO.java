@@ -1,19 +1,29 @@
 package com.itermit.railway.dao;
 
-import com.itermit.railway.db.DBException;
+import com.itermit.railway.utils.Paginator;
+import com.itermit.railway.utils.QueryMaker;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public interface DAO<T> {
 
-    ArrayList<T> getAll() throws DBException;
+    ArrayList<T> getAll(Connection connection) throws SQLException;
 
-    T get(int id) throws DBException;
+    Paginator getPaginated(Connection connection, QueryMaker query) throws SQLException;
 
-    void add(T t) throws DBException;
+    ArrayList<T> getFiltered(Connection connection, QueryMaker query) throws SQLException;
 
-    void update(int id, T t) throws DBException;
+    T get(Connection connection, int id) throws SQLException;
 
-    void delete(int id) throws DBException;
+    void add(Connection connection, T t) throws SQLException;
+
+    void update(Connection connection, int id, T t) throws SQLException;
+
+    void delete(Connection connection, int id) throws SQLException;
+
+    T extract(ResultSet resultSet) throws SQLException;
 
 }

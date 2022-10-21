@@ -2,8 +2,8 @@ package com.itermit.railway.command.Route;
 
 import com.itermit.railway.command.Command;
 import com.itermit.railway.command.CommandContainer;
-import com.itermit.railway.dao.impl.RouteDAOImpl;
 import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.RouteManager;
 import com.itermit.railway.db.entity.Route;
 import com.itermit.railway.db.entity.Station;
 import org.apache.logging.log4j.LogManager;
@@ -43,18 +43,7 @@ public class RouteAddPostCommand implements Command {
                 .withSeatsTotal(seatsTotal)
                 .build();
 
-//        Route route = new Route(
-//                0,
-//                train_number,
-//                new Station.Builder().withId(station_departure_id).build(),
-//                new Station.Builder().withId(station_arrival_id).build(),
-//                date_departure,
-//                date_arrival,
-//                travel_cost,
-//                seats_total,
-//                seats_total
-//        );
-        RouteDAOImpl.getInstance().add(route);
+        RouteManager.getInstance().add(route);
 
         request.getSession().setAttribute("messages", "Route " + trainNumber + " added!");
 

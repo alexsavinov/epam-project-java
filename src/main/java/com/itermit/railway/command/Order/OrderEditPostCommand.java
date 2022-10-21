@@ -2,8 +2,8 @@ package com.itermit.railway.command.Order;
 
 import com.itermit.railway.command.Command;
 import com.itermit.railway.command.CommandContainer;
-import com.itermit.railway.dao.impl.OrderDAOImpl;
 import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.OrderManager;
 import com.itermit.railway.db.entity.Order;
 import com.itermit.railway.db.entity.Route;
 import com.itermit.railway.db.entity.User;
@@ -39,7 +39,7 @@ public class OrderEditPostCommand implements Command {
                 .withSeats(CommandContainer.getIntegerFromRequest(request, "seats"))
                 .withDateReserve(CommandContainer.getStringFromRequest(request, "date_reserve"))
                 .build();
-        OrderDAOImpl.getInstance().update(id, order);
+        OrderManager.getInstance().update(id, order);
 
         request.getSession().setAttribute("messages", "Order updated!");
         request.getSession().setAttribute("url", "/orders");

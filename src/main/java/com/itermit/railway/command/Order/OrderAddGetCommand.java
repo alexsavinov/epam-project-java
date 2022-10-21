@@ -1,9 +1,9 @@
 package com.itermit.railway.command.Order;
 
 import com.itermit.railway.command.Command;
-import com.itermit.railway.dao.impl.RouteDAOImpl;
-import com.itermit.railway.dao.impl.UserDAOImpl;
 import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.RouteManager;
+import com.itermit.railway.db.UserManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,8 +22,8 @@ public class OrderAddGetCommand implements Command {
 
         logger.debug("#execute(request, response).  {}", request.getRequestURI());
 
-        request.setAttribute("users", UserDAOImpl.getInstance().getAll());
-        request.setAttribute("routes", RouteDAOImpl.getInstance().getAll());
+        request.setAttribute("users", UserManager.getInstance().getAll());
+        request.setAttribute("routes", RouteManager.getInstance().getAll());
         request.setAttribute("action", "add");
 
         try {

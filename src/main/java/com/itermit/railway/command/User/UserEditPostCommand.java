@@ -2,8 +2,8 @@ package com.itermit.railway.command.User;
 
 import com.itermit.railway.command.Command;
 import com.itermit.railway.command.CommandContainer;
-import com.itermit.railway.dao.impl.UserDAOImpl;
 import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.UserManager;
 import com.itermit.railway.db.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,7 +39,7 @@ public class UserEditPostCommand implements Command {
         String name = request.getParameter("name");
         String password = request.getParameter("password");
         User user = new User.Builder().withName(name).withPassword(password).build();
-        UserDAOImpl.getInstance().update(id, user);
+        UserManager.getInstance().update(id, user);
         request.getSession().setAttribute("messages", "User updated!");
         request.getSession().setAttribute("url", "/users");
 

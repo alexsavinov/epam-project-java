@@ -1,8 +1,8 @@
 package com.itermit.railway.command.Order;
 
 import com.itermit.railway.command.Command;
-import com.itermit.railway.dao.impl.OrderDAOImpl;
 import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.OrderManager;
 import com.itermit.railway.db.entity.Order;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +21,7 @@ public class OrdersListCommand implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response)
             throws DBException {
 
-        ArrayList<Order> orders = OrderDAOImpl.getInstance().getAll();
+        ArrayList<Order> orders = OrderManager.getInstance().getAll();
         request.setAttribute("orders", orders);
 
         try {

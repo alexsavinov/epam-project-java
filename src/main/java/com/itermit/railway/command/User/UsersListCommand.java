@@ -1,8 +1,8 @@
 package com.itermit.railway.command.User;
 
 import com.itermit.railway.command.Command;
-import com.itermit.railway.dao.impl.UserDAOImpl;
 import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.UserManager;
 import com.itermit.railway.db.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -22,7 +22,7 @@ public class UsersListCommand implements Command {
             throws DBException {
 
         try {
-            ArrayList<User> users = UserDAOImpl.getInstance().getAll();
+            ArrayList<User> users = UserManager.getInstance().getAll();
             request.setAttribute("users", users);
         } catch (DBException e) {
             throw new RuntimeException(e);

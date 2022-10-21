@@ -23,7 +23,7 @@
         </a>
 
         <table class="table table-striped table-hover p-5 mt-3" aria-describedby="Orders">
-            <thead>
+            <thead class="table-secondary">
             <tr>
                 <th scope="col">id</th>
                 <th scope="col">Seats reserved</th>

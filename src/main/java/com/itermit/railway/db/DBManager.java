@@ -9,7 +9,6 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.sql.*;
 
-
 /*
  * Serves DB connection routines.
  * Trows DBException.
@@ -37,8 +36,8 @@ public class DBManager {
     private DBManager() {
         try {
             Context initContext = new InitialContext();
-            Context envContext  = (Context)initContext.lookup("java:/comp/env");
-            dataSource = (DataSource)envContext.lookup("jdbc/sql-connector-pool");
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            dataSource = (DataSource) envContext.lookup("jdbc/sql-connector-pool");
         } catch (NamingException e) {
             throw new IllegalStateException("Cannot obtain a data source", e);
         }
@@ -53,13 +52,13 @@ public class DBManager {
 
         Connection connection;
 
-        try {
-            connection = dataSource.getConnection();
-            logger.warn("connection: {}", connection);
-        } catch (SQLException e) {
-            logger.error("SQLException while getConnection(): {}", e.getMessage());
-            throw new SQLException("SQLException while getConnection()!", e);
-        }
+//        try {
+        connection = dataSource.getConnection();
+//            logger.warn("connection: {}", connection);
+//        } catch (SQLException e) {
+//            logger.error("Error while getConnection(): {}", e.getMessage());
+//            throw new SQLException("Error while getConnection()!", e);
+//        }
 
         return connection;
     }
@@ -67,68 +66,68 @@ public class DBManager {
     /*
      * Closes Connection to DB
      */
-    public static void closeConnection(Connection connection) throws DBException {
+    public static void closeConnection(Connection connection) throws SQLException {
 
         logger.trace("#closeConnection(connection).");
 
         if (connection != null) {
-            try {
-                connection.close();
-            } catch (SQLException e) {
-                logger.error("SQLException while closeConnection(connection): {}", e.getMessage());
-                throw new DBException("SQLException while closeConnection(connection)!", e);
-            }
+//            try {
+//                connection.close();
+//            } catch (SQLException e) {
+//                logger.error("Error while closeConnection(connection): {}", e.getMessage());
+//                throw new DBException("Error while closeConnection(connection)!", e);
+//            }
         }
     }
 
     /*
      * Closes Statement to DB
      */
-    public static void closeStatement(Statement statement) throws DBException {
+    public static void closeStatement(Statement statement) throws SQLException {
 
         logger.trace("#closeStatement(statement).");
 
         if (statement != null) {
-            try {
-                statement.close();
-            } catch (SQLException e) {
-                logger.error("SQLException while closeStatement(statement): {}", e.getMessage());
-                throw new DBException("SQLException while closeStatement(statement)!", e);
-            }
+//            try {
+            statement.close();
+//            } catch (SQLException e) {
+//                logger.error("Error while closeStatement(statement): {}", e.getMessage());
+//                throw new DBException("Error while closeStatement(statement)!", e);
+//            }
         }
     }
 
     /*
      * Closes preparedStatement
      */
-    public static void closePreparedStatement(PreparedStatement preparedStatement) throws DBException {
+    public static void closePreparedStatement(PreparedStatement preparedStatement) throws SQLException {
 
         logger.trace("#closePreparedStatement(preparedStatement).");
 
         if (preparedStatement != null) {
-            try {
-                preparedStatement.close();
-            } catch (SQLException e) {
-                logger.error("SQLException while closePreparedStatement(preparedStatement): {}", e.getMessage());
-                throw new DBException("SQLException while closePreparedStatement(preparedStatement)!", e);
-            }
+//            try {
+            preparedStatement.close();
+//            } catch (SQLException e) {
+//                logger.error("Error while closePreparedStatement(preparedStatement): {}", e.getMessage());
+//                throw new DBException("Error while closePreparedStatement(preparedStatement)!", e);
+//            }
         }
     }
 
     /*
      * Closes resultSet
      */
-    public static void closeResultSet(ResultSet resultSet) throws DBException {
+    public static void closeResultSet(ResultSet resultSet) throws SQLException {
 
         logger.trace("#closeResultSet(resultSet).");
 
         if (resultSet != null) {
-            try {
-                resultSet.close();
-            } catch (SQLException e) {
-                logger.error("SQLException while closeResultSet(resultSet): {}", e.getMessage());
-                throw new DBException("SQLException while closeResultSet(resultSet)!", e);
-            }
+//            try {
+            resultSet.close();
+//            } catch (SQLException e) {
+//                logger.error("Error while closeResultSet(resultSet): {}", e.getMessage());
+//                throw new DBException("Error while closeResultSet(resultSet)!", e);
+//            }
         }
     }
 
@@ -143,8 +142,8 @@ public class DBManager {
             try {
                 connection.rollback();
             } catch (SQLException e) {
-                logger.error("SQLException while rollback(connection): {}", e.getMessage());
-                throw new DBException("SQLException while rollback(connection)!", e);
+                logger.error("Error while rollback(connection): {}", e.getMessage());
+                throw new DBException("Error while rollback(connection)!", e);
             }
         }
 

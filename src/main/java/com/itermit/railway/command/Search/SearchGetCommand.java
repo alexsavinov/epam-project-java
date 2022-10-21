@@ -1,8 +1,8 @@
 package com.itermit.railway.command.Search;
 
 import com.itermit.railway.command.Command;
-import com.itermit.railway.dao.impl.StationDAOImpl;
 import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.StationManager;
 import com.itermit.railway.db.entity.Station;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,7 +35,7 @@ public class SearchGetCommand implements Command {
         }
 
         try {
-            ArrayList<Station> stations = StationDAOImpl.getInstance().getAll();
+            ArrayList<Station> stations = StationManager.getInstance().getAll();
             stations.add(0, new Station.Builder().withName("-- Select --").build());
             session.setAttribute("stations", stations);
 

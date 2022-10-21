@@ -36,9 +36,10 @@ public class SearchResetCommand implements Command {
         session.removeAttribute("seats_available_max");
         session.removeAttribute("orders");
         session.removeAttribute("routes");
+        session.removeAttribute("paginator");
+        session.removeAttribute("sort_train_number");
 
         return null;
-
     }
 
 }

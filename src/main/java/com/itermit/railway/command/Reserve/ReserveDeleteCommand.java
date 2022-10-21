@@ -1,8 +1,8 @@
 package com.itermit.railway.command.Reserve;
 
 import com.itermit.railway.command.Command;
-import com.itermit.railway.dao.impl.OrderDAOImpl;
 import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.OrderManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,7 +27,7 @@ public class ReserveDeleteCommand implements Command {
 
 //        logger.info(seats);
 
-        OrderDAOImpl.getInstance().deleteReserve(id, seats);
+        OrderManager.getInstance().deleteReserve(id, seats);
 
         request.getSession().setAttribute("messages", "Reserve deleted!");
 

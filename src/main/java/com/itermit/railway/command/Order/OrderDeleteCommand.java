@@ -2,8 +2,8 @@ package com.itermit.railway.command.Order;
 
 import com.itermit.railway.command.Command;
 import com.itermit.railway.command.CommandContainer;
-import com.itermit.railway.dao.impl.OrderDAOImpl;
 import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.OrderManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,7 +23,7 @@ public class OrderDeleteCommand implements Command {
 
         int id = CommandContainer.getIdFromRequest(request);
 
-        OrderDAOImpl.getInstance().delete(id);
+        OrderManager.getInstance().delete(id);
 
         request.getSession().setAttribute("messages", "Order deleted!");
         request.getSession().setAttribute("url", "/profile");

@@ -66,9 +66,7 @@ public class QueryMaker implements Serializable {
     }
 
     public void deleteQueryOffset() {
-
         this.queryOffset = new StringBuilder();
-
     }
 
     public void updateQueryCondition(String field, Condition condition, String value) {

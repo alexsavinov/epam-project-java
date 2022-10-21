@@ -89,7 +89,7 @@ public class Route implements Serializable {
 //        long days = duration.toDays();
         long hours = duration.toHours();
 
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
 //        if (days != 0) sb.append(days + (days == 1 ? " day " : " days "));
         if (hours != 0) sb.append(hours + (hours == 1 ? " hour " : " hours "));
 //        if (minutes != 0) sb.append(minutes + (minutes == 1 ? " minute " : " minutes "));

@@ -4,6 +4,7 @@ import com.itermit.railway.command.Command;
 import com.itermit.railway.command.CommandContainer;
 import com.itermit.railway.dao.impl.UserDAOImpl;
 import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.UserManager;
 import com.itermit.railway.db.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -25,7 +26,7 @@ public class UserEditGetCommand implements Command {
 
         int id = CommandContainer.getIdFromRequest(request);
 
-        User user = UserDAOImpl.getInstance().get(id);
+        User user = UserManager.getInstance().get(id);
         request.setAttribute("user", user);
         request.setAttribute("action", "edit");
 

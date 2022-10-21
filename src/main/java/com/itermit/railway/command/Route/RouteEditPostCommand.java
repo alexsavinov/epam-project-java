@@ -2,8 +2,8 @@ package com.itermit.railway.command.Route;
 
 import com.itermit.railway.command.Command;
 import com.itermit.railway.command.CommandContainer;
-import com.itermit.railway.dao.impl.RouteDAOImpl;
 import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.RouteManager;
 import com.itermit.railway.db.entity.Route;
 import com.itermit.railway.db.entity.Station;
 import org.apache.logging.log4j.LogManager;
@@ -45,7 +45,8 @@ public class RouteEditPostCommand implements Command {
                 .withSeatsTotal(seatsTotal)
                 .build();
 
-        RouteDAOImpl.getInstance().update(id, route);
+        RouteManager.getInstance().update(id, route);
+
         request.getSession().setAttribute("messages", "Route updated!");
         request.getSession().setAttribute("url", "/routes");
 

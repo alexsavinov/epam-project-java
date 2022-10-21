@@ -1,8 +1,8 @@
 package com.itermit.railway.command.Station;
 
 import com.itermit.railway.command.Command;
-import com.itermit.railway.dao.impl.StationDAOImpl;
 import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.StationManager;
 import com.itermit.railway.db.entity.Station;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +21,7 @@ public class StationsListCommand implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response)
             throws DBException {
 
-        ArrayList<Station> stations = StationDAOImpl.getInstance().getAll();
+        ArrayList<Station> stations = StationManager.getInstance().getAll();
         request.setAttribute("stations", stations);
 
         try {

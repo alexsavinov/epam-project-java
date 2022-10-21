@@ -1,202 +1,169 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/parts/init.jspf" %>
 
+<c:set var="page_title" value="Your Orders for Route:" scope="page"/>
+
+<c:set var="total_travel_cost" value="0" scope="page"/>
+<c:set var="total_seats" value="0" scope="page"/>
+<c:if test="${reserves ne null and not empty reserves and reserves.size() ge 0}">
+    <c:forEach var="order" items="${reserves}">
+        <c:set var="total_travel_cost" scope="page"
+               value="${total_travel_cost + order.getRoute().getTravelCost() * order.getSeats()}"/>
+        <c:set var="total_seats" scope="page"
+               value="${total_seats + order.getSeats()}"/>
+    </c:forEach>
+</c:if>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <%@ include file="/parts/head.jspf" %>
-
-
-    <head>
-        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-        <script type="text/javascript">
-            google.charts.load('current', {'packages': ['corechart']});
-            google.charts.setOnLoadCallback(drawChart);
-
-            function drawChart() {
-
-                const seats_total = document.getElementById('seats_total').value;
-                const seats_available = document.getElementById('seats_available').value;
-                // console.log(document.getElementById('seats_total').value)
-                // console.log(document.getElementById('seats_available').value)
-
-                const data = google.visualization.arrayToDataTable([
-                    ['Title', 'Value'],
-                    ['Available seats', seats_total / 100],
-                    ['Reserved seats', (seats_total - seats_available) / 100]
-                    // ['Reserved seats', document.getElementById('seats_total').value - document.getElementById('seats_available').value],
-                    // ['Available seats', document.getElementById('seats_available').value],
-                ]);
-
-                const options = {
-                    title: 'Total seats by routes',
-                    is3D: true,
-                };
-
-                const chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-                chart.draw(data, options);
-            }
-        </script>
-
-        <title>Railway ticket office - Reserve</title>
-    </head>
+    <title>Railway ticket office - ${page_title}</title>
 <body>
 
 <div class="_wrapper">
     <%@ include file="/parts/header.jspf" %>
-
     <%@ include file="/parts/bodyTop.jspf" %>
-
     <%@ include file="/parts/message.jspf" %>
 
-    <div class="ms-5 h3 _main-color1">
-        Route reserve
-    </div>
+    <div id="reserve" class="d-flex flex-column align-items-center mb-4">
 
-    <%-- Input form AND piechart  --%>
-    <div class="d-md-flex">
-
-
-        <%-- FORM --%>
-        <form class="ms-5 mt-4 border border-1 rounded _form _main-bg-color4 _main-color3 p-3 shadow-lg me-5 w-50"
-              method="POST">
-
-            <%-- id --%>
-            <div class="mb-1">
-                <label for="id" class="form-label">id</label>
-                <input type="text" class="form-control" aria-label="id" id="id" name="id" disabled
-                       value="${route.getId()}">
-            </div>
+        <div class="m-3 mt-4">
 
             <%-- train_number --%>
-            <div class="mb-1">
-                <label for="train_number" class="form-label">Train number</label>
-                <input type="text" class="form-control" placeholder="Train number" aria-label="train_number"
-                       id="train_number" name="train_number" value="${route.getTrainNumber()}" disabled>
+            <div class="mb-2 p-3 d-flex justify-content-between align-items-baseline _main-color4 _main-bg-color2 rounded">
+                <div class="h3">
+                    Train number:
+                </div>
+                <div class="fs-3">
+                    ${order.getRoute().getTrainNumber()}
+                </div>
             </div>
 
             <%-- station_departure --%>
-            <div class="form-group mb-1">
-                <label for="station_departure">Station departure</label>
-                <input type="text" class="form-control" placeholder="Station departure" aria-label="station_departure"
-                       id="station_departure" name="station_departure"
-                       value="${route.getStationDeparture().getName()}" disabled>
+            <div class="mb-2 p-3 d-flex gap-1 justify-content-between">
+                <div>
+                    <div class="h3">
+                        From:
+                    </div>
+                    <div class="">
+                        <div class="h2 d-flex justify-content-start _main-color4">
+                            ${order.getRoute().getStationDeparture().getName()}
+                        </div>
+                        <div class="fs-5">
+                            departure at ${order.getRoute().getDateDeparture()}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-flex align-items-center">
+                    <div class="_dot"></div>
+                    <div class="_line"></div>
+                    <div class="_dot"></div>
+                </div>
+
+                <div>
+                    <div class="h3">
+                        To:
+                    </div>
+                    <div class="">
+                        <div class="fs-3 d-flex justify-content-start">
+                            ${order.getRoute().getStationArrival().getName()}
+                        </div>
+                        <div class="fs-5">
+                            arrival at ${order.getRoute().getDateArrival()}
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
-            <%-- date_departure --%>
-            <div class="mb-1">
-                <label for="date_departure" class="form-label">Date departure</label>
-                <input type="datetime-local" class="form-control" aria-label="date_departure"
-                       id="date_departure" name="date_departure"
-                       onchange="updateTime();"
-                       value="${route.getDateDeparture()}" max="${route.getDateArrival()}" disabled>
+
+            <div class="d-flex justify-content-start _main-bg-color2 rounded">
+                <%-- seats_total --%>
+                <div class="mb-2 p-3 d-flex justify-content-between align-items-baseline">
+                    <div class="fs-3">
+                        Total seats:
+                    </div>
+                    <div class="fs-3">
+                        ${order.getRoute().getSeatsTotal()}
+                    </div>
+                </div>
+
+                <%-- seats_reserve --%>
+                <div class="mb-2 p-3 d-flex justify-content-between align-items-baseline">
+                    <div class="fs-3">
+                        Seats reserved:
+                    </div>
+                    <div class="fs-3">
+                        ${order.getRoute().getSeatsReserved()}
+                    </div>
+                </div>
+
+                <%-- seats_available --%>
+                <div class="mb-2 p-3 d-flex justify-content-between align-items-baseline">
+                    <div class="fs-3">
+                        Seats available:
+                    </div>
+                    <div class="fs-3">
+                        ${order.getRoute().getSeatsAvailable()}
+                    </div>
+                </div>
+
+                <%-- seats_available --%>
+                <div class="mb-2 p-3 d-flex justify-content-between align-items-baseline">
+                    <div class="h3 _main-color4">
+                        Your seats:
+                    </div>
+                    <div class="fs-3 _main-color4 fw-bold">
+                        ${total_seats}
+                    </div>
+                </div>
             </div>
 
-            <%-- station_arrival --%>
-            <div class="form-group mb-1">
-                <label for="station_arrival">Station arrival</label>
-                <input type="text" class="form-control" placeholder="Station arrival" aria-label="station_arrival"
-                       id="station_arrival" name="station_arrival"
-                       value="${route.getStationArrival().getName()}" disabled>
-            </div>
 
-            <%-- date_arrival --%>
-            <div class="mb-1">
-                <label for="date_arrival" class="form-label">Date arrival</label>
-                <input type="datetime-local" class="form-control" aria-label="date_arrival"
-                       id="date_arrival" name="date_arrival"
-                       onchange="updateTime();"
-                       value="${route.getDateArrival()}" min="${route.getDateDeparture()}" disabled>
-            </div>
-
-            <%--        <div class="mb-1">--%>
-            <%--            <label for="travel_time" class="form-label">Travel time</label>--%>
-            <%--            <div>11</div>--%>
-            <%--            <input type="text" class="form-control" aria-label="travel_time"--%>
-            <%--                   id="travel_time" name="travel_time" value="${route.getTravelTime()}" disabled>--%>
-            <%--        </div>--%>
-
-            <%--        <div class="mb-1">--%>
-            <%--            <label for="travel_cost" class="form-label">Travel cost</label>--%>
-            <%--            <input type="number" class="form-control" aria-label="travel_cost"--%>
-            <%--                   id="travel_cost" name="travel_cost" value="${route.getTravelCost()}">--%>
-            <%--        </div>--%>
-
-            <%-- seats_available --%>
-            <div class="mb-1">
-                <label for="seats_available" class="form-label">Seats available</label>
-                <input type="number" class="form-control" aria-label="seats_available"
-                       id="seats_available" name="seats_available"
-                       value="${route.getSeatsAvailable()}" disabled>
-            </div>
-
-            <%-- seats_total --%>
-            <div class="mb-1">
-                <label for="seats_total" class="form-label">Seats total</label>
-                <input type="number" class="form-control" aria-label="seats_total"
-                       id="seats_total" name="seats_total"
-                       value="${route.getSeatsTotal()}" disabled>
-            </div>
-
-            <%-- seats_reserve --%>
-            <div class="mb-1">
-                <label for="seats_reserve" class="form-label">Seats to reserve</label>
-                <input type="number" class="form-control" aria-label="seats_reserve"
-                       id="seats_reserve" name="seats_reserve">
-            </div>
-
-            <%-- BUTTONS --%>
-            <div class="form-group mt-3">
-                <button type="submit" class="btn">Confirm</button>
-                <a class="btn btn-outline-secondary" href="/search">Cancel</a>
-            </div>
-
-        </form>
-
-        <%-- piechart --%>
-        <%--        <div id="piechart" class="ms-5 mt-5" style="width: 400px; height: 500px;"></div>--%>
-        <div id="piechart" class="ms-5 mt-5 w-50"></div>
+        </div>
 
     </div>
 
-    <%--    <%@ include file="/parts/orders.jsp">--%>
-    <%--        <jsp:param name="orders" value="${userRoutes}"/>--%>
-    <%--    </jsp:include>--%>
+    <c:if test="${reserves ne null and not empty reserves and reserves.size() ge 0}">
+        <hr>
 
-<%--    <c:if test="${not empty userRoutesByRoute and userRoutesByRoute.size() ge 0}">--%>
-<%--        <% request.setAttribute("orders", request.getAttribute("userRoutesByRoute"));%>--%>
-<%--        <% request.setAttribute("orders_tittle", "Orders by route");%>--%>
+        <div id="reserves">
+            <div class="mt-4">
+                    <%--                    <c:if test="${paginator ne null}">--%>
+                    <%--                    <div class="h3 ms-5 _main-color1">--%>
+                    <%--                        Reserves found: ${reserves.size()}--%>
+                    <%--                    </div>--%>
+                    <%--                    </c:if>--%>
 
-<%--        <div class="mt-5">--%>
-<%--            <%@ include file="/parts/orders.jspf" %>--%>
-<%--        </div>--%>
-<%--    </c:if>--%>
+                    <%--                    <% request.setAttribute("tickets", request.getSession().getAttribute("routes"));%>--%>
+                <%@ include file="/parts/reserves.jspf" %>
 
-<%--    <c:if test="${not empty userRoutesByCurrentUser and userRoutesByCurrentUser.size() ge 0}">--%>
-<%--        <% request.setAttribute("orders", request.getAttribute("userRoutesByCurrentUser"));%>--%>
-<%--        <% request.setAttribute("orders_tittle", "Orders by logged user"); %>--%>
+            </div>
+        </div>
+    </c:if>
 
-<%--        <div class="mt-5">--%>
-<%--            <%@ include file="/parts/orders.jspf" %>--%>
-<%--        </div>--%>
-<%--    </c:if>--%>
+    <%--    <c:if test="${tickets ne null and not empty tickets and tickets.size() ge 0}">--%>
+    <%--        <div id="routes">--%>
+    <%--            <div class="mt-4">--%>
+    <%--                    &lt;%&ndash;                    <c:if test="${paginator ne null}">&ndash;%&gt;--%>
+    <%--                <div class="h3 ms-5 _main-color1">--%>
+    <%--                    tickets found: ${tickets.size()}--%>
+    <%--                </div>--%>
+    <%--                    &lt;%&ndash;                    </c:if>&ndash;%&gt;--%>
 
-<%--    <c:if test="${not empty userRoutes and userRoutes.size() ge 0}">--%>
-<%--        <% request.setAttribute("orders", request.getAttribute("userRoutes"));%>--%>
-<%--        <% request.setAttribute("orders_tittle", "Orders all");%>--%>
+    <%--                    &lt;%&ndash;                    <% request.setAttribute("tickets", request.getSession().getAttribute("routes"));%>&ndash;%&gt;--%>
+    <%--                <%@ include file="/parts/tickets.jspf" %>--%>
 
-<%--        <div class="mt-5">--%>
-<%--            <%@ include file="/parts/orders.jspf" %>--%>
-<%--        </div>--%>
-<%--    </c:if>--%>
-
-
-    <%@ include file="/parts/footer.jspf" %>
-
+    <%--            </div>--%>
+    <%--        </div>--%>
+    <%--    </c:if>--%>
 
 </div>
 
+<%@ include file="/parts/footer.jspf" %>
+</div>
 
 <%@ include file="/parts/bodyBottom.jspf" %>
 

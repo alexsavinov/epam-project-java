@@ -47,10 +47,10 @@ public class EncodingFilter implements Filter {
                 return;
             }
 
-            if (httpReq.getCharacterEncoding() == encoding) {
+            if (Objects.equals(httpReq.getCharacterEncoding(), encoding)) {
                 httpReq.setCharacterEncoding(encoding);
             }
-            if (httpResp.getCharacterEncoding() == encoding) {
+            if (Objects.equals(httpResp.getCharacterEncoding(), encoding)) {
                 httpResp.setCharacterEncoding(encoding);
             }
 

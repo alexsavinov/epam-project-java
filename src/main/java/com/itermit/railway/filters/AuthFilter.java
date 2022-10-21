@@ -55,7 +55,9 @@ public class AuthFilter implements Filter {
             if (httpReq.getRequestURI().equals("/profile")
                     || httpReq.getRequestURI().startsWith("/reserves")
                     || httpReq.getRequestURI().startsWith("/users")
-                    || httpReq.getRequestURI().startsWith("/routes")
+                    || httpReq.getRequestURI().startsWith("/routes/add")
+                    || httpReq.getRequestURI().startsWith("/routes/edit")
+                    || httpReq.getRequestURI().startsWith("/routes/delete")
                     || httpReq.getRequestURI().startsWith("/orders")
                     || httpReq.getRequestURI().startsWith("/stations")) {
 

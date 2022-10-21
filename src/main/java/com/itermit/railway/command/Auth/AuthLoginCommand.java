@@ -4,8 +4,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.itermit.railway.command.Command;
-import com.itermit.railway.dao.impl.UserDAOImpl;
 import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.UserManager;
 import com.itermit.railway.db.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -32,7 +32,9 @@ public class AuthLoginCommand implements Command {
         String hex = passwordEncrypt(password);
         logger.warn("password (SHA-256): {}", hex);
 
-        User user = UserDAOImpl.getInstance().get(
+//        User user = UserManager.getInstance().get(
+//                new User.Builder().withName(name).withPassword(hex).build());
+        User user = UserManager.getInstance().get(
                 new User.Builder().withName(name).withPassword(hex).build());
 
         if (user.getId() == 0) {

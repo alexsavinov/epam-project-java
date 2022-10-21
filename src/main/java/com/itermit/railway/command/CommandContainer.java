@@ -5,6 +5,7 @@ import com.itermit.railway.command.Auth.AuthLogoutCommand;
 import com.itermit.railway.command.Order.*;
 import com.itermit.railway.command.Reserve.ReserveAddPostCommand;
 import com.itermit.railway.command.Reserve.ReserveDeleteCommand;
+import com.itermit.railway.command.Reserve.ReserveEditGetCommand;
 import com.itermit.railway.command.Reserve.ReservesListCommand;
 import com.itermit.railway.command.Route.*;
 import com.itermit.railway.command.Search.SearchGetCommand;
@@ -59,6 +60,7 @@ public class CommandContainer {
         commands.put("routeAddGet", new RouteAddGetCommand());
         commands.put("routeAddPost", new RouteAddPostCommand());
         commands.put("routeDelete", new RouteDeleteCommand());
+        commands.put("routeInfo", new RouteInfoCommand());
         /* OrderServlet */
         commands.put("ordersList", new OrdersListCommand());
         commands.put("orderEditGet", new OrderEditGetCommand());
@@ -66,10 +68,9 @@ public class CommandContainer {
         commands.put("orderAddGet", new OrderAddGetCommand());
         commands.put("orderAddPost", new OrderAddPostCommand());
         commands.put("orderDelete", new OrderDeleteCommand());
-
         /* ReserveServlet */
         commands.put("reservesList", new ReservesListCommand());
-//        commands.put("reserveEditGet", new ReserveEditGetCommand());
+        commands.put("reserveEditGet", new ReserveEditGetCommand());
 //        commands.put("reserveEditPost", new ReserveEditPostCommand());
 //        commands.put("reserveAddGet", new ReserveAddGetCommand());
         commands.put("reserveAddPost", new ReserveAddPostCommand());

@@ -15,6 +15,7 @@
     <div class="ms-5 mt-3 h3 _main-color4">
         Search
     </div>
+
     <%--    align-items-start align-items-sm-center--%>
     <form method="POST" action="/search" id="searchForm" onsubmit="return validateForm()">
         <div class="_search-form d-flex flex-column m-3 ms-lg-5 me-lg-5 mt-2 p-3 border border-1 rounded _main-bg-color4 _main-color2 shadow-lg">
@@ -187,6 +188,7 @@
                             <label class="form-label">Seats available from:</label>
                         </div>
                         <div class="d-flex g-0 m-0 p-0">
+
                             <%-- seats_available_min --%>
                             <div class="input-group _input-number">
                                 <input type="number" class="form-control"
@@ -221,6 +223,7 @@
                                     <em class="fa fa-xmark fa-2l"></em>
                                 </button>
                             </div>
+
                         </div>
                     </div>
 
@@ -254,9 +257,11 @@
 
     <div id="routes">
         <div class="mt-4">
-            <div class="h3 ms-5 _main-color1">
-                Routes found: ${paginator.getResults()}
-            </div>
+            <c:if test="${paginator ne null}">
+                <div class="h3 ms-5 _main-color1">
+                    Routes found: ${paginator.getResults()}
+                </div>
+            </c:if>
             <c:if test="${routes ne null and not empty routes and routes.size() ge 0}">
                 <% request.setAttribute("routes", request.getSession().getAttribute("routes"));%>
                 <%@ include file="/parts/routes.jspf" %>
@@ -266,7 +271,7 @@
 
     <%@ include file="/parts/message.jspf" %>
 
-<%--    <%@ include file="/parts/footer.jspf" %>--%>
+    <%--    <%@ include file="/parts/footer.jspf" %>--%>
 
 </div>
 

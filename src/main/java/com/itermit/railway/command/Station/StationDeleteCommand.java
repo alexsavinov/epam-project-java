@@ -2,8 +2,8 @@ package com.itermit.railway.command.Station;
 
 import com.itermit.railway.command.Command;
 import com.itermit.railway.command.CommandContainer;
-import com.itermit.railway.dao.impl.StationDAOImpl;
 import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.StationManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,7 +23,7 @@ public class StationDeleteCommand implements Command {
 
         int id = CommandContainer.getIdFromRequest(request);
 
-        StationDAOImpl.getInstance().delete(id);
+        StationManager.getInstance().delete(id);
 
         request.getSession().setAttribute("messages", "Station deleted!");
         request.getSession().setAttribute("url", "/stations");

@@ -4,6 +4,7 @@ import com.itermit.railway.command.Command;
 import com.itermit.railway.command.CommandContainer;
 import com.itermit.railway.dao.impl.UserDAOImpl;
 import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.UserManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,7 +24,7 @@ public class UserDeleteCommand implements Command {
 
         int id = CommandContainer.getIdFromRequest(request);
 
-        UserDAOImpl.getInstance().delete(id);
+        UserManager.getInstance().delete(id);
 
         request.getSession().setAttribute("messages", "User deleted!");
         request.getSession().setAttribute("url", "/users");

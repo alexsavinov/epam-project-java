@@ -31,7 +31,7 @@ public class InitServlet extends HttpServlet {
         if (request.getRequestURI().equals("/error")) {
             response.setContentType("text/html");
 
-            PrintWriter out = null;
+            PrintWriter out;
             try {
                 out = response.getWriter();
 

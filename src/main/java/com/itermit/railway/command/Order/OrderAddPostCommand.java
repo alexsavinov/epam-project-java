@@ -2,8 +2,8 @@ package com.itermit.railway.command.Order;
 
 import com.itermit.railway.command.Command;
 import com.itermit.railway.command.CommandContainer;
-import com.itermit.railway.dao.impl.OrderDAOImpl;
 import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.OrderManager;
 import com.itermit.railway.db.entity.Order;
 import com.itermit.railway.db.entity.Route;
 import com.itermit.railway.db.entity.User;
@@ -38,7 +38,7 @@ public class OrderAddPostCommand implements Command {
                 .withDateReserve(CommandContainer.getStringFromRequest(request, "date_reserve"))
                 .build();
 
-        OrderDAOImpl.getInstance().add(order);
+        OrderManager.getInstance().add(order);
 
         request.getSession().setAttribute("messages", "Order added!");
 

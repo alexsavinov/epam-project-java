@@ -1,8 +1,8 @@
 package com.itermit.railway.command.Station;
 
 import com.itermit.railway.command.Command;
-import com.itermit.railway.dao.impl.StationDAOImpl;
 import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.StationManager;
 import com.itermit.railway.db.entity.Station;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -24,7 +24,7 @@ public class StationAddPostCommand implements Command {
         String name = request.getParameter("name");
 
         Station station = new Station.Builder().withName(name).build();
-        StationDAOImpl.getInstance().add(station);
+        StationManager.getInstance().add(station);
 
         request.getSession().setAttribute("messages", "Station " + name + " added!");
 

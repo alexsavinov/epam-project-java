@@ -6,6 +6,9 @@ import com.itermit.railway.dao.impl.OrderDAOImpl;
 import com.itermit.railway.dao.impl.RouteDAOImpl;
 import com.itermit.railway.dao.impl.UserDAOImpl;
 import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.OrderManager;
+import com.itermit.railway.db.RouteManager;
+import com.itermit.railway.db.UserManager;
 import com.itermit.railway.db.entity.Order;
 import com.itermit.railway.db.entity.Route;
 import com.itermit.railway.db.entity.User;
@@ -30,9 +33,9 @@ public class OrderEditGetCommand implements Command {
 
         int id = CommandContainer.getIdFromRequest(request);
 
-        ArrayList<User> users = UserDAOImpl.getInstance().getAll();
-        ArrayList<Route> routes = RouteDAOImpl.getInstance().getAll();
-        Order order = OrderDAOImpl.getInstance().get(id);
+        ArrayList<User> users = UserManager.getInstance().getAll();
+        ArrayList<Route> routes = RouteManager.getInstance().getAll();
+        Order order = OrderManager.getInstance().get(id);
 
         request.setAttribute("users", users);
         request.setAttribute("routes", routes);

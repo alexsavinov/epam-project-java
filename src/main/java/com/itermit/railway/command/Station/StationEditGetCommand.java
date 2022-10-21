@@ -2,8 +2,8 @@ package com.itermit.railway.command.Station;
 
 import com.itermit.railway.command.Command;
 import com.itermit.railway.command.CommandContainer;
-import com.itermit.railway.dao.impl.StationDAOImpl;
 import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.StationManager;
 import com.itermit.railway.db.entity.Station;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,7 +36,7 @@ public class StationEditGetCommand implements Command {
 
         int id = CommandContainer.getIdFromRequest(request);
 
-        Station station = StationDAOImpl.getInstance().get(id);
+        Station station = StationManager.getInstance().get(id);
         request.setAttribute("station", station);
         request.setAttribute("action", "edit");
 

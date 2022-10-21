@@ -1,6 +1,5 @@
 package com.itermit.railway.controller;
 
-
 import com.itermit.railway.command.CommandContainer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -11,7 +10,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-
 
 /*
  * Handles authorization process.
@@ -45,7 +43,9 @@ public class AuthServlet extends HttpServlet {
 
         logger.debug("#doPost(request, response).  {}", request.getRequestURI());
 
-        String commandName = null;
+        /* Reset session attributes */
+        String commandName = "searchReset";
+        CommandContainer.runCommand(request, response, commandName);
 
         if (request.getRequestURI().equals("/login")) {
 

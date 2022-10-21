@@ -1,8 +1,8 @@
 package com.itermit.railway.command.Route;
 
 import com.itermit.railway.command.Command;
-import com.itermit.railway.dao.impl.RouteDAOImpl;
 import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.RouteManager;
 import com.itermit.railway.db.entity.Route;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -21,7 +21,7 @@ public class RoutesListCommand implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response)
             throws DBException {
 
-        ArrayList<Route> routes = RouteDAOImpl.getInstance().getAll();
+        ArrayList<Route> routes = RouteManager.getInstance().getAll();
         request.setAttribute("routes", routes);
 
         try {

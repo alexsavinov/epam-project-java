@@ -9,37 +9,6 @@
     <%@ include file="/parts/head.jspf" %>
 
     <head>
-        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-        <script type="text/javascript">
-            google.charts.load('current', {'packages': ['corechart']});
-            google.charts.setOnLoadCallback(drawChart);
-
-            function drawChart() {
-
-                const seats_total = document.getElementById('seats_total').value;
-                const seats_available = document.getElementById('seats_available').value;
-                // console.log(document.getElementById('seats_total').value)
-                // console.log(document.getElementById('seats_available').value)
-
-                const data = google.visualization.arrayToDataTable([
-                    ['Title', 'Value'],
-                    ['Available seats', seats_total / 100],
-                    ['Reserved seats', (seats_total - seats_available) / 100]
-                    // ['Reserved seats', document.getElementById('seats_total').value - document.getElementById('seats_available').value],
-                    // ['Available seats', document.getElementById('seats_available').value],
-                ]);
-
-                const options = {
-                    title: 'Total seats by routes',
-                    is3D: true,
-                };
-
-                const chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-                chart.draw(data, options);
-            }
-        </script>
-
         <title>Railway ticket office - ${page_title}</title>
     </head>
 <body>
@@ -173,8 +142,6 @@
             <%@ include file="/parts/orders.jspf" %>
         </div>
     </c:if>
-
-    <div id="piechart" style="width: 900px; height: 500px;"></div>
 
     <%@ include file="/parts/footer.jspf" %>
 </div>
