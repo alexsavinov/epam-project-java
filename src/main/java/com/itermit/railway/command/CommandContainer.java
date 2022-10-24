@@ -1,12 +1,11 @@
 package com.itermit.railway.command;
 
+import com.itermit.railway.command.Auth.AuthActivateCommand;
 import com.itermit.railway.command.Auth.AuthLoginCommand;
 import com.itermit.railway.command.Auth.AuthLogoutCommand;
+import com.itermit.railway.command.Auth.AuthRegisterCommand;
 import com.itermit.railway.command.Order.*;
-import com.itermit.railway.command.Reserve.ReserveAddPostCommand;
-import com.itermit.railway.command.Reserve.ReserveDeleteCommand;
-import com.itermit.railway.command.Reserve.ReserveEditGetCommand;
-import com.itermit.railway.command.Reserve.ReservesListCommand;
+import com.itermit.railway.command.Reserve.*;
 import com.itermit.railway.command.Route.*;
 import com.itermit.railway.command.Search.SearchGetCommand;
 import com.itermit.railway.command.Search.SearchPostCommand;
@@ -35,6 +34,8 @@ public class CommandContainer {
         /* AuthServlet */
         commands.put("authLogin", new AuthLoginCommand());
         commands.put("authLogout", new AuthLogoutCommand());
+        commands.put("authRegister", new AuthRegisterCommand());
+        commands.put("authActivate", new AuthActivateCommand());
         /* SearchServlet */
         commands.put("searchGet", new SearchGetCommand());
         commands.put("searchPost", new SearchPostCommand());
@@ -70,6 +71,7 @@ public class CommandContainer {
         commands.put("orderDelete", new OrderDeleteCommand());
         /* ReserveServlet */
         commands.put("reservesList", new ReservesListCommand());
+        commands.put("reservesGroupedList", new ReservesGroupedListCommand());
         commands.put("reserveEditGet", new ReserveEditGetCommand());
 //        commands.put("reserveEditPost", new ReserveEditPostCommand());
 //        commands.put("reserveAddGet", new ReserveAddGetCommand());
@@ -119,6 +121,19 @@ public class CommandContainer {
             throw new DBException("Cannot get 'id' from request!", null);
         }
         return id;
+    }
+
+    public static String getTokenFromRequest(HttpServletRequest request) throws DBException {
+
+        String token = "";
+        if (request.getPathInfo() != null && request.getPathInfo().length() > 1) {
+            token = request.getPathInfo().substring(1);
+        }
+
+        if (token == null) {
+            throw new DBException("Cannot get 'token' from request!", null);
+        }
+        return token;
     }
 
     public static String getErrorMessage(String defaultMessage, SQLException e) {

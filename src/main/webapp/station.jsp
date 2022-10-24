@@ -45,8 +45,13 @@
             </div>
 
             <div class="form-group mt-3">
-                <button type="submit" class="btn">Save</button>
-                <a class="btn btn-outline-secondary" href="/stations/delete/${station.getId()}">Delete</a>
+                <button type="submit" class="btn" <customTags:access role="user" modifier="disabled"/>>
+                    Save
+                </button>
+                <a class="btn btn-outline-secondary <customTags:access role="user" modifier="disabled"/>"
+                   href="/stations/delete/${station.getId()}">
+                    Delete
+                </a>
             </div>
         </form>
 

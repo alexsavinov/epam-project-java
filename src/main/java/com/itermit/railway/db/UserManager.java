@@ -3,12 +3,17 @@ package com.itermit.railway.db;
 import com.itermit.railway.command.CommandContainer;
 import com.itermit.railway.dao.impl.UserDAOImpl;
 import com.itermit.railway.db.entity.User;
+import com.itermit.railway.utils.Condition;
+import com.itermit.railway.utils.QueryMaker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import static com.itermit.railway.dao.impl.UserDAOImpl.SQL_GET_ALL_USERS;
 
 public class UserManager {
 
@@ -37,6 +42,7 @@ public class UserManager {
             throw new DBException(errorMessage, e);
         }
     }
+
     public User get(User user) throws DBException {
         logger.debug("#get(user).");
 
@@ -62,12 +68,68 @@ public class UserManager {
     public void add(User user) throws DBException {
         logger.debug("#add(user).");
 
-        try (Connection connection = dbManager.getConnection()) {
+        Connection connection = null;
+
+        try {
+            connection = dbManager.getConnection();
+
+            /* Set transaction isolation */
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+            connection.setAutoCommit(false);
+
+            if (checkSameName(connection, user)) {
+                /* Rollback if not */
+                DBManager.rollback(connection);
+                logger.info("User with same name {} is already exists!", user.getName());
+                throw new DBException("User with same name " + user.getName() + " is already exists!", null);
+            }
+
+            if (checkSameEmail(connection, user)) {
+                /* Rollback if not */
+                DBManager.rollback(connection);
+                logger.info("User with same E-mail {} is already exists!", user.getEmail());
+                throw new DBException("User with same E-mail " + user.getEmail() + " is already exists!", null);
+            }
+
             UserDAOImpl.getInstance().add(connection, user);
+
+            /* Commit */
+            connection.commit();
+
         } catch (SQLException e) {
+            /* Rollback if error */
+            DBManager.rollback(connection);
             String errorMessage = CommandContainer.getErrorMessage("Error while adding user!", e);
             throw new DBException(errorMessage, e);
+        } finally {
+            try {
+                DBManager.closeConnection(connection);
+            } catch (SQLException e) {
+                throw new DBException("Error closing Prepared statement! ", e);
+            }
         }
+    }
+
+    public Boolean checkSameName(Connection connection, User user) throws SQLException {
+
+        QueryMaker query = new QueryMaker.Builder()
+                .withMainQuery(SQL_GET_ALL_USERS)
+                .withCondition("name", Condition.EQ, user.getName())
+                .build();
+        ArrayList<User> users = UserDAOImpl.getInstance().getFiltered(connection, query);
+
+        return users.size() > 0;
+    }
+
+    public Boolean checkSameEmail(Connection connection, User user) throws SQLException {
+
+        QueryMaker query = new QueryMaker.Builder()
+                .withMainQuery(SQL_GET_ALL_USERS)
+                .withCondition("email", Condition.EQ, user.getEmail())
+                .build();
+        ArrayList<User> users = UserDAOImpl.getInstance().getFiltered(connection, query);
+
+        return users.size() > 0;
     }
 
     public void delete(int id) throws DBException {
@@ -81,7 +143,7 @@ public class UserManager {
         }
     }
 
-    public void  update(int id, User user) throws DBException {
+    public void update(int id, User user) throws DBException {
         logger.debug("#update(id, user): {} -- {}", id, user);
 
         try (Connection connection = dbManager.getConnection()) {
@@ -92,47 +154,27 @@ public class UserManager {
         }
     }
 
-//    public void createUsers(User... users) throws DBException {
-//        Connection con = null;
-//        try {
-//            con = dbManager.getConnection();
-//            con.setTransactionIsolation(
-//                    Connection.TRANSACTION_READ_COMMITTED);
-//            con.setAutoCommit(false);
-//
-//            for (User user : users) {
-//                dbManager.createUser(con, user);
-//            }
-//
-//            con.commit();
-//        } catch (SQLException ex) {
-//            // (1) write to log: log.error("Cannot create users", ex);
-//            ex.printStackTrace();
-//
-//            // (2)
-//            if (con != null) {
-//                try {
-//                    con.rollback();
-//                } catch (SQLException e) {
-//                    // write to log
-//                    e.printStackTrace();
-//                }
-//            }
-//
-//            // (3) throw your own exception
-//            throw new DBException("Cannot create users", ex);
-//        }
-//    }
-//
-//    public List<User> findAllUsers() throws DBException {
-//        try (Connection con = dbManager.getConnection()) {
-//            return dbManager.findAllUsers(con);
-//        } catch (SQLException ex) {
-//            // (1) write to log: log.error(..., ex);
-//            ex.printStackTrace();
-//
-//            // (2) throw your own exception
-//            throw new DBException("Cannot find all users", ex);
+    public void updatePassword(int id, String password) throws DBException {
+        logger.debug("#updatePassword(id, password): {}", id);
+
+        try (Connection connection = dbManager.getConnection()) {
+            UserDAOImpl.getInstance().update(connection, id,
+                    new User.Builder().withId(id).withPassword(password).build());
+        } catch (SQLException e) {
+            String errorMessage = CommandContainer.getErrorMessage("Error while update user password!", e);
+            throw new DBException(errorMessage, e);
+        }
+    }
+
+//    public void activatePrepare(User user) throws DBException {
+//        logger.debug("#activatePrepare(user): {} ", user);
+//        try (Connection connection = dbManager.getConnection()) {
+//            user.generateActivateToken();
+//            user.setIsActive(false);
+//            UserDAOImpl.getInstance().update(connection, user.getId(), user);
+//        } catch (SQLException e) {
+//            String errorMessage = CommandContainer.getErrorMessage("Error while prepare to activate user!", e);
+//            throw new DBException(errorMessage, e);
 //        }
 //    }
 

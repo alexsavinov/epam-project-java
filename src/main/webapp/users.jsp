@@ -17,7 +17,8 @@
 
     <div class="_wrapper-table">
 
-        <a class="btn btn-sm btn-outline-secondary mt-2 mb-1" href="/users/add">
+        <a class="btn btn-sm btn-outline-secondary mt-2 mb-1 <customTags:access role="user" modifier="d-none"/>"
+           href="/users/add">
             <i class="fa fa-plus-circle" aria-hidden="true"></i>
             Add ${url}
         </a>
@@ -27,13 +28,15 @@
             <tr>
                 <th scope="col">id</th>
                 <th scope="col">Name</th>
+                <th scope="col">E-mail</th>
                 <th scope="col">Admin</th>
+                <th scope="col">Active</th>
             </tr>
             </thead>
 
             <tbody>
             <c:forEach var="user" items="${users}">
-                <tr id="selectBox_${user.getId()}" onclick="goByUrl('/users/edit/${user.getId()}');">
+                <tr id="user_${user.getId()}" onclick="goByUrl('/users/edit/${user.getId()}');">
                     <th scope="row">
                             ${user.getId()}
                     </th>
@@ -41,7 +44,17 @@
                             ${user.getName()}
                     </td>
                     <td>
-                            ${user.getIsAdmin()}
+                            ${user.getEmail()}
+                    </td>
+                    <td>
+                        <c:if test="${user.getIsAdmin() == true}">
+                            <em class="fa fa-check fa-l me-2"></em>
+                        </c:if>
+                    </td>
+                    <td>
+                        <c:if test="${user.getIsActive() == true}">
+                            <em class="fa fa-check fa-l me-2"></em>
+                        </c:if>
                     </td>
                 </tr>
             </c:forEach>
@@ -49,14 +62,11 @@
         </table>
 
     </div>
+
     <%@ include file="/parts/message.jspf" %>
-
     <%@ include file="/parts/footer.jspf" %>
-
 </div>
 
-
 <%@ include file="/parts/bodyBottom.jspf" %>
-
 </body>
 </html>

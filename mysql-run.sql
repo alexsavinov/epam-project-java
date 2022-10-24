@@ -7,23 +7,39 @@ drop table if exists users;
 
 create table users
 (
-    id       int auto_increment
+    id               int auto_increment
         primary key,
-    name     VARCHAR(50)  null,
-    password VARCHAR(255) null,
-    isadmin  boolean      not null default 0
+    name             VARCHAR(50)  null,
+    password         VARCHAR(255) null,
+    email            VARCHAR(255) null,
+    isadmin          boolean      not null default 0,
+    isactive         boolean      not null default 0,
+    activation_token VARCHAR(255) null
 
 );
 
 
-insert into users (name, password, isadmin)
-values ('admin', SHA2('admin', 0), 1);
-insert into users (name, password, isadmin)
-values ('user1', SHA2('pass1', 0), 0);
-insert into users (name, password, isadmin)
-values ('user2', SHA2('pass2', 0), 0);
-insert into users (name, password, isadmin)
-values ('user3', SHA2('pass2', 0), 0);
+insert into users (name, password, email, isadmin, isactive)
+values ('admin', SHA2('admin', 0), 'spell478@gmail.com', 1, 1);
+insert into users (name, password,  email, isadmin, isactive)
+values ('user1', SHA2('pass1', 0), 'user1@railway.itermit.com', 0, 1);
+insert into users (name, password,  email, isadmin, isactive)
+values ('user2', SHA2('pass2', 0), 'user2@railway.itermit.com', 0, 1);
+insert into users (name, password,  email, isadmin, isactive)
+values ('user3', SHA2('pass3', 0), 'user3@railway.itermit.com', 0, 1);
+insert into users (name, password,  email, isadmin, isactive)
+values ('user4', SHA2('pass4', 0), 'user4@railway.itermit.com', 0, 1);
+insert into users (name, password,  email, isadmin, isactive)
+values ('user5', SHA2('pass5', 0), 'user5@railway.itermit.com', 0, 1);
+insert into users (name, password,  email, isadmin, isactive)
+values ('user6', SHA2('pass6', 0), 'user6@railway.itermit.com', 0, 0);
+insert into users (name, password,  email, isadmin, isactive)
+values ('user7', SHA2('pass7', 0), 'user7@railway.itermit.com', 0, 1);
+insert into users (name, password,  email, isadmin, isactive)
+values ('user8', SHA2('pass8', 0), 'user8@railway.itermit.com', 0, 0);
+insert into users (name, password,  email, isadmin, isactive)
+values ('user9', SHA2('pass9', 0), 'user9@railway.itermit.com', 0, 0);
+
 
 ######################################
 # STATIONS

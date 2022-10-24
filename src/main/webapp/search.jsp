@@ -270,9 +270,7 @@
     </div>
 
     <%@ include file="/parts/message.jspf" %>
-
     <%--    <%@ include file="/parts/footer.jspf" %>--%>
-
 </div>
 
 <%@ include file="/parts/bodyBottom.jspf" %>

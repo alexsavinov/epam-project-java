@@ -17,7 +17,8 @@
 
     <div class="_wrapper-table">
 
-        <a class="btn btn-sm btn-outline-secondary mt-2 mb-1 shadow-sm" href="/orders/add">
+        <a class="btn btn-sm btn-outline-secondary mt-2 mb-1 shadow-sm <customTags:access role="user" modifier="d-none"/>"
+           href="/orders/add">
             <i class="fa fa-plus-circle" aria-hidden="true"></i>
             Add ${url}
         </a>

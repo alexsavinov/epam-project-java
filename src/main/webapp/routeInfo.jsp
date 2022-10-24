@@ -8,34 +8,6 @@
 
 
     <head>
-        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-        <script type="text/javascript">
-            google.charts.load('current', {'packages': ['corechart']});
-            google.charts.setOnLoadCallback(drawChart);
-
-            function drawChart() {
-                const seats_available = document.getElementById('seats_available').value;
-                const seats_reserved = document.getElementById('seats_reserved').value;
-                // console.log(document.getElementById('seats_total').value)
-                // console.log(document.getElementById('seats_available').value)
-
-                const data = google.visualization.arrayToDataTable([
-                    ['Title', 'Value'],
-                    ['Available seats: ' + seats_available, seats_available / 100],
-                    ['Reserved seats: ' + seats_reserved, seats_reserved / 100]
-                ]);
-
-                const options = {
-                    title: 'Seats by route',
-                    is3D: true,
-                };
-
-                const chart = new google.visualization.PieChart(document.getElementById('piechart'));
-
-                chart.draw(data, options);
-            }
-        </script>
-
         <title>Railway ticket office - Route information</title>
     </head>
 <body>
@@ -162,29 +134,92 @@
 
         <%-- piechart --%>
         <%--        <div id="piechart" class="ms-5 mt-5" style="width: 400px; height: 500px;"></div>--%>
-        <div id="piechart" class="ms-5 mt-5 w-50"></div>
+        <div>
+
+            <div id="piechart" class="ms-5 mt-5"></div>
+            <div id="chart_div" class="ms-5 mt-5"></div>
+        </div>
+
+        <%--    <div>--%>
+
+        <%--        <%@ include file="/parts/orders.jspf" %>--%>
+
+        <%--    </div>--%>
+
+        <%-- Table of orders --%>
+        <%--    <div id="orders_wrapper" class="mt-5 <customTags:access role="guest" modifier="d-none"/>">--%>
 
     </div>
 
-    <div>
-
-        <%@ include file="/parts/orders.jspf" %>
-
-    </div>
-
-    <c:if test="${not empty ordersByRoute and ordersByRoute.size() ge 0}">
+    <c:if test="${not empty orders and orders.size() ge 0}">
+    <div class="m-1 mt-5">
         <% request.setAttribute("orders", request.getAttribute("ordersByRoute"));%>
         <% request.setAttribute("orders_tittle", "Orders by route");%>
-
-        <div class="mt-5">
-            <%@ include file="/parts/orders.jspf" %>
-        </div>
+        <%@ include file="/parts/orders.jspf" %>
+    </div>
     </c:if>
 
     <%@ include file="/parts/footer.jspf" %>
-</div>
+    <%@ include file="/parts/bodyBottom.jspf" %>
 
-<%@ include file="/parts/bodyBottom.jspf" %>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script type="text/javascript">
+        google.charts.load('current', {'packages': ['corechart']});
+        google.charts.setOnLoadCallback(drawChartPie);
+
+        function drawChartPie() {
+            const seats_available = document.getElementById('seats_available').value;
+            const seats_reserved = document.getElementById('seats_reserved').value;
+
+            const data = google.visualization.arrayToDataTable([
+                ['Title', 'Value'],
+                ['Available seats: ' + seats_available, seats_available / 100],
+                ['Reserved seats: ' + seats_reserved, seats_reserved / 100]
+            ]);
+
+            const options = {
+                title: 'Seats by route',
+                is3D: true,
+            };
+
+            const chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+            chart.draw(data, options);
+        }
+
+        google.charts.load('current', {'packages': ['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+
+        let dataTickets = [['Day', 'Tickets']];
+
+        let parent = document.querySelector('#order_container');
+        if (parent) {
+
+            for (let node of parent.childNodes) {
+                if (node.childNodes[1]) {
+                    const dateChart = node.childNodes[7].innerText.trim().substring(0, 10);
+                    const valueChart = parseInt(node.childNodes[5].innerText);
+                    console.log(dateChart)
+                    console.log(valueChart)
+                    dataTickets.push([dateChart, valueChart]);
+                }
+            }
+        }
+
+        function drawChart() {
+            let data = google.visualization.arrayToDataTable(dataTickets);
+            let options = {
+                title: 'Tickets sales by period',
+                hAxis: {title: 'Year', titleTextStyle: {color: '#333'}},
+                vAxis: {minValue: 0}
+            };
+            if (dataTickets.length > 1) {
+                var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+            }
+        }
+    </script>
 
 </body>
 </html>

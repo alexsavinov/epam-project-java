@@ -184,8 +184,13 @@
 
 
         <div class="form-group mt-3">
-            <button type="submit" class="btn">Save</button>
-            <a class="btn btn-outline-secondary" href="/orders/delete/${order.getId()}">Delete</a>
+            <button type="submit" class="btn" <customTags:access role="user" modifier="disabled"/>>
+                Save
+            </button>
+            <a class="btn btn-outline-secondary <customTags:access role="user" modifier="disabled"/>"
+               href="/orders/delete/${order.getId()}">
+                Delete
+            </a>
         </div>
     </form>
 

@@ -16,7 +16,7 @@ function setEmpty(id) {
 
     const element = document.getElementById(id);
     element.value = '';
-    element.classList.remove("border", "border-danger", "border-4");
+    element.classList.remove("border", "border-danger", "border-2");
 
 }
 
@@ -24,13 +24,13 @@ function isValidValue(element, res, message) {
     if (res) {
         // $('#submit_button').addClass("disabled"); // TODO uncomment in prod!
         $(element).attr('data-bs-title', message)
-        element.classList.add('border', 'border-danger', 'border-4');
+        element.classList.add('border', 'border-danger', 'border-2');
         new bootstrap.Tooltip(element);
         $(element).tooltip('show');
         return false;
     } else {
         $('#submit_button').removeClass("disabled");
-        element.classList.remove("border", "border-danger", "border-4");
+        element.classList.remove("border", "border-danger", "border-2");
         $(element).click();
         return true;
     }
@@ -102,10 +102,35 @@ function validate(element) {
                 }
             }
             break;
+        case "email":
+            if (element.value) {
+                const emailRGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                const emailResult = emailRGEX.test(element.value || "");
+                if (!isValidValue(element, !emailResult, 'Email is incorrect!')) {
+                    $('#register_submit_button').addClass("disabled");
+                    return;
+                } else {
+                    $('#register_submit_button').removeClass("disabled");
+                }
+            }
+            break;
+        case "password2":
+            if (element.value) {
+                const password = document.getElementById("password");
+                console.log('password.value', password.value);
+                console.log('element.value', element.value);
+                if (password.value == element.value) {
+                    $('#register_submit_button').removeClass("disabled");
+                } else {
+                    $('#register_submit_button').addClass("disabled");
+                    isValidValue(element, true, 'Password mismatch!');
+                }
+            }
+            break;
         case "name":
             // console.log("name", element.value)
             if (element.value) {
-                const nameRGEX = /^[a-zA-Z0-9_]{5,100}[a-zA-Z]+[0-9]*$/;
+                const nameRGEX = /^[a-zA-Z0-9_]{4,100}[a-zA-Z]+[0-9]*$/;
                 const nameResult = nameRGEX.test(element.value || "");
                 $('#submit_button').removeClass("disabled");
                 if (!isValidValue(element, !nameResult, 'Name is incorrect!')) {
@@ -291,6 +316,15 @@ function resetSearchForm() {
         },
         success: function () {
             location.reload();
+        }
+    });
+}
+
+function submitRegistrationForm() {
+    const frm = $('#registerForm');
+    frm.submit(function (e) {
+        if ($('#password').value !== $('#password2').value) {
+            e.preventDefault();
         }
     });
 }

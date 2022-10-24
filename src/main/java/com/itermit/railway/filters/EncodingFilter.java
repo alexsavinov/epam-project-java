@@ -17,10 +17,10 @@ import java.util.Objects;
         urlPatterns = {"/*"},
         initParams = {
                 @WebInitParam(name = "encoding", value = "utf-8"),
+                @WebInitParam(name = "forceEncoding", value = "true"),
                 @WebInitParam(name = "active", value = "true")
         })
 public class EncodingFilter implements Filter {
-
     private Boolean active;
     private String encoding;
     private static final Logger logger = LogManager.getLogger(EncodingFilter.class);
@@ -35,7 +35,7 @@ public class EncodingFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
 
-//        logger.debug("#doFilter(servletRequest, servletResponse, filterChain). active: {}", active);
+        logger.debug("#doFilter(servletRequest, servletResponse, filterChain). active: {}", active);
 
         HttpServletRequest httpReq = (HttpServletRequest) servletRequest;
         HttpServletResponse httpResp = (HttpServletResponse) servletResponse;

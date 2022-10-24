@@ -13,13 +13,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 /*
- * Initializes locale settings for multi-language resources.
+ *  Initializes locale settings for multi-language resources.
  */
 @WebListener
 public class ContextListener implements ServletContextListener {
 
     private static final String LOCALES = "locales";
     private static final String LOCALES_ERROR = "Can't define path for locales - check params in web.xml";
+    private static final String PROPERTIES_ERROR = "Can't define path for properties - check if app.properties exists.";
 
     @Override
     public void contextInitialized(ServletContextEvent event) {
@@ -44,6 +45,9 @@ public class ContextListener implements ServletContextListener {
         /* Init locales settings */
         loadLocales(context);
 
+        /* Reading settings from properties file  */
+//        getProperties(context);
+
         if (logger != null) {
             logger.warn("locales.list = {}", context.getAttribute(LOCALES));
             logger.warn("logPath = {}", logPath);
@@ -51,9 +55,10 @@ public class ContextListener implements ServletContextListener {
     }
 
     /*
-     * Init locales settings
+     *  Init locales settings
      */
     private void loadLocales(ServletContext context) {
+
         String localesFileName = context.getInitParameter(LOCALES);
         String localesFileRealPath = context.getRealPath(localesFileName);
 
@@ -73,6 +78,32 @@ public class ContextListener implements ServletContextListener {
             System.err.println("ERROR loadLocales: " + e.getMessage());
         }
 
+    }
+
+    /*
+     *  Reading settings from properties file
+     */
+    private void getProperties(ServletContext context) {
+
+        String propsFileName = context.getInitParameter("app.properties");
+        String propsFileRealPath = context.getRealPath(propsFileName);
+
+        if (propsFileRealPath == null) {
+            System.out.println(PROPERTIES_ERROR);
+            return;
+        }
+
+        Properties properties = new Properties();
+
+        try (FileInputStream fileInputStream = new FileInputStream(propsFileRealPath)) {
+            properties.load(fileInputStream);
+
+            context.setAttribute("daofqn", properties.getProperty("dao.fqn"));
+        } catch (FileNotFoundException e) {
+            System.err.println("File not found: " + propsFileRealPath);
+        } catch (IOException e) {
+            System.err.println(PROPERTIES_ERROR + " " + e.getMessage());
+        }
     }
 
 }

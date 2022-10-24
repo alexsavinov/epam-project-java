@@ -15,7 +15,7 @@ import java.io.IOException;
  * Handles authorization process.
  */
 @WebServlet(name = "AuthServlet",
-        urlPatterns = {"/login", "/logout", "/profile"})
+        urlPatterns = {"/login", "/logout", "/register", "/profile", "/activate/*"})
 public class AuthServlet extends HttpServlet {
 
     private static final Logger logger = LogManager.getLogger(AuthServlet.class);
@@ -29,7 +29,11 @@ public class AuthServlet extends HttpServlet {
             request.getRequestDispatcher("/profile.jsp").forward(request, response);
         } else if (request.getRequestURI().equals("/login")) {
             request.getRequestDispatcher("/auth.jsp").forward(request, response);
+        } else if (request.getRequestURI().equals("/register")) {
+            request.getRequestDispatcher("/register.jsp").forward(request, response);
         } else if (request.getRequestURI().equals("/logout")) {
+            doPost(request, response);
+        } else if (request.getRequestURI().startsWith("/activate")) {
             doPost(request, response);
         } else {
             request.setAttribute("error", "UNHANDLED request: " + request.getRequestURI());
@@ -54,6 +58,16 @@ public class AuthServlet extends HttpServlet {
         } else if (request.getRequestURI().equals("/logout")) {
 
             commandName = "authLogout";
+
+
+        } else if (request.getRequestURI().equals("/register")) {
+
+            commandName = "authRegister";
+
+
+        } else if (request.getRequestURI().startsWith("/activate")) {
+
+            commandName = "authActivate";
 
         } else {
             request.setAttribute("error", "UNHANDLED request: " + request.getRequestURI());

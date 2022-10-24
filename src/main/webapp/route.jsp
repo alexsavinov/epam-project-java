@@ -103,8 +103,10 @@
         </div>
 
         <div class="form-group mt-3">
-            <button type="submit" class="btn">Save</button>
-            <a class="btn btn-outline-secondary"
+            <button type="submit" class="btn" <customTags:access role="user" modifier="disabled"/>>
+                Save
+            </button>
+            <a class="btn btn-outline-secondary <customTags:access role="user" modifier="disabled"/>"
                href="/routes/delete/${route.getId()}">
                 Delete
             </a>

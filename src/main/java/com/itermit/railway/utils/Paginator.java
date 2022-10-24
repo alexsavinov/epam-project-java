@@ -1,8 +1,21 @@
 package com.itermit.railway.utils;
 
+import java.io.IOException;
+import java.util.Properties;
+
 public class Paginator {
 
-    public static int PAGE_SIZE = 2; // TODO: store setting in props file
+    private static Properties conf;
+
+    static {
+        try {
+            conf = PropertiesLoader.loadProperties();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public static int PAGE_SIZE = Integer.parseInt(conf.getProperty("pagination.page.size"));
     int page;
     int pages;
     int results;

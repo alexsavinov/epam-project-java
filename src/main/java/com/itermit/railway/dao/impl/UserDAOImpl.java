@@ -1,11 +1,7 @@
 package com.itermit.railway.dao.impl;
 
-import com.itermit.railway.command.CommandContainer;
 import com.itermit.railway.dao.UserDAO;
-import com.itermit.railway.db.entity.Route;
-import com.itermit.railway.db.entity.Station;
 import com.itermit.railway.db.entity.User;
-import com.itermit.railway.db.DBException;
 import com.itermit.railway.db.DBManager;
 import com.itermit.railway.utils.Paginator;
 import com.itermit.railway.utils.QueryMaker;
@@ -23,12 +19,30 @@ public class UserDAOImpl implements UserDAO {
     private DBManager dbManager;
     private static UserDAOImpl instance;
     private static final Logger logger = LogManager.getLogger(UserDAOImpl.class);
-    private static final String SQL_GET_ALL_USERS = "select id, name, password, isadmin from users";
-    private static final String SQL_GET_USER_BY_CREDENTIALS = "select id, name, password, isadmin from users where name = ? and password = ?";
-    private static final String SQL_GET_USER_BY_ID = "select id, name, password, isadmin from users where id = ?";
-    private static final String SQL_ADD_USER = "INSERT INTO users (name, password, isadmin) VALUES (?, ?, ?)";
-    private static final String SQL_UPDATE_USER = "UPDATE users set name = ?, password = ?, isadmin = ? where id = ?";
-    private static final String SQL_DELETE_USER = "DELETE FROM users WHERE id = ?";
+    public static final String SQL_GET_ALL_USERS = "" +
+            "SELECT id, name, password, email, isadmin, isactive, activation_token " +
+            "FROM users";
+    private static final String SQL_GET_USER_BY_CREDENTIALS = "" +
+            "SELECT * " +
+            "FROM users " +
+            "WHERE name = ? AND password = SHA2(?, 0)";
+    private static final String SQL_GET_USER_BY_ID = "" +
+            "SELECT * " +
+            "FROM users " +
+            "WHERE id = ?";
+    private static final String SQL_ADD_USER = "" +
+            "INSERT INTO users (name, password, email, isadmin, isactive, activation_token) " +
+            "VALUES (?, SHA2(?, 0), ?, ?, ?, ?)";
+    private static final String SQL_UPDATE_USER = "" +
+            "UPDATE users " +
+            "SET name = ?, email = ? , isadmin = ? , isactive = ? , activation_token = ? " +
+            "WHERE id = ?";
+    private static final String SQL_DELETE_USER = "" +
+            "DELETE FROM users " +
+            "WHERE id = ?";
+    private static final String SQL_GET_TOTAL_ROWS = "" +
+            "SELECT COUNT(*) total_rows " +
+            "FROM users";
 
     public static synchronized UserDAOImpl getInstance() {
         if (instance == null) {
@@ -43,12 +57,70 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public Paginator getPaginated(Connection connection, QueryMaker query) throws SQLException {
-        return null;
+
+        logger.debug("#getPaginated().");
+
+        ArrayList<User> users = getFiltered(connection, query);
+
+        query.setQueryMain(SQL_GET_TOTAL_ROWS);
+        query.deleteQueryOffset();
+
+        int totalRows = getTotalRows(connection, query);
+        int total_pages = (int) Math.ceil(totalRows / (float) (Paginator.PAGE_SIZE));
+        return new Paginator.Builder()
+                .withPage(query.getPage())
+                .withPages(total_pages)
+                .withResults(totalRows)
+                .withData(users)
+                .build();
+    }
+
+    public int getTotalRows(Connection connection, QueryMaker query) throws SQLException {
+
+        int totalRows = 0;
+
+        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            preparedStatement = query.getPreparedStatement(connection);
+
+            ResultSet rsTotalRows = preparedStatement.executeQuery();
+            if (rsTotalRows.next()) {
+                totalRows = rsTotalRows.getInt("total_rows");
+            }
+        } finally {
+            DBManager.closeResultSet(resultSet);
+            DBManager.closePreparedStatement(preparedStatement);
+        }
+
+        return totalRows;
     }
 
     @Override
     public ArrayList<User> getFiltered(Connection connection, QueryMaker query) throws SQLException {
-        return null;
+
+        logger.debug("#getAll().  {}", query);
+
+        ArrayList<User> users = new ArrayList<>();
+
+        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            query.setQueryMain(SQL_GET_ALL_USERS);
+            preparedStatement = query.getPreparedStatement(connection);
+            logger.info("preparedStatement: {}", preparedStatement);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                users.add(extract(resultSet));
+            }
+        } finally {
+            DBManager.closeResultSet(resultSet);
+            DBManager.closePreparedStatement(preparedStatement);
+        }
+
+        return users;
     }
 
     @Override
@@ -66,16 +138,8 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.setInt(1, id);
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                user = new User.Builder()
-                        .withId(resultSet.getInt(User.F_ID))
-                        .withName(resultSet.getString(User.F_NAME))
-                        .withPassword(resultSet.getString(User.F_PASSWORD))
-                        .withIsAdmin(resultSet.getBoolean(User.F_ISADMIN))
-                        .build();
+                user = extract(resultSet);
             }
-        } catch (SQLException e) {
-            String errorMessage = CommandContainer.getErrorMessage("Cannot find user.", e);
-//            throw new DBException(errorMessage, e);
         } finally {
             DBManager.closeResultSet(resultSet);
             DBManager.closePreparedStatement(preparedStatement);
@@ -84,42 +148,9 @@ public class UserDAOImpl implements UserDAO {
         return user;
     }
 
-//    @Override
-//    public User get(User user) throws DBException {
-//
-//        logger.debug("#get(user): {}", user);
-//
-//        ResultSet resultSet = null;
-//        PreparedStatement preparedStatement = null;
-//
-//        try (Connection connection = dbManager.getConnection()) {
-//            preparedStatement = connection.prepareStatement(SQL_GET_USER_BY_CREDENTIALS);
-//            int l = 0;
-//            preparedStatement.setString(++l, user.getName());
-//            preparedStatement.setString(++l, user.getPassword());
-//
-//            resultSet = preparedStatement.executeQuery();
-//            if (resultSet.next()) {
-//                user = new User.Builder()
-//                        .withId(resultSet.getInt(User.F_ID))
-//                        .withName(resultSet.getString(User.F_NAME))
-//                        .withPassword(resultSet.getString(User.F_PASSWORD))
-//                        .withIsAdmin(resultSet.getBoolean(User.F_ISADMIN))
-//                        .build();
-//            }
-//        } catch (SQLException e) {
-//            String errorMessage = CommandContainer.getErrorMessage("Error while get(user)!", e);
-//            throw new DBException(errorMessage, e);
-////        } finally {
-////            DBManager.closeResultSet(resultSet);
-////            DBManager.closePreparedStatement(preparedStatement);
-//        }
-//
-//        return user;
-//    }
-
     @Override
     public User get(Connection connection, User user) throws SQLException {
+
         logger.debug("#get(connection, user): {}", user);
 
         ResultSet resultSet = null;
@@ -131,18 +162,13 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.setString(++l, user.getName());
             preparedStatement.setString(++l, user.getPassword());
 
+
+            logger.info(preparedStatement);
+
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
-                user = new User.Builder()
-                        .withId(resultSet.getInt(User.F_ID))
-                        .withName(resultSet.getString(User.F_NAME))
-                        .withPassword(resultSet.getString(User.F_PASSWORD))
-                        .withIsAdmin(resultSet.getBoolean(User.F_ISADMIN))
-                        .build();
+                user = extract(resultSet);
             }
-//        } catch (SQLException e) {
-//            String errorMessage = CommandContainer.getErrorMessage("Error while get(user)!", e);
-//            throw new DBException(errorMessage, e);
         } finally {
             DBManager.closeResultSet(resultSet);
             DBManager.closePreparedStatement(preparedStatement);
@@ -166,12 +192,7 @@ public class UserDAOImpl implements UserDAO {
             resultSet = preparedStatement.executeQuery();
 
             while (resultSet.next()) {
-                users.add(new User.Builder()
-                        .withId(resultSet.getInt(User.F_ID))
-                        .withName(resultSet.getString(User.F_NAME))
-                        .withPassword(resultSet.getString(User.F_PASSWORD))
-                        .withIsAdmin(resultSet.getBoolean(User.F_ISADMIN))
-                        .build());
+                users.add(extract(resultSet));
             }
         } finally {
             DBManager.closeResultSet(resultSet);
@@ -193,7 +214,13 @@ public class UserDAOImpl implements UserDAO {
             int l = 0;
             preparedStatement.setString(++l, user.getName());
             preparedStatement.setString(++l, user.getPassword());
+            preparedStatement.setString(++l, user.getEmail());
             preparedStatement.setBoolean(++l, user.getIsAdmin());
+            preparedStatement.setBoolean(++l, user.getIsActive());
+            preparedStatement.setString(++l, user.getActivationToken());
+
+            logger.info(preparedStatement);
+
             preparedStatement.executeUpdate();
         } finally {
             DBManager.closePreparedStatement(preparedStatement);
@@ -212,8 +239,11 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement = connection.prepareStatement(SQL_UPDATE_USER);
             int l = 0;
             preparedStatement.setString(++l, user.getName());
-            preparedStatement.setString(++l, user.getPassword());
+//            preparedStatement.setString(++l, user.getPassword());
+            preparedStatement.setString(++l, user.getEmail());
             preparedStatement.setBoolean(++l, user.getIsAdmin());
+            preparedStatement.setBoolean(++l, user.getIsActive());
+            preparedStatement.setString(++l, user.getActivationToken());
             preparedStatement.setInt(++l, id);
             preparedStatement.executeUpdate();
         } finally {
@@ -251,7 +281,10 @@ public class UserDAOImpl implements UserDAO {
                 .withId(resultSet.getInt(User.F_ID))
                 .withName(resultSet.getString(User.F_NAME))
                 .withPassword(resultSet.getString(User.F_PASSWORD))
+                .withEmail(resultSet.getString(User.F_EMAIL))
                 .withIsAdmin(resultSet.getBoolean(User.F_ISADMIN))
+                .withIsActive(resultSet.getBoolean(User.F_ISACTIVE))
+                .withActivationToken(resultSet.getString(User.F_ACTIVATION_TOKEN))
                 .build();
     }
 

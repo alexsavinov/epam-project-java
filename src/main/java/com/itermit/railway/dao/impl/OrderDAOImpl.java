@@ -137,10 +137,10 @@ public class OrderDAOImpl implements OrderDAO {
 
         ArrayList<Order> orders = getFiltered(connection, query);
 
-        int total_pages = (int) Math.ceil(orders.size() / (float) (Paginator.PAGE_SIZE));
+        int totalPages = (int) Math.ceil(orders.size() / (float) (Paginator.PAGE_SIZE));
 
         return new Paginator.Builder()
-                .withPages(total_pages)
+                .withPages(totalPages)
                 .withData(orders)
                 .build();
     }

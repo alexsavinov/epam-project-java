@@ -10,8 +10,13 @@
 
     <context-param>
         <param-name>locales</param-name>
-        <param-value>/WEB-INF/locales.properties</param-value>
+        <param-value>/WEB-INF/classes/locales.properties</param-value>
     </context-param>
+<!--    <context-param>-->
+<!--        <param-name>app.properties</param-name>-->
+<!--        <param-value>/WEB-INF/app.properties</param-value>-->
+<!--    </context-param>-->
+
     <context-param>
         <param-name>javax.servlet.jsp.jstl.fmt.localizationContext</param-name>
         <param-value>resources</param-value>

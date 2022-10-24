@@ -26,38 +26,36 @@
                 Users
             </a>
 
-            <a class="btn btn-outline-secondary _btn_profile mb-2 shadow-sm" href="/stations">
+            <a class="btn btn-outline-secondary _btn_profile mb-2 shadow-sm"
+               href="/stations">
                 <em class="fa fa-university fa-3x _profile-btn"></em>
                 Stations
             </a>
 
-            <a class="btn btn-outline-secondary _btn_profile mb-2 shadow-sm" href="/routes">
+            <a class="btn btn-outline-secondary _btn_profile mb-2 shadow-sm <customTags:access role="user" modifier="d-none"/>"
+               href="/routes">
                 <em class="fa fa-map fa-3x _profile-btn"></em>
                 Routes
             </a>
 
-            <a class="btn btn-outline-secondary _btn_profile mb-2 shadow-sm" href="/orders">
+            <a class="btn btn-outline-secondary _btn_profile mb-2 shadow-sm <customTags:access role="user" modifier="d-none"/>"
+               href="/orders">
                 <em class="fa fa-window-restore fa-3x _profile-btn"></em>
                 Orders
             </a>
 
-            <a class="btn btn-outline-secondary _btn_profile mb-2 shadow-sm" href="/reserves">
+            <a class="btn btn-outline-secondary _btn_profile mb-2 shadow-sm"
+               href="/reserves/grouped">
                 <em class="fa fa-handshake fa-3x _profile-btn"></em>
                 Reserves
             </a>
-
-            <%--        <em class="fa fa-search fa-2xl me-2"></em>--%>
-
 
         </div>
     </div>
 
     <%@ include file="/parts/message.jspf" %>
-
     <%@ include file="/parts/footer.jspf" %>
-
 </div>
-
 
 <%@ include file="/parts/bodyBottom.jspf" %>
 

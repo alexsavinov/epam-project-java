@@ -51,6 +51,7 @@
                                 data-bs-toggle="modal"
                                 data-bs-target="#reserveDeleteModal"
                                 onclick='setValue("order_id", ${order.getId()});
+                                        setValue("route_id", ${order.getRoute().getId()});
                                         setValue("seats", ${order.getSeats()});
                                         setAttributeValue("seats", "max", ${order.getSeats()});'>
                             Delete

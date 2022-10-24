@@ -45,34 +45,51 @@
                        value="${user.getName()}">
 
                 <label for="password" class="form-label mt-1">Password</label>
-                <input type="password" class="form-control" placeholder="Password" aria-label="name"
+                <input type="password" class="form-control" placeholder="Password" aria-label="password"
                        id="password" name="password" value="">
+
+                <label for="email" class="form-label mt-1">E-mail</label>
+                <input type="email" class="form-control" placeholder="E-mail" aria-label="email"
+                       id="email" name="email" value="${user.getEmail()}">
 
                 <div class="form-check mt-3">
                     <input class="form-check-input" type="checkbox" value="" id="isadmin"
-                           <c:if test="${user.getIsAdmin()}">checked</c:if> disabled>
+                           <c:if test="${user.getIsAdmin()}">checked</c:if>
+                           <c:if test="${user.getId() eq 1}">disabled</c:if>
+                    <customTags:access role="user" modifier="disabled"/>>
                     <label class="form-check-label" for="isadmin">
                         Admin
                     </label>
                 </div>
-                <%--            <input type="text" class="form-control" placeholder="Username" aria-label="name" id="password" name="password"--%>
-                <%--                   value="${user.getPassword()}">--%>
 
+                <div class="form-check mt-3">
+                    <input class="form-check-input" type="checkbox" value="" id="isactive"
+                           <c:if test="${user.getIsActive()}">checked</c:if>>
+                    <label class="form-check-label" for="isactive">
+                        Active
+                    </label>
+                </div>
 
-                <%--            <form action="upload" method="post" enctype="multipart/form-data">--%>
+                <label for="activation_token" class="form-label mt-3">Activation token</label>
+                <input type="activation_token" class="form-control"
+                       placeholder="Activation token" aria-label="activation_token"
+                       id="activation_token" name="activation_token"
+                       value="${user.getActivationToken()}">
 
             </div>
 
+            <%--            <form action="upload" method="post" enctype="multipart/form-data">--%>
             <%--        <div class="form-group mt-3">--%>
             <%--            <img src="/images/image.jpg" alt="avatar" style="width: 150px">--%>
             <%--            <input type="file" name="file" value="asdfasdfasd" />--%>
             <%--        </div>--%>
 
             <div class="form-group mt-3">
-                <button type="submit" class="btn">
+                <button type="submit" class="btn" <customTags:access role="user" modifier="disabled"/>>
                     Save
                 </button>
-                <a class="btn btn-outline-secondary" href="/users/delete/${user.getId()}">
+                <a class="btn btn-outline-secondary <customTags:access role="user" modifier="disabled"/>"
+                   href="/users/delete/${user.getId()}">
                     Delete
                 </a>
             </div>

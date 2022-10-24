@@ -11,10 +11,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
-import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class AuthLoginCommand implements Command {
 
@@ -26,20 +22,21 @@ public class AuthLoginCommand implements Command {
 
         logger.debug("#execute(request, response).  {}", request.getRequestURI());
 
+//        try {
+//            request.setCharacterEncoding("UTF-8");
+//        } catch (UnsupportedEncodingException e) {
+//            logger.error("UnsupportedEncodingException. Error setCharacterEncoding! {}", e.getMessage());
+//            throw new DBException("Error redirecting!", e);
+//        }
+
         String name = request.getParameter("name");
         String password = request.getParameter("password");
 
-        String hex = passwordEncrypt(password);
-        logger.warn("password (SHA-256): {}", hex);
-
-//        User user = UserManager.getInstance().get(
-//                new User.Builder().withName(name).withPassword(hex).build());
         User user = UserManager.getInstance().get(
-                new User.Builder().withName(name).withPassword(hex).build());
+                new User.Builder().withName(name).withPassword(password).build());
 
         if (user.getId() == 0) {
             logger.warn("401 Unauthorized");
-            /* display message on the same page */
             request.getSession().setAttribute("errors", "Login or password incorrect!");
         } else {
             logger.warn("User logged in: {}", user.getName());
@@ -47,16 +44,7 @@ public class AuthLoginCommand implements Command {
             request.getSession().setAttribute("isAdmin", user.getIsAdmin());
             request.getSession().setAttribute("userid", user.getId());
             request.getSession().setAttribute("username", user.getName());
-            request.getSession().removeAttribute("orders");
-            request.getSession().removeAttribute("routes");
-
-            logger.info("user {}", user);
-            logger.info("user.getId() {}", user.getId());
-
-            String userId = String.valueOf(request.getSession().getAttribute("userid"));
-            if (userId != null) {
-                logger.info("userId {}", userId);
-            }
+            request.getSession().setAttribute("email", user.getEmail());
         }
 
         try {
@@ -69,23 +57,5 @@ public class AuthLoginCommand implements Command {
         return null;
     }
 
-    /*
-     * Returns encrypted string
-     */
-    protected static String passwordEncrypt(String password) throws DBException {
 
-        MessageDigest md;
-
-        try {
-            md = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            logger.error("NoSuchAlgorithmException. Error encrypting password!  {}", e.getMessage());
-            throw new DBException("Error encrypting password!", e);
-        }
-
-        md.update(password.getBytes(StandardCharsets.UTF_8));
-        byte[] digest = md.digest();
-
-        return String.format("%064x", new BigInteger(1, digest));
-    }
 }

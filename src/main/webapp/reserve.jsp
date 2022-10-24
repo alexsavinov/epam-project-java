@@ -8,7 +8,7 @@
 <c:if test="${reserves ne null and not empty reserves and reserves.size() ge 0}">
     <c:forEach var="order" items="${reserves}">
         <c:set var="total_travel_cost" scope="page"
-               value="${total_travel_cost + order.getRoute().getTravelCost() * order.getSeats()}"/>
+               value="${total_travel_cost + route.getTravelCost() * order.getSeats()}"/>
         <c:set var="total_seats" scope="page"
                value="${total_seats + order.getSeats()}"/>
     </c:forEach>
@@ -24,19 +24,18 @@
 <div class="_wrapper">
     <%@ include file="/parts/header.jspf" %>
     <%@ include file="/parts/bodyTop.jspf" %>
-    <%@ include file="/parts/message.jspf" %>
 
     <div id="reserve" class="d-flex flex-column align-items-center mb-4">
 
         <div class="m-3 mt-4">
 
             <%-- train_number --%>
-            <div class="mb-2 p-3 d-flex justify-content-between align-items-baseline _main-color4 _main-bg-color2 rounded">
+            <div class="mb-2 p-3 d-flex justify-content-between align-items-baseline _main-color4 _main-bg-color2 rounded-4 rounded-bottom">
                 <div class="h3">
                     Train number:
                 </div>
                 <div class="fs-3">
-                    ${order.getRoute().getTrainNumber()}
+                    ${route.getTrainNumber()}
                 </div>
             </div>
 
@@ -48,10 +47,10 @@
                     </div>
                     <div class="">
                         <div class="h2 d-flex justify-content-start _main-color4">
-                            ${order.getRoute().getStationDeparture().getName()}
+                            ${route.getStationDeparture().getName()}
                         </div>
                         <div class="fs-5">
-                            departure at ${order.getRoute().getDateDeparture()}
+                            departure at ${route.getDateDeparture()}
                         </div>
                     </div>
                 </div>
@@ -67,11 +66,11 @@
                         To:
                     </div>
                     <div class="">
-                        <div class="fs-3 d-flex justify-content-start">
-                            ${order.getRoute().getStationArrival().getName()}
+                        <div class="h2 d-flex justify-content-start _main-color4">
+                            ${route.getStationArrival().getName()}
                         </div>
                         <div class="fs-5">
-                            arrival at ${order.getRoute().getDateArrival()}
+                            arrival at ${route.getDateArrival()}
                         </div>
                     </div>
                 </div>
@@ -79,45 +78,49 @@
             </div>
 
 
-            <div class="d-flex justify-content-start _main-bg-color2 rounded">
+            <div class="d-flex justify-content-between _main-bg-color2 rounded-4 rounded-top">
                 <%-- seats_total --%>
                 <div class="mb-2 p-3 d-flex justify-content-between align-items-baseline">
-                    <div class="fs-3">
-                        Total seats:
-                    </div>
-                    <div class="fs-3">
-                        ${order.getRoute().getSeatsTotal()}
-                    </div>
+                    <span class="badge bg-dark _main-color3">Total seats: ${route.getSeatsTotal()}</span>
+<%--                    <div class="fs-3">--%>
+<%--                        Total seats:--%>
+<%--                    </div>--%>
+<%--                    <div class="fs-3">--%>
+<%--                        ${route.getSeatsTotal()}--%>
+<%--                    </div>--%>
                 </div>
 
                 <%-- seats_reserve --%>
                 <div class="mb-2 p-3 d-flex justify-content-between align-items-baseline">
-                    <div class="fs-3">
-                        Seats reserved:
-                    </div>
-                    <div class="fs-3">
-                        ${order.getRoute().getSeatsReserved()}
-                    </div>
+                    <span class="badge bg-warning _main-color1">Seats reserved: ${route.getSeatsReserved()}</span>
+<%--                    <div class="fs-3">--%>
+<%--                        Seats reserved:--%>
+<%--                    </div>--%>
+<%--                    <div class="fs-3">--%>
+<%--                        ${route.getSeatsReserved()}--%>
+<%--                    </div>--%>
                 </div>
 
                 <%-- seats_available --%>
                 <div class="mb-2 p-3 d-flex justify-content-between align-items-baseline">
-                    <div class="fs-3">
-                        Seats available:
-                    </div>
-                    <div class="fs-3">
-                        ${order.getRoute().getSeatsAvailable()}
-                    </div>
+                    <span class="badge bg-success _main-color3">Seats available: ${route.getSeatsAvailable()}</span>
+<%--                    <div class="fs-3">--%>
+<%--                        Seats available:--%>
+<%--                    </div>--%>
+<%--                    <div class="fs-3">--%>
+<%--                        ${route.getSeatsAvailable()}--%>
+<%--                    </div>--%>
                 </div>
 
                 <%-- seats_available --%>
                 <div class="mb-2 p-3 d-flex justify-content-between align-items-baseline">
-                    <div class="h3 _main-color4">
-                        Your seats:
-                    </div>
-                    <div class="fs-3 _main-color4 fw-bold">
-                        ${total_seats}
-                    </div>
+                    <span class="badge _main-color3 _main-bg-color4">Your seats: ${total_seats}</span>
+<%--                    <div class="h3 _main-color4">--%>
+<%--                        Your seats:--%>
+<%--                    </div>--%>
+<%--                    <div class="fs-3 _main-color4 fw-bold">--%>
+<%--                        ${total_seats}--%>
+<%--                    </div>--%>
                 </div>
             </div>
 
@@ -160,11 +163,11 @@
     <%--        </div>--%>
     <%--    </c:if>--%>
 
+    <%@ include file="/parts/message.jspf" %>
 </div>
+
 
 <%@ include file="/parts/footer.jspf" %>
-</div>
-
 <%@ include file="/parts/bodyBottom.jspf" %>
 
 </body>

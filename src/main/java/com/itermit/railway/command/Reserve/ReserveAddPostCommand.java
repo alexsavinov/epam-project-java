@@ -42,7 +42,7 @@ public class ReserveAddPostCommand implements Command {
         request.getSession().setAttribute("messages", "Reserve for " + seats + " seats added!");
 
         try {
-            response.sendRedirect("/reserves");
+            response.sendRedirect("/reserves/grouped");
         } catch (IOException e) {
             logger.error("IOException. Error redirecting! {}", e.getMessage());
             throw new DBException("Error redirecting!", e);

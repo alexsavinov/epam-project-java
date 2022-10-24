@@ -25,7 +25,7 @@ public class DBManager {
      */
     public static synchronized DBManager getInstance() {
 
-        logger.debug("#DBManager getInstance().");
+//        logger.debug("#DBManager getInstance().");
 
         if (instance == null) {
             instance = new DBManager();
@@ -48,7 +48,7 @@ public class DBManager {
      */
     public Connection getConnection() throws SQLException {
 
-        logger.trace("#getConnection().");
+//        logger.trace("#getConnection().");
 
         Connection connection;
 
@@ -68,7 +68,7 @@ public class DBManager {
      */
     public static void closeConnection(Connection connection) throws SQLException {
 
-        logger.trace("#closeConnection(connection).");
+//        logger.trace("#closeConnection(connection).");
 
         if (connection != null) {
 //            try {
@@ -85,7 +85,7 @@ public class DBManager {
      */
     public static void closeStatement(Statement statement) throws SQLException {
 
-        logger.trace("#closeStatement(statement).");
+//        logger.trace("#closeStatement(statement).");
 
         if (statement != null) {
 //            try {
@@ -102,7 +102,7 @@ public class DBManager {
      */
     public static void closePreparedStatement(PreparedStatement preparedStatement) throws SQLException {
 
-        logger.trace("#closePreparedStatement(preparedStatement).");
+//        logger.trace("#closePreparedStatement(preparedStatement).");
 
         if (preparedStatement != null) {
 //            try {
@@ -119,7 +119,7 @@ public class DBManager {
      */
     public static void closeResultSet(ResultSet resultSet) throws SQLException {
 
-        logger.trace("#closeResultSet(resultSet).");
+//        logger.trace("#closeResultSet(resultSet).");
 
         if (resultSet != null) {
 //            try {
@@ -136,7 +136,7 @@ public class DBManager {
      */
     public static void rollback(Connection connection) throws DBException {
 
-        logger.trace("#rollback(connection).");
+//        logger.trace("#rollback(connection).");
 
         if (connection != null) {
             try {

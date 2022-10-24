@@ -22,7 +22,8 @@ public class AuthLogoutCommand implements Command {
         request.getSession().removeAttribute("isAuthorized");
         request.getSession().removeAttribute("userid");
         request.getSession().removeAttribute("username");
-        request.getSession().removeAttribute("isAdmin");
+        request.getSession().removeAttribute("setIsAdmin");
+        request.getSession().removeAttribute("email");
 
         try {
             logger.warn("User logged out: {}", username);

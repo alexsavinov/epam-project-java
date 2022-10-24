@@ -24,9 +24,7 @@
             <th scope="col">Seats reserved</th>
             <th scope="col">Seats available</th>
             <th scope="col">Seats total</th>
-            <th scope="col" class="<customTags:access role="guest" modifier="d-none"/>">
-                Action
-            </th>
+            <th scope="col">Action</th>
         </tr>
         </thead>
 
@@ -66,9 +64,9 @@
                 <td>
                         ${route.getSeatsTotal()}
                 </td>
-                <td class="d-flex <customTags:access role="guest" modifier="d-none"/>">
+                <td class="d-flex">
                     <button type="button"
-                            class="btn btn-outline-secondary btn-sm m-1"
+                            class="btn btn-outline-secondary btn-sm m-1  <customTags:access role="guest" modifier="d-none"/>"
                             data-bs-toggle="modal"
                             data-bs-target="#reserveAddModal"
                             onclick='setValue("route_id", ${route.getId()});

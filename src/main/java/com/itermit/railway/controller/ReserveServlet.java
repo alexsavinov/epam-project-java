@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @WebServlet(name = "ReserveServlet",
-        urlPatterns = {"/reserves", "/reserves/delete", "/reserves/edit/*", "/reserves/add"})
+        urlPatterns = {"/reserves/grouped", "/reserves", "/reserves/delete", "/reserves/edit/*", "/reserves/add"})
 public class ReserveServlet extends HttpServlet {
 
     private static final Logger logger = LogManager.getLogger(ReserveServlet.class);
@@ -28,6 +28,10 @@ public class ReserveServlet extends HttpServlet {
         if (request.getRequestURI().equals("/reserves")) {
 
             commandName = "reservesList";
+
+        } else if (request.getRequestURI().equals("/reserves/grouped")) {
+
+            commandName = "reservesGroupedList";
 
         } else if (request.getRequestURI().contains("/reserves/delete")) {
 

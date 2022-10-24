@@ -36,6 +36,7 @@
                                        onchange="validate(this)" min="0" max=""
                                        value="">
                                 <input type="hidden" id="order_id" name="order_id" value="0">
+                                <input type="hidden" id="route_id" name="route_id" value="0">
                             </div>
                         </div>
                     </div>

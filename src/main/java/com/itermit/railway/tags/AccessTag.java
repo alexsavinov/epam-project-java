@@ -53,7 +53,7 @@ public class AccessTag extends TagSupport {
                 default:
                     logger.error("UNHANDLED role: {}", role);
                     logger.debug("AccessTag: isAuthorized  {}", isAuthorized);
-                    logger.debug("AccessTag: isAdmin  {}", isAdmin);
+                    logger.debug("AccessTag: setIsAdmin  {}", isAdmin);
                     logger.debug("AccessTag: role  {}", role);
                     logger.debug("AccessTag: modifier  {}", modifier);
                     break;
