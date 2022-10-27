@@ -2,6 +2,7 @@ package com.itermit.railway.command.Station;
 
 import com.itermit.railway.command.Command;
 import com.itermit.railway.command.CommandContainer;
+import com.itermit.railway.db.CommandException;
 import com.itermit.railway.db.DBException;
 import com.itermit.railway.db.StationManager;
 import com.itermit.railway.db.entity.Station;
@@ -10,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 public class StationEditPostCommand implements Command {
 
@@ -18,7 +18,7 @@ public class StationEditPostCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-            throws DBException {
+            throws CommandException {
 
         logger.debug("#execute(request, response).  {}", request.getRequestURI());
 
@@ -28,18 +28,15 @@ public class StationEditPostCommand implements Command {
                 .withId(id)
                 .withName(request.getParameter("name"))
                 .build();
-        StationManager.getInstance().update(id, station);
-        request.getSession().setAttribute("messages", "Station updated!");
-        request.getSession().setAttribute("url", "/stations");
-
         try {
-            response.sendRedirect("/stations/edit/" + id);
-        } catch (IOException e) {
-            logger.error("IOException. Error redirecting! {}", e.getMessage());
-            throw new DBException("Error redirecting!", e);
+            StationManager.getInstance().update(id, station);
+            request.getSession().setAttribute("messages", "Station updated!");
+            request.getSession().setAttribute("url", "/stations");
+        } catch (DBException e) {
+            throw new RuntimeException(e);
         }
 
-        return null;
+        return "/stations/edit/" + id;
     }
 
 }

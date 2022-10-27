@@ -1,6 +1,7 @@
 package com.itermit.railway.command.Station;
 
 import com.itermit.railway.command.Command;
+import com.itermit.railway.db.CommandException;
 import com.itermit.railway.db.DBException;
 import com.itermit.railway.db.StationManager;
 import com.itermit.railway.db.entity.Station;
@@ -9,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 public class StationAddPostCommand implements Command {
 
@@ -17,25 +17,23 @@ public class StationAddPostCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-            throws DBException {
+            throws CommandException {
 
         logger.debug("#execute(request, response).  {}", request.getRequestURI());
 
         String name = request.getParameter("name");
 
         Station station = new Station.Builder().withName(name).build();
-        StationManager.getInstance().add(station);
+        try {
+            StationManager.getInstance().add(station);
+        } catch (DBException e) {
+            logger.error("DBException. {}", e.getMessage());
+            throw new CommandException(e.getMessage(), e);
+        }
 
         request.getSession().setAttribute("messages", "Station " + name + " added!");
 
-        try {
-            response.sendRedirect("/stations");
-        } catch (IOException e) {
-            logger.error("IOException. Error redirecting! {}", e.getMessage());
-            throw new DBException("Error redirecting!", e);
-        }
-
-        return null;
+        return "/stations";
     }
 
 }

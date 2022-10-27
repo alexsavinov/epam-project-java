@@ -35,7 +35,8 @@ public class UserDAOImpl implements UserDAO {
             "VALUES (?, SHA2(?, 0), ?, ?, ?, ?)";
     private static final String SQL_UPDATE_USER = "" +
             "UPDATE users " +
-            "SET name = ?, email = ? , isadmin = ? , isactive = ? , activation_token = ? " +
+//            "SET name = ?, email = ? , isadmin = ? , isactive = ? , activation_token = ? " +
+            "SET name = ?, email = ? , password = SHA2(?, 0), isadmin = ? , isactive = ? , activation_token = ? " +
             "WHERE id = ?";
     private static final String SQL_DELETE_USER = "" +
             "DELETE FROM users " +
@@ -58,7 +59,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public Paginator getPaginated(Connection connection, QueryMaker query) throws SQLException {
 
-        logger.debug("#getPaginated().");
+        logger.debug("#getPaginated(connection, query).");
 
         ArrayList<User> users = getFiltered(connection, query);
 
@@ -100,7 +101,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public ArrayList<User> getFiltered(Connection connection, QueryMaker query) throws SQLException {
 
-        logger.debug("#getAll().  {}", query);
+        logger.debug("#getFiltered(connection, query).  {}", query);
 
         ArrayList<User> users = new ArrayList<>();
 
@@ -126,7 +127,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public User get(Connection connection, int id) throws SQLException {
 
-        logger.debug("#get(id): {}", id);
+        logger.debug("#get(connection, id): {}", id);
 
         User user = null;
 
@@ -161,9 +162,7 @@ public class UserDAOImpl implements UserDAO {
             int l = 0;
             preparedStatement.setString(++l, user.getName());
             preparedStatement.setString(++l, user.getPassword());
-
-
-            logger.info(preparedStatement);
+//            logger.trace(preparedStatement);
 
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -180,7 +179,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public ArrayList<User> getAll(Connection connection) throws SQLException {
 
-        logger.debug("#getAll()");
+        logger.debug("#getAll(connection).");
 
         ArrayList<User> users = new ArrayList<>();
 
@@ -190,7 +189,6 @@ public class UserDAOImpl implements UserDAO {
         try {
             preparedStatement = connection.prepareStatement(SQL_GET_ALL_USERS);
             resultSet = preparedStatement.executeQuery();
-
             while (resultSet.next()) {
                 users.add(extract(resultSet));
             }
@@ -205,7 +203,7 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public void add(Connection connection, User user) throws SQLException {
 
-        logger.debug("#add(user): {}", user);
+        logger.debug("#add(connection, user): {}", user);
 
         PreparedStatement preparedStatement = null;
 
@@ -218,20 +216,18 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.setBoolean(++l, user.getIsAdmin());
             preparedStatement.setBoolean(++l, user.getIsActive());
             preparedStatement.setString(++l, user.getActivationToken());
-
-            logger.info(preparedStatement);
+//            logger.trace(preparedStatement);
 
             preparedStatement.executeUpdate();
         } finally {
             DBManager.closePreparedStatement(preparedStatement);
         }
-
     }
 
     @Override
     public void update(Connection connection, int id, User user) throws SQLException {
 
-        logger.debug("#update(id, user): {} -- {}", id, user);
+        logger.debug("#update(connection, id, user): {} -- {}", id, user);
 
         PreparedStatement preparedStatement = null;
 
@@ -239,7 +235,7 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement = connection.prepareStatement(SQL_UPDATE_USER);
             int l = 0;
             preparedStatement.setString(++l, user.getName());
-//            preparedStatement.setString(++l, user.getPassword());
+            preparedStatement.setString(++l, user.getPassword());
             preparedStatement.setString(++l, user.getEmail());
             preparedStatement.setBoolean(++l, user.getIsAdmin());
             preparedStatement.setBoolean(++l, user.getIsActive());

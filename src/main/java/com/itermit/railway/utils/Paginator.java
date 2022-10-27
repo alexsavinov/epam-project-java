@@ -15,7 +15,7 @@ public class Paginator {
         }
     }
 
-    public static int PAGE_SIZE = Integer.parseInt(conf.getProperty("pagination.page.size"));
+    public static final int PAGE_SIZE = Integer.parseInt(conf.getProperty("pagination.page.size"));
     int page;
     int pages;
     int results;
@@ -114,4 +114,5 @@ public class Paginator {
             return paginator;
         }
     }
+
 }

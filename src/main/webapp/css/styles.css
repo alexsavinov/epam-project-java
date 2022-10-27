@@ -55,9 +55,6 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    /*justify-content: space-between;*/
-    /*opacity: 0.6;*/
-    /*background:var(--main-color3) url('/images/standards.png') no-repeat right bottom;*/
     background-color: white;
     /*background-image: url("/images/train.jpg");*/
     background-repeat: no-repeat;
@@ -72,7 +69,6 @@ body {
 .header {
     background-color: var(--main-color2);
     color: var(--main-color1);
-    /*height: 50px;*/
 }
 
 
@@ -105,7 +101,6 @@ a:hover {
 
 .btn {
     background-color: var(--main-color2);
-    /*background-color: var(--main-color3);*/
     color: var(--main-color1);
 }
 
@@ -120,7 +115,6 @@ a:hover {
 
 ._btn_form {
     min-width: 110px;
-    /*background-color: var(--main-color3);*/
 }
 
 ._btn_profile {
@@ -148,7 +142,7 @@ nav .navbar-nav li a:hover {
     background-color: var(--main-color2);
 }
 
-.fa-globe, .fa-ticket, .fa-check, .fa-search {
+.fa-globe, .fa-ticket, .fa-check, .fa-search, .fa-credit-card {
     color: var(--main-color4);
 }
 
@@ -158,7 +152,6 @@ nav .navbar-nav li a:hover {
 
 .fa-info-circle {
     color: var(--main-color4);
-    /*background-color: var(--main-color4);*/
 }
 
 .fa-exclamation-triangle {
@@ -189,13 +182,11 @@ nav .navbar-nav li a:hover {
 /* form */
 
 ._form {
-    /*border: 1px solid black;*/
-    /*border-color: var(--main-color2);*/
     width: 400px;
 }
 
 ._search-form {
-    /*max-width: 650px;*/
+    max-width: 1360px;
 }
 
 ._input-number {
@@ -205,20 +196,20 @@ nav .navbar-nav li a:hover {
 }
 
 ._input-train-number {
-    width: 302px;
+    height: 38px;
+    width: 300px;
 }
 
 ._input-daterange {
-    width: 302px;
+    height: 38px;
+    width: 300px;
 }
 
 ._input-station {
-    width: 302px;
+    width: 300px;
 }
 
-
 ._wrapper-table {
-    /*width: 90%;*/
     margin-left: 50px;
     margin-right: 50px;
 }
@@ -240,7 +231,6 @@ nav .navbar-nav li a:hover {
     row-gap: 30px;
 }
 
-
 ._page-link {
     color: var(--main-color4);
 }
@@ -253,7 +243,6 @@ nav .navbar-nav li a:hover {
 ._link-back:hover {
     color: var(--main-color1);
 }
-
 
 ._line {
     display: flex;

@@ -16,7 +16,7 @@
         Search
     </div>
 
-    <%--    align-items-start align-items-sm-center--%>
+    <%-- align-items-start align-items-sm-center --%>
     <form method="POST" action="/search" id="searchForm" onsubmit="return validateForm()">
         <div class="_search-form d-flex flex-column m-3 ms-lg-5 me-lg-5 mt-2 p-3 border border-1 rounded _main-bg-color4 _main-color2 shadow-lg">
 
@@ -51,7 +51,7 @@
                     <div class="d-flex flex-column border rounded p-1 me-md-3 mb-3">
 
                         <%-- Station departure --%>
-                        <div class="form-group mb-1">
+                        <div class="form-group ms-1 me-1 mb-1">
                             <label for="station_departure_id" class="form-label">
                                 Station departure
                             </label>
@@ -69,7 +69,7 @@
                         </div>
 
                         <%-- Station arrival --%>
-                        <div class="form-group mb-1">
+                        <div class="form-group ms-1 me-1 mb-1">
                             <label for="station_arrival_id" class="form-label">
                                 Station arrival
                             </label>
@@ -87,13 +87,15 @@
                         </div>
 
                     </div>
+
                 </div>
 
                 <div class="d-flex flex-column flex-xxl-row justify-content-between">
-                    <div class="d-flex flex-column p-1 me-md-3 mb-2">
+                    <%-- Travel cost, Travel time --%>
+                    <div class="d-flex flex-column border rounded p-1 me-md-3 mb-3">
 
                         <%-- Travel cost --%>
-                        <div class="form-group d-flex flex-column mb-1">
+                        <div class="d-flex flex-column me-md-1 ms-1 mb-1">
                             <div>
                                 <label class="form-label">Travel cost from:</label>
                             </div>
@@ -135,7 +137,7 @@
                         </div>
 
                         <%-- Travel time --%>
-                        <div class="form-group d-flex flex-column mb-3 mb-lg-0">
+                        <div class="form-group d-flex flex-column ms-1 mb-1">
 
                             <div>
                                 <label class="form-label">Travel time (in hours) from:</label>
@@ -161,7 +163,7 @@
                                 <label for="travel_time_max" class="form-label ms-2 me-2 mt-1">
                                     to:
                                 </label>
-                                <div class="input-group  _input-number">
+                                <div class="input-group _input-number ">
                                     <input type="number" class="form-control"
                                            id="travel_time_max" name="travel_time_max"
                                            aria-label="travel_time_max"
@@ -181,54 +183,106 @@
 
                     </div>
 
-                    <%-- Seats available --%>
-                    <div class="mb-1 form-group d-flex flex-column mt-1 ms-1">
+                    <%-- Seats available, Seats reserved --%>
+                    <div class="d-flex flex-column border rounded p-1 me-md-3 mb-3">
 
-                        <div>
-                            <label class="form-label">Seats available from:</label>
-                        </div>
-                        <div class="d-flex g-0 m-0 p-0">
+                        <%-- Seats available --%>
+                        <div class="mb-1 form-group d-flex flex-column mt-0 ms-1">
 
-                            <%-- seats_available_min --%>
-                            <div class="input-group _input-number">
-                                <input type="number" class="form-control"
-                                       id="seats_available_min" name="seats_available_min"
-                                       aria-label="seats_available_min"
-                                       data-bs-toggle="popover" data-bs-trigger="manual"
-                                       data-bs-placement="bottom" data-ds-container="body"
-                                       data-bs-delay='{"show":100,"hide":300}' data-bs-title=" "
-                                       onchange="validate(this)" min="0" max="999"
-                                       value="${sessionScope.seats_available_min}">
-                                <button class="btn btn-sm btn-outline-secondary"
-                                        onclick="setEmpty('seats_available_min')" type="button">
-                                    <em class="fa fa-xmark fa-2l"></em>
-                                </button>
+                            <div>
+                                <label class="form-label">Seats available from:</label>
                             </div>
+                            <div class="d-flex g-0 m-0 p-0">
 
-                            <%-- seats_available_max --%>
-                            <label for="seats_available_max" class="form-label ms-2 me-2 mt-1">
-                                to:
-                            </label>
-                            <div class="input-group _input-number">
-                                <input type="number" class="form-control"
-                                       id="seats_available_max" name="seats_available_max"
-                                       aria-label="seats_available_max"
-                                       data-bs-toggle="popover" data-bs-trigger="manual"
-                                       data-bs-placement="bottom" data-ds-container="body"
-                                       data-bs-delay='{"show":100,"hide":300}' data-bs-title=" "
-                                       onchange="validate(this)" min="0" max="999"
-                                       value="${sessionScope.seats_available_max}">
-                                <button class="btn btn-sm btn-outline-secondary"
-                                        onclick="setEmpty('seats_available_max')" type="button">
-                                    <em class="fa fa-xmark fa-2l"></em>
-                                </button>
+                                <%-- seats_available_min --%>
+                                <div class="input-group _input-number">
+                                    <input type="number" class="form-control"
+                                           id="seats_available_min" name="seats_available_min"
+                                           aria-label="seats_available_min"
+                                           data-bs-toggle="popover" data-bs-trigger="manual"
+                                           data-bs-placement="bottom" data-ds-container="body"
+                                           data-bs-delay='{"show":100,"hide":300}' data-bs-title=" "
+                                           onchange="validate(this)" min="0" max="999"
+                                           value="${sessionScope.seats_available_min}">
+                                    <button class="btn btn-sm btn-outline-secondary"
+                                            onclick="setEmpty('seats_available_min')" type="button">
+                                        <em class="fa fa-xmark fa-2l"></em>
+                                    </button>
+                                </div>
+
+                                <%-- seats_available_max --%>
+                                <label for="seats_available_max" class="form-label ms-2 me-2 mt-1">
+                                    to:
+                                </label>
+                                <div class="input-group _input-number">
+                                    <input type="number" class="form-control"
+                                           id="seats_available_max" name="seats_available_max"
+                                           aria-label="seats_available_max"
+                                           data-bs-toggle="popover" data-bs-trigger="manual"
+                                           data-bs-placement="bottom" data-ds-container="body"
+                                           data-bs-delay='{"show":100,"hide":300}' data-bs-title=" "
+                                           onchange="validate(this)" min="0" max="999"
+                                           value="${sessionScope.seats_available_max}">
+                                    <button class="btn btn-sm btn-outline-secondary"
+                                            onclick="setEmpty('seats_available_max')" type="button">
+                                        <em class="fa fa-xmark fa-2l"></em>
+                                    </button>
+                                </div>
+
                             </div>
-
                         </div>
+
+                        <%-- Seats reserved --%>
+                        <div class="mb-1 form-group d-flex flex-column mt-0 ms-1">
+
+                            <div>
+                                <label class="form-label">Seats reserved from:</label>
+                            </div>
+                            <div class="d-flex g-0 m-0 p-0">
+
+                                <%-- seats_reserved_min --%>
+                                <div class="input-group _input-number">
+                                    <input type="number" class="form-control"
+                                           id="seats_reserved_min" name="seats_reserved_min"
+                                           aria-label="seats_reserved_min"
+                                           data-bs-toggle="popover" data-bs-trigger="manual"
+                                           data-bs-placement="bottom" data-ds-container="body"
+                                           data-bs-delay='{"show":100,"hide":300}' data-bs-title=" "
+                                           onchange="validate(this)" min="0" max="999"
+                                           value="${sessionScope.seats_reserved_min}">
+                                    <button class="btn btn-sm btn-outline-secondary"
+                                            onclick="setEmpty('seats_reserved_min')" type="button">
+                                        <em class="fa fa-xmark fa-2l"></em>
+                                    </button>
+                                </div>
+
+                                <%-- seats_reserved_max --%>
+                                <label for="seats_available_max" class="form-label ms-2 me-2 mt-1">
+                                    to:
+                                </label>
+                                <div class="input-group _input-number">
+                                    <input type="number" class="form-control"
+                                           id="seats_reserved_max" name="seats_reserved_max"
+                                           aria-label="seats_reserved_max"
+                                           data-bs-toggle="popover" data-bs-trigger="manual"
+                                           data-bs-placement="bottom" data-ds-container="body"
+                                           data-bs-delay='{"show":100,"hide":300}' data-bs-title=" "
+                                           onchange="validate(this)" min="0" max="999"
+                                           value="${sessionScope.seats_reserved_max}">
+                                    <button class="btn btn-sm btn-outline-secondary"
+                                            onclick="setEmpty('seats_reserved_max')" type="button">
+                                        <em class="fa fa-xmark fa-2l"></em>
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
             </div>
+
 
             <%-- BUTTONS --%>
             <div class="form-group mt-3">
@@ -248,6 +302,33 @@
             <%-- Sorting --%>
             <input type="hidden" id="sort_train_number" name="sort_train_number"
                    value="${sessionScope.sort_train_number}"/>
+
+            <input type="hidden" id="sort_station_departure" name="sort_station_departure"
+                   value="${sessionScope.sort_station_departure}"/>
+
+            <input type="hidden" id="sort_date_departure" name="sort_date_departure"
+                   value="${sessionScope.sort_date_departure}"/>
+
+            <input type="hidden" id="sort_travel_time" name="sort_travel_time"
+                   value="${sessionScope.sort_travel_time}"/>
+
+            <input type="hidden" id="sort_station_arrival" name="sort_station_arrival"
+                   value="${sessionScope.sort_station_arrival}"/>
+
+            <input type="hidden" id="sort_date_arrival" name="sort_date_arrival"
+                   value="${sessionScope.sort_date_arrival}"/>
+
+            <input type="hidden" id="sort_travel_cost" name="sort_travel_cost"
+                   value="${sessionScope.sort_travel_cost}"/>
+
+            <input type="hidden" id="sort_seats_reserved" name="sort_seats_reserved"
+                   value="${sessionScope.sort_seats_reserved}"/>
+
+            <input type="hidden" id="sort_seats_available" name="sort_seats_available"
+                   value="${sessionScope.sort_seats_available}"/>
+
+            <input type="hidden" id="sort_seats_total" name="sort_seats_total"
+                   value="${sessionScope.sort_seats_total}"/>
 
             <%-- Pagination --%>
             <input type="hidden" id="pg_page" name="pg_page" value="0"/>

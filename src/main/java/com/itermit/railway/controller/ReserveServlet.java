@@ -1,6 +1,5 @@
 package com.itermit.railway.controller;
 
-import com.itermit.railway.command.CommandContainer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,15 +22,13 @@ public class ReserveServlet extends HttpServlet {
 
         logger.debug("#doGet(request, response).  {}", request.getRequestURI());
 
-        String commandName = null;
-
         if (request.getRequestURI().equals("/reserves")) {
 
-            commandName = "reservesList";
+            CommandHandler.processForward("reservesList", request, response);
 
         } else if (request.getRequestURI().equals("/reserves/grouped")) {
 
-            commandName = "reservesGroupedList";
+            CommandHandler.processRedirect("reservesGroupedList", request, response);
 
         } else if (request.getRequestURI().contains("/reserves/delete")) {
 
@@ -39,19 +36,17 @@ public class ReserveServlet extends HttpServlet {
 
         } else if (request.getRequestURI().startsWith("/reserves/edit")) {
 
-            commandName = "reserveEditGet";
+            CommandHandler.processForward("reserveEditGet", request, response);
 
         } else if (request.getRequestURI().contains("/reserves/add")) {
 
-            commandName = "reserveAddGet";
+            CommandHandler.processRedirect("reserveAddGet", request, response);
 
         } else {
             request.setAttribute("error", "UNHANDLED request: " + request.getRequestURI());
             request.getRequestDispatcher("/error").forward(request, response);
             logger.error("UNHANDLED request!  {}", request.getRequestURI());
         }
-
-        CommandContainer.runCommand(request, response, commandName);
     }
 
     @Override
@@ -60,26 +55,22 @@ public class ReserveServlet extends HttpServlet {
 
         logger.debug("#doPost(request, response).  {}", request.getRequestURI());
 
-        String commandName = null;
-
         if (request.getRequestURI().contains("/reserves/edit")) {
 
-            commandName = "reserveEditPost";
+            CommandHandler.processRedirect("reserveEditPost", request, response);
 
         } else if (request.getRequestURI().contains("/reserves/delete")) {
 
-            commandName = "reserveDelete";
+            CommandHandler.processRedirect("reserveDelete", request, response);
 
         } else if (request.getRequestURI().equals("/reserves/add")) {
 
-            commandName = "reserveAddPost";
+            CommandHandler.processRedirect("reserveAddPost", request, response);
 
         } else {
             request.setAttribute("error", "UNHANDLED request: " + request.getRequestURI());
             request.getRequestDispatcher("/error").forward(request, response);
             logger.error("UNHANDLED request!  {}", request.getRequestURI());
         }
-
-        CommandContainer.runCommand(request, response, commandName);
     }
 }

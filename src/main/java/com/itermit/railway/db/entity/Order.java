@@ -16,25 +16,6 @@ public class Order implements Serializable {
     private Order() {
     }
 
-//    public Order(int id, User user, Route route, int seats, String dateReserve) {
-//        this.id = id;
-//        this.user = user;
-//        this.route = route;
-//        this.seats = seats;
-//        this.dateReserve = dateReserve;
-//    }
-//
-//    public Order(int userId, int routeId, int seats) {
-//        this.user = new User.Builder().withId(userId).build();
-//        this.route = new Route.Builder().withId(routeId).build();
-//        this.seats = seats;
-//
-//        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(
-//                "yyyy-MM-dd hh:mm:ss",
-//                Locale.ENGLISH);
-//        this.dateReserve = dateTimeFormatter.format(LocalDateTime.now());
-//    }
-
     public String getDateReserve() {
         return dateReserve;
     }
@@ -86,6 +67,7 @@ public class Order implements Serializable {
     }
 
     public static class Builder {
+
         private final Order order;
 
         public Builder() {
@@ -129,4 +111,5 @@ public class Order implements Serializable {
             return order;
         }
     }
+
 }

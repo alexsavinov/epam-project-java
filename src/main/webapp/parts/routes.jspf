@@ -7,23 +7,56 @@
 
         <thead class="table-secondary">
         <tr>
-            <th scope="col" onclick="sortClick('sort_train_number');
-                    goByPage(${sessionScope.paginator.getPage()});">
+            <th scope="col" onclick="sortClick('sort_train_number'); goByPage(${sessionScope.paginator.getPage()});">
                 Train #
-                <c:if test="${sort_train_number == 'asc'}">
-                    <em class="fa fa-arrow-down fa-2l"></em>
-                </c:if>
+                <c:if test="${sort_train_number == 'asc'}"><em class="fa fa-arrow-down fa-2l"></em></c:if>
                 <c:if test="${sort_train_number == 'desc'}"><em class="fa fa-arrow-up fa-2l"></em></c:if>
             </th>
-            <th scope="col">Departure</th>
-            <th scope="col">Date/time departure</th>
-            <th scope="col">Travel time</th>
-            <th scope="col">Arrival</th>
-            <th scope="col">Date/time arrival</th>
-            <th scope="col">Travel cost</th>
-            <th scope="col">Seats reserved</th>
-            <th scope="col">Seats available</th>
-            <th scope="col">Seats total</th>
+            <th scope="col" onclick="sortClick('sort_station_departure'); goByPage(${sessionScope.paginator.getPage()});">
+                Station of departure
+                <c:if test="${sort_station_departure == 'asc'}"><em class="fa fa-arrow-down fa-2l"></em></c:if>
+                <c:if test="${sort_station_departure == 'desc'}"><em class="fa fa-arrow-up fa-2l"></em></c:if>
+            </th>
+            <th scope="col" onclick="sortClick('sort_date_departure'); goByPage(${sessionScope.paginator.getPage()});">
+                Date/time departure
+                <c:if test="${sort_date_departure == 'asc'}"><em class="fa fa-arrow-down fa-2l"></em></c:if>
+                <c:if test="${sort_date_departure == 'desc'}"><em class="fa fa-arrow-up fa-2l"></em></c:if>
+            </th>
+            <th scope="col" onclick="sortClick('sort_station_arrival'); goByPage(${sessionScope.paginator.getPage()});">
+                Station of arrival
+                <c:if test="${sort_station_arrival == 'asc'}"><em class="fa fa-arrow-down fa-2l"></em></c:if>
+                <c:if test="${sort_station_arrival == 'desc'}"><em class="fa fa-arrow-up fa-2l"></em></c:if>
+            </th>
+            <th scope="col" onclick="sortClick('sort_date_arrival'); goByPage(${sessionScope.paginator.getPage()});">
+                Date/time arrival
+                <c:if test="${sort_date_arrival == 'asc'}"><em class="fa fa-arrow-down fa-2l"></em></c:if>
+                <c:if test="${sort_date_arrival == 'desc'}"><em class="fa fa-arrow-up fa-2l"></em></c:if>
+            </th>
+            <th scope="col" onclick="sortClick('sort_travel_time'); goByPage(${sessionScope.paginator.getPage()});">
+                Travel time
+                <c:if test="${sort_travel_time == 'asc'}"><em class="fa fa-arrow-down fa-2l"></em></c:if>
+                <c:if test="${sort_travel_time == 'desc'}"><em class="fa fa-arrow-up fa-2l"></em></c:if>
+            </th>
+            <th scope="col" onclick="sortClick('sort_travel_cost'); goByPage(${sessionScope.paginator.getPage()});">
+                Travel cost
+                <c:if test="${sort_travel_cost == 'asc'}"><em class="fa fa-arrow-down fa-2l"></em></c:if>
+                <c:if test="${sort_travel_cost == 'desc'}"><em class="fa fa-arrow-up fa-2l"></em></c:if>
+            </th>
+            <th scope="col" onclick="sortClick('sort_seats_available'); goByPage(${sessionScope.paginator.getPage()});">
+                Seats available
+                <c:if test="${sort_seats_available == 'asc'}"><em class="fa fa-arrow-down fa-2l"></em></c:if>
+                <c:if test="${sort_seats_available == 'desc'}"><em class="fa fa-arrow-up fa-2l"></em></c:if>
+            </th>
+            <th scope="col" onclick="sortClick('sort_seats_reserved'); goByPage(${sessionScope.paginator.getPage()});">
+                Seats reserved
+                <c:if test="${sort_seats_reserved == 'asc'}"><em class="fa fa-arrow-down fa-2l"></em></c:if>
+                <c:if test="${sort_seats_reserved == 'desc'}"><em class="fa fa-arrow-up fa-2l"></em></c:if>
+            </th>
+            <th scope="col" onclick="sortClick('sort_seats_total'); goByPage(${sessionScope.paginator.getPage()});">
+                Seats total
+                <c:if test="${sort_seats_total == 'asc'}"><em class="fa fa-arrow-down fa-2l"></em></c:if>
+                <c:if test="${sort_seats_total == 'desc'}"><em class="fa fa-arrow-up fa-2l"></em></c:if>
+            </th>
             <th scope="col">Action</th>
         </tr>
         </thead>
@@ -44,27 +77,29 @@
                         ${route.getDateDeparture()}
                 </td>
                 <td>
-                        ${route.getTravelTime()}
-                </td>
-                <td>
                         ${route.getStationArrival().getName()}
                 </td>
                 <td>
                         ${route.getDateArrival()}
                 </td>
                 <td>
+                        ${route.getTravelTime()}
+                </td>
+                <td>
                         ${route.getTravelCost()}
+                <td>
+                        ${route.getSeatsAvailable()}
+                </td>
                 </td>
                 <td>
                         ${route.getSeatsReserved()}
                 </td>
                 <td>
-                        ${route.getSeatsAvailable()}
-                </td>
-                <td>
                         ${route.getSeatsTotal()}
                 </td>
-                <td class="d-flex">
+                <td>
+                    <div class="d-flex">
+
                     <button type="button"
                             class="btn btn-outline-secondary btn-sm m-1  <customTags:access role="guest" modifier="d-none"/>"
                             data-bs-toggle="modal"
@@ -74,13 +109,16 @@
                             <c:if test="${route.getSeatsAvailable() le 0}">
                                 disabled
                             </c:if>>
+                        <em class="fa fa-credit-card "></em>
                         Reserve
                     </button>
                     <button type="button"
                             class="btn btn-outline-secondary btn-sm m-1"
                             onclick='goByUrl("/routes/info/${route.getId()}")'>
+                        <em class="fa fa-info-circle fa-xl me-1"></em>
                         Info
                     </button>
+                    </div>
                 </td>
             </tr>
 

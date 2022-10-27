@@ -1,6 +1,7 @@
 package com.itermit.railway.command.Reserve;
 
 import com.itermit.railway.command.Command;
+import com.itermit.railway.db.CommandException;
 import com.itermit.railway.db.DBException;
 import com.itermit.railway.db.OrderManager;
 import com.itermit.railway.db.entity.Order;
@@ -11,7 +12,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class ReserveDeleteCommand implements Command {
@@ -20,13 +20,20 @@ public class ReserveDeleteCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-            throws DBException {
+            throws CommandException {
 
         logger.debug("#execute(request, response).  {}", request.getRequestURI());
 
         int id =  Integer.parseInt(request.getParameter("order_id"));
         int seats =  Integer.parseInt(request.getParameter("seats"));
-        OrderManager.getInstance().deleteReserve(id, seats);
+
+        try {
+            OrderManager.getInstance().deleteReserve(id, seats);
+        } catch (DBException e) {
+            logger.error("DBException. {}", e.getMessage());
+            throw new CommandException(e.getMessage(), e);
+        }
+
         request.getSession().setAttribute("messages",
                 String.format("Reserve for %d seats removed (order ID: %d)!", seats, id));
 
@@ -35,17 +42,16 @@ public class ReserveDeleteCommand implements Command {
                 .withCondition("user_id", Condition.EQ , String.valueOf(request.getSession().getAttribute("userid")))
                 .withCondition("route_id", Condition.EQ , String.valueOf(routeId))
                 .build();
-        ArrayList<Order> reserves = OrderManager.getInstance().getFiltered(query);
-        request.getSession().setAttribute("reserves", reserves);
 
         try {
-            response.sendRedirect("/reserve.jsp");
-        } catch (IOException e) {
-            logger.error("IOException. Error redirecting! {}", e.getMessage());
-            throw new DBException("Error redirecting /stations!", e);
+            ArrayList<Order> reserves = OrderManager.getInstance().getFiltered(query);
+            request.getSession().setAttribute("reserves", reserves);
+        } catch (DBException e) {
+            logger.error("DBException. {}", e.getMessage());
+            throw new CommandException(e.getMessage(), e);
         }
 
-        return null;
+        return "/reserve.jsp";
     }
 
 }

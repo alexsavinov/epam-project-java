@@ -36,6 +36,7 @@ public class OrderManager {
     }
 
     public ArrayList<Order> getAll() throws DBException {
+
         logger.debug("#getAll()");
 
         try (Connection connection = dbManager.getConnection()) {
@@ -47,6 +48,7 @@ public class OrderManager {
     }
 
     public Order get(int id) throws DBException {
+
         logger.debug("#get(order).");
 
         try (Connection connection = dbManager.getConnection()) {
@@ -58,6 +60,7 @@ public class OrderManager {
     }
 
     public void add(Order order) throws DBException {
+
         logger.debug("#add(order).");
 
         Connection connection = null;
@@ -111,6 +114,7 @@ public class OrderManager {
     }
 
     public void update(int id, Order order) throws DBException {
+
         logger.debug("#update(id, order): {} -- {}", id, order);
 
         try (Connection connection = dbManager.getConnection()) {
@@ -122,6 +126,7 @@ public class OrderManager {
     }
 
     public Paginator getPaginated(QueryMaker queryMaker) throws DBException {
+
         logger.debug("#getPaginated(queryMaker).");
 
         try (Connection connection = dbManager.getConnection()) {
@@ -133,6 +138,7 @@ public class OrderManager {
     }
 
     public ArrayList<Order> getFiltered(QueryMaker queryMaker) throws DBException {
+
         logger.debug("#getFiltered(queryMaker).");
 
         try (Connection connection = dbManager.getConnection()) {
@@ -144,6 +150,7 @@ public class OrderManager {
     }
 
     public void deleteReserve(int id, int seats) throws DBException {
+
         logger.debug("#deleteReserve(id, seats). {} {}", id, seats);
 
         this.seats = seats;

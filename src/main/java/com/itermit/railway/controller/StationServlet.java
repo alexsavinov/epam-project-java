@@ -1,6 +1,5 @@
 package com.itermit.railway.controller;
 
-import com.itermit.railway.command.CommandContainer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,16 +23,14 @@ public class StationServlet extends HttpServlet {
      * @param response HttpServletResponse
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         logger.debug("#doGet(request, response).  {}", request.getRequestURI());
 
-        String commandName = null;
-
         if (request.getRequestURI().equals("/stations")) {
 
-            commandName = "stationsList";
+            CommandHandler.processForward("stationsList", request, response);
 
         } else if (request.getRequestURI().contains("/stations/delete")) {
 
@@ -41,19 +38,17 @@ public class StationServlet extends HttpServlet {
 
         } else if (request.getRequestURI().startsWith("/stations/edit")) {
 
-            commandName = "stationEditGet";
+            CommandHandler.processForward("stationEditGet", request, response);
 
         } else if (request.getRequestURI().contains("/stations/add")) {
 
-            commandName = "stationAddGet";
+            CommandHandler.processRedirect("stationAddGet", request, response);
 
         } else {
             request.setAttribute("error", "UNHANDLED request: " + request.getRequestURI());
             request.getRequestDispatcher("/error").forward(request, response);
             logger.error("UNHANDLED request!  {}", request.getRequestURI());
         }
-
-        CommandContainer.runCommand(request, response, commandName);
     }
 
     @Override
@@ -62,26 +57,22 @@ public class StationServlet extends HttpServlet {
 
         logger.debug("#doPost(request, response).  {}", request.getRequestURI());
 
-        String commandName = null;
-
         if (request.getRequestURI().contains("/stations/edit")) {
 
-            commandName = "stationEditPost";
+            CommandHandler.processRedirect("stationEditPost", request, response);
 
         } else if (request.getRequestURI().contains("/stations/delete")) {
 
-            commandName = "stationDelete";
+            CommandHandler.processRedirect("stationDelete", request, response);
 
         } else if (request.getRequestURI().equals("/stations/add")) {
 
-            commandName = "stationAddPost";
+            CommandHandler.processRedirect("stationAddPost", request, response);
 
         } else {
             request.setAttribute("error", "UNHANDLED request: " + request.getRequestURI());
             request.getRequestDispatcher("/error").forward(request, response);
             logger.error("UNHANDLED request!  {}", request.getRequestURI());
         }
-
-        CommandContainer.runCommand(request, response, commandName);
     }
 }

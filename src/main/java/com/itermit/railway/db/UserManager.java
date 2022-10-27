@@ -9,7 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -33,7 +32,8 @@ public class UserManager {
     }
 
     public User get(int id) throws DBException {
-        logger.debug("#get(user).");
+
+        logger.debug("#get(id).");
 
         try (Connection connection = dbManager.getConnection()) {
             return UserDAOImpl.getInstance().get(connection, id);
@@ -44,6 +44,7 @@ public class UserManager {
     }
 
     public User get(User user) throws DBException {
+
         logger.debug("#get(user).");
 
         try (Connection connection = dbManager.getConnection()) {
@@ -55,6 +56,7 @@ public class UserManager {
     }
 
     public ArrayList<User> getAll() throws DBException {
+
         logger.debug("#getAll()");
 
         try (Connection connection = dbManager.getConnection()) {
@@ -66,6 +68,7 @@ public class UserManager {
     }
 
     public void add(User user) throws DBException {
+
         logger.debug("#add(user).");
 
         Connection connection = null;
@@ -133,6 +136,7 @@ public class UserManager {
     }
 
     public void delete(int id) throws DBException {
+
         logger.debug("#delete(id).");
 
         try (Connection connection = dbManager.getConnection()) {
@@ -144,6 +148,7 @@ public class UserManager {
     }
 
     public void update(int id, User user) throws DBException {
+
         logger.debug("#update(id, user): {} -- {}", id, user);
 
         try (Connection connection = dbManager.getConnection()) {
@@ -155,6 +160,7 @@ public class UserManager {
     }
 
     public void updatePassword(int id, String password) throws DBException {
+
         logger.debug("#updatePassword(id, password): {}", id);
 
         try (Connection connection = dbManager.getConnection()) {
@@ -166,16 +172,5 @@ public class UserManager {
         }
     }
 
-//    public void activatePrepare(User user) throws DBException {
-//        logger.debug("#activatePrepare(user): {} ", user);
-//        try (Connection connection = dbManager.getConnection()) {
-//            user.generateActivateToken();
-//            user.setIsActive(false);
-//            UserDAOImpl.getInstance().update(connection, user.getId(), user);
-//        } catch (SQLException e) {
-//            String errorMessage = CommandContainer.getErrorMessage("Error while prepare to activate user!", e);
-//            throw new DBException(errorMessage, e);
-//        }
-//    }
 
 }

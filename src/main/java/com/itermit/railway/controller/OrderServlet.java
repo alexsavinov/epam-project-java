@@ -1,6 +1,5 @@
 package com.itermit.railway.controller;
 
-import com.itermit.railway.command.CommandContainer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -23,11 +22,9 @@ public class OrderServlet extends HttpServlet {
 
         logger.debug("#doGet(request, response).  {}", request.getRequestURI());
 
-        String commandName = null;
-
         if (request.getRequestURI().equals("/orders")) {
 
-            commandName = "ordersList";
+            CommandHandler.processForward("ordersList", request, response);
 
         } else if (request.getRequestURI().startsWith("/orders/delete")) {
 
@@ -35,19 +32,17 @@ public class OrderServlet extends HttpServlet {
 
         } else if (request.getRequestURI().startsWith("/orders/edit")) {
 
-            commandName = "orderEditGet";
+            CommandHandler.processForward("orderEditGet", request, response);
 
         } else if (request.getRequestURI().startsWith("/orders/add")) {
 
-            commandName = "orderAddGet";
+            CommandHandler.processRedirect("orderAddGet", request, response);
 
         } else {
             request.setAttribute("error", "UNHANDLED request: " + request.getRequestURI());
             request.getRequestDispatcher("/error").forward(request, response);
             logger.error("UNHANDLED request!  {}", request.getRequestURI());
         }
-
-        CommandContainer.runCommand(request, response, commandName);
     }
 
     @Override
@@ -56,27 +51,23 @@ public class OrderServlet extends HttpServlet {
 
         logger.debug("#doPost(request, response).  {}", request.getRequestURI());
 
-        String commandName = null;
-
         if (request.getRequestURI().startsWith("/orders/edit")) {
 
-            commandName = "orderEditPost";
+            CommandHandler.processRedirect("orderEditPost", request, response);
 
         } else if (request.getRequestURI().startsWith("/orders/delete")) {
 
-            commandName = "orderDelete";
+            CommandHandler.processRedirect("orderDelete", request, response);
 
         } else if (request.getRequestURI().equals("/orders/add")) {
 
-            commandName = "orderAddPost";
+            CommandHandler.processRedirect("orderAddPost", request, response);
 
         } else {
             request.setAttribute("error", "UNHANDLED request: " + request.getRequestURI());
             request.getRequestDispatcher("/error").forward(request, response);
             logger.error("UNHANDLED request!  {}", request.getRequestURI());
         }
-
-        CommandContainer.runCommand(request, response, commandName);
     }
 
 }

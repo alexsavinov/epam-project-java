@@ -1,25 +1,19 @@
 package com.itermit.railway.command;
 
-import com.itermit.railway.command.Auth.AuthActivateCommand;
-import com.itermit.railway.command.Auth.AuthLoginCommand;
-import com.itermit.railway.command.Auth.AuthLogoutCommand;
-import com.itermit.railway.command.Auth.AuthRegisterCommand;
+import com.itermit.railway.command.Auth.*;
 import com.itermit.railway.command.Order.*;
 import com.itermit.railway.command.Reserve.*;
 import com.itermit.railway.command.Route.*;
-import com.itermit.railway.command.Search.SearchGetCommand;
-import com.itermit.railway.command.Search.SearchPostCommand;
-import com.itermit.railway.command.Search.SearchResetCommand;
+import com.itermit.railway.command.Search.*;
 import com.itermit.railway.command.Station.*;
 import com.itermit.railway.command.User.*;
+import com.itermit.railway.db.CommandException;
 import com.itermit.railway.db.DBException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
@@ -73,8 +67,6 @@ public class CommandContainer {
         commands.put("reservesList", new ReservesListCommand());
         commands.put("reservesGroupedList", new ReservesGroupedListCommand());
         commands.put("reserveEditGet", new ReserveEditGetCommand());
-//        commands.put("reserveEditPost", new ReserveEditPostCommand());
-//        commands.put("reserveAddGet", new ReserveAddGetCommand());
         commands.put("reserveAddPost", new ReserveAddPostCommand());
         commands.put("reserveDelete", new ReserveDeleteCommand());
     }
@@ -86,31 +78,27 @@ public class CommandContainer {
         return commands.get(commandName);
     }
 
-    public static void runCommand(HttpServletRequest request, HttpServletResponse response, String commandName) {
+    public static String runCommand(HttpServletRequest request, HttpServletResponse response, String commandName)
+            throws CommandException {
 
         logger.debug("#runCommand(request, response, commandName):  {}", commandName);
 
         if (commandName != null) {
             Command command = CommandContainer.getCommand(commandName);
             try {
-                command.execute(request, response);
+                return command.execute(request, response);
             } catch (DBException e) {
                 logger.error("DBException. Command execution error! {}", e.getMessage());
                 request.setAttribute("error", e.getMessage());
-                try {
-                    request.getRequestDispatcher("/error").forward(request, response);
-                } catch (ServletException ex) {
-                    logger.error("ServletException. Command execution error! {}", e.getMessage());
-                    throw new RuntimeException(ex);
-                } catch (IOException ex) {
-                    logger.error("RuntimeException. Command execution error! {}", e.getMessage());
-                    throw new RuntimeException(ex);
-                }
+                throw new CommandException(e.getMessage(), e);
             }
         }
+
+        return null;
     }
 
-    public static int getIdFromRequest(HttpServletRequest request) throws DBException {
+    public static int getIdFromRequest(HttpServletRequest request)
+            throws CommandException {
 
         int id = 0;
         if (request.getPathInfo() != null && request.getPathInfo().length() > 1) {
@@ -118,12 +106,14 @@ public class CommandContainer {
         }
 
         if (id == 0) {
-            throw new DBException("Cannot get 'id' from request!", null);
+            throw new CommandException("Cannot get 'id' from request!", null);
         }
+
         return id;
     }
 
-    public static String getTokenFromRequest(HttpServletRequest request) throws DBException {
+    public static String getTokenFromRequest(HttpServletRequest request)
+            throws CommandException {
 
         String token = "";
         if (request.getPathInfo() != null && request.getPathInfo().length() > 1) {
@@ -131,32 +121,39 @@ public class CommandContainer {
         }
 
         if (token == null) {
-            throw new DBException("Cannot get 'token' from request!", null);
+            throw new CommandException("Cannot get 'token' from request!", null);
         }
+
         return token;
     }
 
     public static String getErrorMessage(String defaultMessage, SQLException e) {
+
         if (e.getErrorCode() == 1451) {
             String nameDatabase = e.getMessage().split("REFERENCES")[1].split("`")[1];
             return "First you have to remove an element from the tables: " + nameDatabase;
         }
+
         return defaultMessage;
     }
 
     public static int getIntegerFromRequest(HttpServletRequest request, String param) {
+
         String paramValue = request.getParameter(param);
         if (paramValue != null) {
             return Integer.valueOf(paramValue);
         }
+
         return 0;
     }
 
     public static String getStringFromRequest(HttpServletRequest request, String param) {
+
         String paramValue = request.getParameter(param);
         if (paramValue != null) {
             return paramValue;
         }
+
         return "";
     }
 }

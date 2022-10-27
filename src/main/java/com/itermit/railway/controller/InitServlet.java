@@ -1,6 +1,5 @@
 package com.itermit.railway.controller;
 
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Objects;
-
 
 @WebServlet(name = "InitServlet",
         urlPatterns = {"/error"})

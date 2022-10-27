@@ -1,6 +1,7 @@
 package com.itermit.railway.command.User;
 
 import com.itermit.railway.command.Command;
+import com.itermit.railway.db.CommandException;
 import com.itermit.railway.db.DBException;
 import com.itermit.railway.db.UserManager;
 import com.itermit.railway.db.entity.User;
@@ -9,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 public class UserAddPostCommand implements Command {
 
@@ -17,7 +17,7 @@ public class UserAddPostCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-            throws DBException {
+            throws CommandException {
 
         logger.debug("#execute(request, response).  {}", request.getRequestURI());
 
@@ -26,18 +26,16 @@ public class UserAddPostCommand implements Command {
 
         User user = new User.Builder().withName(name).withPassword(password).build();
 
-        UserManager.getInstance().add(user);
+        try {
+            UserManager.getInstance().add(user);
+        } catch (DBException e) {
+            logger.error("DBException. {}", e.getMessage());
+            throw new CommandException(e.getMessage(), e);
+        }
 
         request.getSession().setAttribute("messages", "User " + name + " added!");
 
-        try {
-            response.sendRedirect("/users");
-        } catch (IOException e) {
-            logger.error("IOException. Error redirecting! {}", e.getMessage());
-            throw new DBException("Error redirecting!", e);
-        }
-
-        return null;
+        return "/users";
     }
 
 }

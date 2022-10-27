@@ -37,7 +37,6 @@ public class User implements Serializable {
         try {
             md = MessageDigest.getInstance("SHA-256");
         } catch (NoSuchAlgorithmException e) {
-//            logger.error("NoSuchAlgorithmException. Error encrypting password!  {}", e.getMessage());
             throw new DBException("Error encrypting password!", e);
         }
 
@@ -175,7 +174,6 @@ public class User implements Serializable {
             user.setActivationToken(activationToken);
             return this;
         }
-
 
         public User build() {
             return user;

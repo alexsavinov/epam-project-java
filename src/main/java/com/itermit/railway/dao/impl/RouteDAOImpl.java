@@ -20,47 +20,56 @@ public class RouteDAOImpl implements RouteDAO {
     private DBManager dbManager;
     private static RouteDAOImpl instance;
     private static final Logger logger = LogManager.getLogger(RouteDAOImpl.class);
-    private static final String SQL_GET_ALL_ROUTES = "SELECT " +
-            "routes.id, " +
-            "routes.train_number, " +
-            "routes.station_departure_id, " +
-            "s_d.name as station_departure_name, " +
-            "routes.station_arrival_id, " +
-            "s_a.name as station_arrival_name, " +
-            "routes.date_departure, " +
-            "routes.date_arrival, " +
-            "routes.travel_cost, " +
-            "routes.seats_total as seats_total, " +
-            "routes.seats_reserved, " +
-            "routes.seats_total - routes.seats_reserved as seats_available " +
+    private static final String SQL_GET_ALL_ROUTES = "" +
+            "SELECT " +
+            "   routes.id, " +
+            "   routes.train_number, " +
+            "   routes.station_departure_id, " +
+            "   s_d.name as station_departure_name, " +
+            "   routes.station_arrival_id, " +
+            "   s_a.name as station_arrival_name, " +
+            "   routes.date_departure, " +
+            "   routes.date_arrival, " +
+            "   routes.travel_cost, " +
+            "   routes.seats_total as seats_total, " +
+            "   routes.seats_reserved, " +
+            "   routes.seats_total - routes.seats_reserved as seats_available " +
             "FROM routes " +
-            "LEFT JOIN stations s_a ON s_a.id = routes.station_arrival_id " +
-            "LEFT JOIN stations s_d ON s_d.id = routes.station_departure_id";
-    private static final String SQL_GET_ROUTE_BY_ID = "SELECT " +
-            "routes.id, " +
-            "routes.train_number, " +
-            "routes.station_departure_id, " +
-            "s_d.name as station_departure_name, " +
-            "routes.station_arrival_id, " +
-            "s_a.name as station_arrival_name, " +
-            "routes.date_departure, " +
-            "routes.date_arrival, " +
-            "routes.travel_cost, " +
-            "routes.seats_total, " +
-            "routes.seats_reserved " +
+            "   LEFT JOIN stations s_a ON s_a.id = routes.station_arrival_id " +
+            "   LEFT JOIN stations s_d ON s_d.id = routes.station_departure_id";
+    private static final String SQL_GET_ROUTE_BY_ID = "" +
+            "SELECT " +
+            "   routes.id, " +
+            "   routes.train_number, " +
+            "   routes.station_departure_id, " +
+            "   s_d.name as station_departure_name, " +
+            "   routes.station_arrival_id, " +
+            "   s_a.name as station_arrival_name, " +
+            "   routes.date_departure, " +
+            "   routes.date_arrival, " +
+            "   routes.travel_cost, " +
+            "   routes.seats_total, " +
+            "   routes.seats_reserved " +
             "FROM routes " +
-            "LEFT JOIN stations s_a ON s_a.id = routes.station_arrival_id " +
-            "LEFT JOIN stations s_d ON s_d.id = routes.station_departure_id " +
+            "   LEFT JOIN stations s_a ON s_a.id = routes.station_arrival_id " +
+            "   LEFT JOIN stations s_d ON s_d.id = routes.station_departure_id " +
             "WHERE routes.id = ?";
-    private static final String SQL_ADD_ROUTE = "INSERT " +
-            "INTO routes (train_number, station_departure_id, station_arrival_id, " +
+    private static final String SQL_ADD_ROUTE = "" +
+            "INSERT " +
+            "INTO routes " +
+            "   (train_number, station_departure_id, station_arrival_id, " +
             "   date_departure, date_arrival, travel_cost, seats_reserved, seats_total) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    private static final String SQL_UPDATE_ROUTE = "UPDATE routes " +
-            "SET train_number = ?, station_departure_id = ?, station_arrival_id = ?, " +
-            "   date_departure = ?, date_arrival = ?, travel_cost = ?, seats_reserved = ?, seats_total = ? " +
+    private static final String SQL_UPDATE_ROUTE = "" +
+            "UPDATE routes " +
+            "SET " +
+            "   train_number = ?, station_departure_id = ?, " +
+            "   station_arrival_id = ?, date_departure = ?, date_arrival = ?, " +
+            "   travel_cost = ?, seats_reserved = ?, seats_total = ? " +
             "WHERE id = ?";
-    private static final String SQL_DELETE_ROUTE = "DELETE FROM routes WHERE id = ?";
+    private static final String SQL_DELETE_ROUTE = "" +
+            "DELETE FROM routes " +
+            "WHERE id = ?";
     private static final String SQL_GET_TOTAL_ROWS = "" +
             "SELECT COUNT(*) total_rows " +
             "FROM routes";
@@ -93,7 +102,6 @@ public class RouteDAOImpl implements RouteDAO {
     @Override
     public ArrayList<Route> getAll(Connection connection) throws SQLException {
 
-        logger.debug("#getAll()");
 
         ArrayList<Route> routes = new ArrayList<>();
 
@@ -139,20 +147,18 @@ public class RouteDAOImpl implements RouteDAO {
 
     public Paginator getPaginated(Connection connection, QueryMaker query) throws SQLException {
 
-        logger.debug("#getPaginated().");
+        logger.debug("#getPaginated(connection, query).");
 
         ArrayList<Route> routes = getFiltered(connection, query);
 
+        logger.debug("getFiltered OK");
         query.setQueryMain(SQL_GET_TOTAL_ROWS);
         query.deleteQueryOffset();
+        query.deleteQuerySort();
 
         int totalRows = getTotalRows(connection, query);
-
-//        logger.info("totalRows {}", totalRows);
-//        logger.info("query {}", query);
-
         int total_pages = (int) Math.ceil(totalRows / (float) (Paginator.PAGE_SIZE));
-//        logger.info("total_pages {}", total_pages);
+
         return new Paginator.Builder()
                 .withPage(query.getPage())
                 .withPages(total_pages)
@@ -173,7 +179,7 @@ public class RouteDAOImpl implements RouteDAO {
         try {
             query.setQueryMain(SQL_GET_ALL_ROUTES);
             preparedStatement = query.getPreparedStatement(connection);
-            logger.info("preparedStatement: {}", preparedStatement);
+            logger.trace("preparedStatement: {}", preparedStatement);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 routes.add(extract(resultSet));

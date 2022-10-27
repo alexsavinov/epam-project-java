@@ -11,9 +11,9 @@ public class RouteName extends SimpleTagSupport {
     private String stationArrival;
 
     /*
-    Example of usage:
-        <customTags:routeName train_number="001" station_arrival="Station1" station_departure="Station2"/>
-    */
+     * Example of usage:
+     *    <customTags:routeName train_number="001" station_arrival="Station1" station_departure="Station2"/>
+     */
 
     @Override
     public void doTag() throws IOException {

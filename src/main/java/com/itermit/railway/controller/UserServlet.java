@@ -1,6 +1,5 @@
 package com.itermit.railway.controller;
 
-import com.itermit.railway.command.CommandContainer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -28,18 +27,17 @@ public class UserServlet extends HttpServlet {
 
         logger.debug("#doGet(request, response).  {}", request.getRequestURI());
 
-        String commandName = null;
         if (request.getRequestURI().equals("/users")) {
 
-            commandName = "usersList";
+            CommandHandler.processForward("usersList", request, response);
 
         } else if (request.getRequestURI().startsWith("/users/edit")) {
 
-            commandName = "userEditGet";
+            CommandHandler.processForward("userEditGet", request, response);
 
         } else if (request.getRequestURI().equals("/users/add")) {
 
-            commandName = "userAddGet";
+            CommandHandler.processRedirect("userAddGet", request, response);
 
         } else if (request.getRequestURI().startsWith("/users/delete")) {
 
@@ -50,8 +48,6 @@ public class UserServlet extends HttpServlet {
             request.getRequestDispatcher("/error").forward(request, response);
             logger.error("UNHANDLED request!  {}", request.getRequestURI());
         }
-
-        CommandContainer.runCommand(request, response, commandName);
     }
 
     @Override
@@ -60,25 +56,22 @@ public class UserServlet extends HttpServlet {
 
         logger.debug("#doPost(request, response).  {}", request.getRequestURI());
 
-        String commandName = null;
         if (request.getRequestURI().startsWith("/users/edit")) {
 
-            commandName = "userEditPost";
+            CommandHandler.processRedirect("userEditPost", request, response);
 
         } else if (request.getRequestURI().startsWith("/users/delete")) {
 
-            commandName = "userDelete";
+            CommandHandler.processRedirect("userDelete", request, response);
 
         } else if (request.getRequestURI().equals("/users/add")) {
 
-            commandName = "userAddPost";
+            CommandHandler.processRedirect("userAddPost", request, response);
 
         } else {
             request.setAttribute("error", "UNHANDLED request: " + request.getRequestURI());
             request.getRequestDispatcher("/error").forward(request, response);
             logger.error("UNHANDLED request!  {}", request.getRequestURI());
         }
-
-        CommandContainer.runCommand(request, response, commandName);
     }
 }

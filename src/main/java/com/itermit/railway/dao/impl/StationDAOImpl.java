@@ -1,6 +1,5 @@
 package com.itermit.railway.dao.impl;
 
-
 import com.itermit.railway.dao.StationDAO;
 import com.itermit.railway.db.entity.Station;
 import com.itermit.railway.db.entity.User;
@@ -21,11 +20,23 @@ public class StationDAOImpl implements StationDAO {
     private DBManager dbManager;
     private static StationDAOImpl instance;
     private static final Logger logger = LogManager.getLogger(StationDAOImpl.class);
-    private static final String SQL_GET_ALL_STATIONS = "SELECT id, name FROM stations";
-    private static final String SQL_GET_STATIONS_BY_ID = "SELECT id, name FROM stations WHERE id = ?";
-    private static final String SQL_ADD_STATION = "INSERT INTO stations (name) VALUES (?)";
-    private static final String SQL_UPDATE_STATION = "UPDATE stations SET name = ? WHERE id = ?";
-    private static final String SQL_DELETE_STATION = "DELETE FROM stations WHERE id = ?";
+    private static final String SQL_GET_ALL_STATIONS = "" +
+            "SELECT id, name " +
+            "FROM stations";
+    private static final String SQL_GET_STATIONS_BY_ID = "" +
+            "SELECT id, name " +
+            "FROM stations " +
+            "WHERE id = ?";
+    private static final String SQL_ADD_STATION = "" +
+            "INSERT INTO stations (name) " +
+            "VALUES (?)";
+    private static final String SQL_UPDATE_STATION = "" +
+            "UPDATE stations " +
+            "SET name = ? " +
+            "WHERE id = ?";
+    private static final String SQL_DELETE_STATION = "" +
+            "DELETE FROM stations " +
+            "WHERE id = ?";
 
     private StationDAOImpl() {
         dbManager = DBManager.getInstance();
@@ -41,7 +52,7 @@ public class StationDAOImpl implements StationDAO {
     @Override
     public ArrayList<Station> getAll(Connection connection) throws SQLException {
 
-        logger.debug("#getAll().");
+        logger.debug("#getAll(connection).");
 
         ArrayList<Station> stations = new ArrayList<>();
 
@@ -49,7 +60,7 @@ public class StationDAOImpl implements StationDAO {
         PreparedStatement preparedStatement = null;
 
         try {
-            logger.trace(SQL_GET_ALL_STATIONS);
+//            logger.trace(SQL_GET_ALL_STATIONS);
             preparedStatement = connection.prepareStatement(SQL_GET_ALL_STATIONS);
             resultSet = preparedStatement.executeQuery();
 
@@ -77,7 +88,7 @@ public class StationDAOImpl implements StationDAO {
     @Override
     public Station get(Connection connection, int id) throws SQLException {
 
-        logger.debug("#get(id): {}", id);
+        logger.debug("#get(connection, id): {}", id);
 
         Station station = null;
 
@@ -104,7 +115,7 @@ public class StationDAOImpl implements StationDAO {
     @Override
     public void add(Connection connection, Station station) throws SQLException {
 
-        logger.debug("#add(station): {}", station);
+        logger.debug("#add(connection, station): {}", station);
 
         PreparedStatement preparedStatement = null;
         try {
@@ -121,7 +132,7 @@ public class StationDAOImpl implements StationDAO {
     @Override
     public void update(Connection connection, int id, Station station) throws SQLException {
 
-        logger.debug("#update(id, station): {} -- {}", id, station);
+        logger.debug("#update(connection, id, station): {} -- {}", id, station);
 
         PreparedStatement preparedStatement = null;
         try {
@@ -139,7 +150,7 @@ public class StationDAOImpl implements StationDAO {
     @Override
     public void delete(Connection connection, int id) throws SQLException {
 
-        logger.debug("#delete(id): {}", id);
+        logger.debug("#delete(connection, id): {}", id);
 
         PreparedStatement preparedStatement = null;
         try {

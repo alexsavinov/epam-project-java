@@ -2,13 +2,12 @@ package com.itermit.railway.command.Auth;
 
 import com.itermit.railway.command.Command;
 import com.itermit.railway.command.CommandContainer;
-import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.CommandException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 public class AuthActivateCommand implements Command {
 
@@ -16,7 +15,7 @@ public class AuthActivateCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-            throws DBException {
+            throws CommandException {
 
         logger.debug("#execute(request, response).  {}", request.getRequestURI());
 
@@ -25,14 +24,7 @@ public class AuthActivateCommand implements Command {
         logger.info("activationToken {}", activationToken);
             request.getSession().setAttribute("messages", "User activated!");
 
-        try {
-            response.sendRedirect("/login");
-        } catch (IOException e) {
-            logger.error("IOException. Error redirecting! {}", e.getMessage());
-            throw new DBException("Error redirecting!", e);
-        }
-
-        return null;
+        return "/login";
     }
 
 }

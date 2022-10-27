@@ -1,16 +1,15 @@
 package com.itermit.railway.command.Route;
 
 import com.itermit.railway.command.Command;
+import com.itermit.railway.db.CommandException;
 import com.itermit.railway.db.DBException;
 import com.itermit.railway.db.StationManager;
 import com.itermit.railway.db.entity.Station;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class RouteAddGetCommand implements Command {
@@ -19,25 +18,19 @@ public class RouteAddGetCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-            throws DBException {
+            throws CommandException {
 
         logger.debug("#execute(request, response).  {}", request.getRequestURI());
 
-        ArrayList<Station> stations = StationManager.getInstance().getAll();
-        request.setAttribute("stations", stations);
-        request.setAttribute("action", "add");
-
         try {
-            request.getRequestDispatcher("/route.jsp").forward(request, response);
-        } catch (ServletException e) {
-            logger.error("ServletException. Error routes add! {}", e.getMessage());
-            throw new DBException("Error routes add!", e);
-        } catch (IOException e) {
-            logger.error("IOException. Error routes add! {}", e.getMessage());
-            throw new DBException("Error routes add!", e);
+            ArrayList<Station> stations = StationManager.getInstance().getAll();
+            request.setAttribute("stations", stations);
+            request.setAttribute("action", "add");
+        } catch (DBException e) {
+            throw new RuntimeException(e);
         }
 
-        return null;
+        return "/route.jsp";
     }
 
 }

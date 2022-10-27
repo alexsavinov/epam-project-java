@@ -2,16 +2,15 @@ package com.itermit.railway.command.Station;
 
 import com.itermit.railway.command.Command;
 import com.itermit.railway.command.CommandContainer;
+import com.itermit.railway.db.CommandException;
 import com.itermit.railway.db.DBException;
 import com.itermit.railway.db.StationManager;
 import com.itermit.railway.db.entity.Station;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 public class StationEditGetCommand implements Command {
 
@@ -19,38 +18,21 @@ public class StationEditGetCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-            throws DBException {
+            throws CommandException {
 
         logger.debug("#execute(request, response).  {}", request.getRequestURI());
 
-        //            try {
-//                SendEmailUtil.sendEmail(
-//                        "spell477@gmail.com",
-//                        "test",
-//                        "-->>> testeststestst <<<<---");
-//            } catch (MessagingException e) {
-//                logger.error("MessagingException e1: {}", e.getMessage());
-//                logger.error("MessagingException e2: {}", e);
-////                throw new RuntimeException(e);
-//            }
-
         int id = CommandContainer.getIdFromRequest(request);
 
-        Station station = StationManager.getInstance().get(id);
-        request.setAttribute("station", station);
-        request.setAttribute("action", "edit");
-
         try {
-            request.getRequestDispatcher("/station.jsp").forward(request, response);
-        } catch (ServletException e) {
-            logger.error("ServletException. Error station editing! {}", e.getMessage());
-            throw new DBException("Error station editing!", e);
-        } catch (IOException e) {
-            logger.error("IOException. Error station editing! {}", e.getMessage());
-            throw new DBException("Error station editing!", e);
+            Station station = StationManager.getInstance().get(id);
+            request.setAttribute("station", station);
+            request.setAttribute("action", "edit");
+        } catch (DBException e) {
+            throw new RuntimeException(e);
         }
 
-        return null;
+        return "/station.jsp";
     }
 
 }

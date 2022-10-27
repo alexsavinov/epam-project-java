@@ -79,19 +79,18 @@ public class RouteManager {
         try (Connection connection = dbManager.getConnection()) {
             RouteDAOImpl.getInstance().update(connection, id, route);
         } catch (SQLException e) {
-            String errorMessage = CommandContainer.getErrorMessage("Error while deleting route!", e);
+            String errorMessage = CommandContainer.getErrorMessage("Error while updating route!", e);
             throw new DBException(errorMessage, e);
         }
     }
 
     public Paginator getPaginated(QueryMaker queryMaker) throws DBException {
-
         logger.debug("#getPaginated(queryMaker).");
 
         try (Connection connection = dbManager.getConnection()) {
             return RouteDAOImpl.getInstance().getPaginated(connection, queryMaker);
         } catch (SQLException e) {
-            String errorMessage = CommandContainer.getErrorMessage("Error while deleting route!", e);
+            String errorMessage = CommandContainer.getErrorMessage("Error while getting paginated routes!", e);
             throw new DBException(errorMessage, e);
         }
     }

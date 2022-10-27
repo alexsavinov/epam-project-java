@@ -1,6 +1,14 @@
 function sortClick(id) {
     const elem = document.getElementById(id);
-    elem.value = (elem.value === "asc") ? "desc" : "asc";
+
+    console.log(elem.value)
+    if (elem.value === "asc") {
+        elem.value = "desc";
+    } else if (elem.value === "desc") {
+        elem.value = "";
+    } else if (elem.value === "") {
+        elem.value = "asc";
+    }
     console.log(elem.value)
 }
 
@@ -13,11 +21,9 @@ function setAttributeValue(id, attribute, value) {
 }
 
 function setEmpty(id) {
-
     const element = document.getElementById(id);
     element.value = '';
     element.classList.remove("border", "border-danger", "border-2");
-
 }
 
 function isValidValue(element, res, message) {
@@ -431,9 +437,6 @@ function appendTd(parentElement, tittle) {
 function goByPage(pg_page) {
     if (pg_page) {
         document.getElementById("pg_page").value = pg_page;
-        // const sort_train_number = document.getElementById("sort_train_number");
-        // sort_train_number.value = (sort_train_number.value === "asc") ? "desc" : "asc";
-        // document.getElementById("paginatorForm").submit();
         document.getElementById("searchForm").submit();
     }
 }

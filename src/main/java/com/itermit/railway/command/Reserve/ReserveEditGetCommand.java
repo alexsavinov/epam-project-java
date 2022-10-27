@@ -2,6 +2,7 @@ package com.itermit.railway.command.Reserve;
 
 import com.itermit.railway.command.Command;
 import com.itermit.railway.command.CommandContainer;
+import com.itermit.railway.db.CommandException;
 import com.itermit.railway.db.DBException;
 import com.itermit.railway.db.OrderManager;
 import com.itermit.railway.db.RouteManager;
@@ -12,10 +13,8 @@ import com.itermit.railway.utils.QueryMaker;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class ReserveEditGetCommand implements Command {
@@ -24,36 +23,36 @@ public class ReserveEditGetCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-            throws DBException {
+            throws CommandException {
 
         logger.debug("#execute(request, response).  {}", request.getRequestURI());
 
-        int id = CommandContainer.getIdFromRequest(request);
-        Route route = RouteManager.getInstance().get(id);
-
-        request.getSession().setAttribute("route", route);
-
-        QueryMaker query = new QueryMaker.Builder()
-                .withCondition("user_id", Condition.EQ , String.valueOf(request.getSession().getAttribute("userid")))
-                .withCondition("route_id", Condition.EQ , String.valueOf(id))
-                .build();
-
-        ArrayList<Order> reserves = OrderManager.getInstance().getFiltered(query);
-        request.getSession().setAttribute("reserves", reserves);
-
-        logger.warn(reserves);
-
+        int id = 0;
         try {
-            request.getRequestDispatcher("/reserve.jsp").forward(request, response);
-        } catch (ServletException e) {
-            logger.error("ServletException. Error editing reserve! {}", e.getMessage());
-            throw new DBException("Error editing reserve!", e);
-        } catch (IOException e) {
-            logger.error("IOException. Error editing reserve! {}", e.getMessage());
-            throw new DBException("Error editing reserve!", e);
+            id = CommandContainer.getIdFromRequest(request);
+        } catch (CommandException e) {
+            logger.error("DBException. {}", e.getMessage());
+            throw new CommandException(e.getMessage(), e);
         }
 
-        return null;
+        try {
+            Route route = RouteManager.getInstance().get(id);
+
+            request.getSession().setAttribute("route", route);
+
+            QueryMaker query = new QueryMaker.Builder()
+                    .withCondition("user_id", Condition.EQ, String.valueOf(request.getSession().getAttribute("userid")))
+                    .withCondition("route_id", Condition.EQ, String.valueOf(id))
+                    .build();
+
+            ArrayList<Order> reserves = OrderManager.getInstance().getFiltered(query);
+            request.getSession().setAttribute("reserves", reserves);
+        } catch (DBException e) {
+            logger.error("DBException. {}", e.getMessage());
+            throw new CommandException(e.getMessage(), e);
+        }
+
+        return "/reserve.jsp";
     }
 
 }

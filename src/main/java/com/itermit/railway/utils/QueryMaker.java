@@ -13,7 +13,7 @@ public class QueryMaker implements Serializable {
     private StringBuilder querySort = new StringBuilder();
     private StringBuilder queryOffset = new StringBuilder();
     private int page;
-    private ArrayList paramList = new ArrayList();
+    private ArrayList<String> paramList = new ArrayList();
 
     private QueryMaker() {
     }
@@ -39,7 +39,6 @@ public class QueryMaker implements Serializable {
     }
 
     public void setQuerySort(StringBuilder querySort) {
-
         this.querySort = new StringBuilder(querySort);
     }
 
@@ -48,13 +47,11 @@ public class QueryMaker implements Serializable {
     }
 
     public void setQueryOffset(int page) {
-
         setPage(page);
         this.queryOffset = new StringBuilder(" LIMIT ")
                 .append(Paginator.PAGE_SIZE)
                 .append(" OFFSET ")
                 .append(Integer.valueOf(page) * Paginator.PAGE_SIZE - Paginator.PAGE_SIZE);
-
     }
 
     public int getPage() {
@@ -67,6 +64,10 @@ public class QueryMaker implements Serializable {
 
     public void deleteQueryOffset() {
         this.queryOffset = new StringBuilder();
+    }
+
+    public void deleteQuerySort() {
+        this.querySort = new StringBuilder();
     }
 
     public void updateQueryCondition(String field, Condition condition, String value) {
@@ -91,6 +92,11 @@ public class QueryMaker implements Serializable {
     }
 
     private void updateQuerySort(String field, Condition condition) {
+
+        if (field.equals("seats_available"))
+            field = "seats_total - seats_reserved";
+        if (field.equals("travel_time"))
+            field = "TIMESTAMPDIFF(HOUR, routes.date_departure, routes.date_arrival)";
 
         StringBuilder query = new StringBuilder(field).append(" ").append(condition.get());
 

@@ -1,7 +1,5 @@
 package com.itermit.railway.controller;
 
-
-import com.itermit.railway.command.CommandContainer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,27 +22,26 @@ public class RouteServlet extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(RouteServlet.class);
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
         logger.debug("#doGet(request, response).  {}", request.getRequestURI());
 
-        String commandName = null;
-
         if (request.getRequestURI().equals("/routes")) {
 
-            commandName = "routesList";
+            CommandHandler.processForward("routesList", request, response);
 
         } else if (request.getRequestURI().startsWith("/routes/edit")) {
 
-            commandName = "routeEditGet";
+            CommandHandler.processForward("routeEditGet", request, response);
 
         } else if (request.getRequestURI().equals("/routes/add")) {
 
-            commandName = "routeAddGet";
+            CommandHandler.processRedirect("routeAddGet", request, response);
 
         } else if (request.getRequestURI().startsWith("/routes/info")) {
 
-            commandName = "routeInfo";
+            CommandHandler.processRedirect("routeInfo", request, response);
 
         } else if (request.getRequestURI().startsWith("/routes/delete")) {
 
@@ -55,8 +52,6 @@ public class RouteServlet extends HttpServlet {
             request.getRequestDispatcher("/error").forward(request, response);
             logger.error("UNHANDLED request!  {}", request.getRequestURI());
         }
-
-        CommandContainer.runCommand(request, response, commandName);
     }
 
     @Override
@@ -65,27 +60,23 @@ public class RouteServlet extends HttpServlet {
 
         logger.debug("#doPost(request, response).  {}", request.getRequestURI());
 
-        String commandName = null;
-
         if (request.getRequestURI().startsWith("/routes/edit")) {
 
-            commandName = "routeEditPost";
+            CommandHandler.processForward("routeEditPost", request, response);
 
         } else if (request.getRequestURI().equals("/routes/add")) {
 
-            commandName = "routeAddPost";
+            CommandHandler.processForward("routeAddPost", request, response);
 
         } else if (request.getRequestURI().startsWith("/routes/delete")) {
 
-            commandName = "routeDelete";
+            CommandHandler.processForward("routeDelete", request, response);
 
         } else {
             request.setAttribute("error", "UNHANDLED request: " + request.getRequestURI());
             request.getRequestDispatcher("/error").forward(request, response);
             logger.error("UNHANDLED request!  {}", request.getRequestURI());
         }
-
-        CommandContainer.runCommand(request, response, commandName);
     }
 
 }

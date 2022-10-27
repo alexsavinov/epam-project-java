@@ -12,7 +12,6 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.util.Objects;
 
-
 @WebFilter(
         urlPatterns = {"/*"},
         initParams = {
@@ -35,7 +34,7 @@ public class EncodingFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
 
-        logger.debug("#doFilter(servletRequest, servletResponse, filterChain). active: {}", active);
+//        logger.debug("#doFilter(servletRequest, servletResponse, filterChain). active: {}", active);
 
         HttpServletRequest httpReq = (HttpServletRequest) servletRequest;
         HttpServletResponse httpResp = (HttpServletResponse) servletResponse;

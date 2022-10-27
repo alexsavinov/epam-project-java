@@ -2,6 +2,7 @@ package com.itermit.railway.command.Station;
 
 import com.itermit.railway.command.Command;
 import com.itermit.railway.command.CommandContainer;
+import com.itermit.railway.db.CommandException;
 import com.itermit.railway.db.DBException;
 import com.itermit.railway.db.StationManager;
 import org.apache.logging.log4j.LogManager;
@@ -9,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 public class StationDeleteCommand implements Command {
 
@@ -17,26 +17,24 @@ public class StationDeleteCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-            throws DBException {
+            throws CommandException {
 
         logger.debug("#execute(request, response).  {}", request.getRequestURI());
 
         int id = CommandContainer.getIdFromRequest(request);
 
-        StationManager.getInstance().delete(id);
+        try {
+            StationManager.getInstance().delete(id);
+        } catch (DBException e) {
+            logger.error("DBException. {}", e.getMessage());
+            throw new CommandException(e.getMessage(), e);
+        }
 
         request.getSession().setAttribute("messages", "Station deleted!");
         request.getSession().setAttribute("url", "/stations");
         request.setAttribute("action", "delete");
 
-        try {
-            response.sendRedirect("/stations");
-        } catch (IOException e) {
-            logger.error("IOException. Error redirecting! {}", e.getMessage());
-            throw new DBException("Error redirecting /stations!", e);
-        }
-
-        return null;
+        return "/stations";
     }
 
 }

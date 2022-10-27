@@ -25,79 +25,91 @@ public class OrderDAOImpl implements OrderDAO {
     private static OrderDAOImpl instance;
     private static final Logger logger = LogManager.getLogger(OrderDAOImpl.class);
 
-    private static final String SQL_GET_ALL_ORDERS = "SELECT " +
-            "orders.id, " +
-            "orders.seats, " +
-            "orders.user_id, " +
-            "orders.route_id, " +
-            "orders.date_reserve, " +
-            "users.name as user_name, " +
-            "routes.train_number as route_train_number, " +
-            "routes.station_departure_id as station_departure_id, " +
-            "routes.station_arrival_id as station_arrival_id, " +
-            "routes.travel_cost as route_travel_cost, " +
-            "routes.seats_reserved as route_seats_reserved, " +
-            "routes.seats_total as route_seats_total, " +
-            "routes.date_departure as route_date_departure, " +
-            "routes.date_arrival as route_date_arrival, " +
-            "s_d.name as station_departure_name, " +
-            "s_a.name as station_arrival_name " +
+    private static final String SQL_GET_ALL_ORDERS = "" +
+            "SELECT " +
+            "   orders.id, " +
+            "   orders.seats, " +
+            "   orders.user_id, " +
+            "   orders.route_id, " +
+            "   orders.date_reserve, " +
+            "   users.name as user_name, " +
+            "   routes.train_number as route_train_number, " +
+            "   routes.station_departure_id as station_departure_id, " +
+            "   routes.station_arrival_id as station_arrival_id, " +
+            "   routes.travel_cost as route_travel_cost, " +
+            "   routes.seats_reserved as route_seats_reserved, " +
+            "   routes.seats_total as route_seats_total, " +
+            "   routes.date_departure as route_date_departure, " +
+            "   routes.date_arrival as route_date_arrival, " +
+            "   s_d.name as station_departure_name, " +
+            "   s_a.name as station_arrival_name " +
             "FROM orders " +
-            "LEFT JOIN users ON orders.user_id = users.id " +
-            "LEFT JOIN routes ON orders.route_id = routes.id " +
-            "LEFT JOIN stations s_a ON routes.station_arrival_id = s_a.id " +
-            "LEFT JOIN stations s_d ON routes.station_departure_id = s_d.id";
-    public static final String SQL_GET_ORDER_BY_ID = "SELECT " +
-            "orders.id, " +
-            "orders.seats, " +
-            "orders.user_id, " +
-            "orders.route_id, " +
-            "orders.date_reserve, " +
-            "users.name as user_name, " +
-            "routes.train_number as route_train_number, " +
-            "routes.station_departure_id as station_departure_id, " +
-            "routes.station_arrival_id as station_arrival_id, " +
-            "routes.travel_cost as route_travel_cost, " +
-            "routes.seats_total as route_seats_total, " +
-            "routes.seats_reserved as route_seats_reserved, " +
-            "routes.seats_total - routes.seats_reserved as route_seats_available, " +
-            "routes.date_departure as route_date_departure, " +
-            "routes.date_arrival as route_date_arrival, " +
-            "s_d.name as station_departure_name, " +
-            "s_a.name as station_arrival_name " +
+            "   LEFT JOIN users ON orders.user_id = users.id " +
+            "   LEFT JOIN routes ON orders.route_id = routes.id " +
+            "   LEFT JOIN stations s_a ON routes.station_arrival_id = s_a.id " +
+            "   LEFT JOIN stations s_d ON routes.station_departure_id = s_d.id";
+    public static final String SQL_GET_ORDER_BY_ID = "" +
+            "SELECT " +
+            "   orders.id, " +
+            "   orders.seats, " +
+            "   orders.user_id, " +
+            "   orders.route_id, " +
+            "   orders.date_reserve, " +
+            "   users.name as user_name, " +
+            "   routes.train_number as route_train_number, " +
+            "   routes.station_departure_id as station_departure_id, " +
+            "   routes.station_arrival_id as station_arrival_id, " +
+            "   routes.travel_cost as route_travel_cost, " +
+            "   routes.seats_total as route_seats_total, " +
+            "   routes.seats_reserved as route_seats_reserved, " +
+            "   routes.seats_total - routes.seats_reserved as route_seats_available, " +
+            "   routes.date_departure as route_date_departure, " +
+            "   routes.date_arrival as route_date_arrival, " +
+            "   s_d.name as station_departure_name, " +
+            "   s_a.name as station_arrival_name " +
             "FROM orders " +
-            "LEFT JOIN users ON orders.user_id = users.id " +
-            "LEFT JOIN routes ON orders.route_id = routes.id " +
-            "LEFT JOIN stations s_a ON routes.station_arrival_id = s_a.id " +
-            "LEFT JOIN stations s_d ON routes.station_departure_id = s_d.id " +
+            "   LEFT JOIN users ON orders.user_id = users.id " +
+            "   LEFT JOIN routes ON orders.route_id = routes.id " +
+            "   LEFT JOIN stations s_a ON routes.station_arrival_id = s_a.id " +
+            "   LEFT JOIN stations s_d ON routes.station_departure_id = s_d.id " +
             "WHERE orders.id = ?";
-
-    private static final String SQL_ADD_ORDER = "INSERT " +
+    private static final String SQL_ADD_ORDER = "" +
+            "INSERT " +
             "INTO orders (user_id, route_id, seats, date_reserve) " +
             "VALUES (?, ?, ?, ?)";
-    private static final String SQL_UPDATE_ORDER = "UPDATE orders " +
+    private static final String SQL_UPDATE_ORDER = "" +
+            "UPDATE orders " +
             "SET user_id = ?, route_id = ?, seats = ?, date_reserve = ? " +
             "WHERE id = ?";
-    private static final String SQL_DELETE_ORDER = "DELETE FROM orders WHERE id = ?";
+    private static final String SQL_DELETE_ORDER = "" +
+            "DELETE FROM orders " +
+            "WHERE id = ?";
     private static final String SQL_GET_GROUPED_BY_ROUTE = "" +
             "SELECT route_id, " +
-            "       r.id, " +
-            "       r.train_number, " +
-            "       r.travel_cost, " +
-            "       s_d.name as station_departure_name, " +
-            "       s_a.name as station_arrival_name, " +
-            "       sum(seats) as seats " +
+            "   r.id, " +
+            "   r.train_number, " +
+            "   r.travel_cost, " +
+            "   s_d.name as station_departure_name, " +
+            "   s_a.name as station_arrival_name, " +
+            "   sum(seats) as seats " +
             "FROM orders " +
-            "         LEFT JOIN routes r on r.id = orders.route_id " +
-            "         LEFT JOIN stations s_d on r.station_departure_id = s_d.id " +
-            "         LEFT JOIN stations s_a on r.station_arrival_id = s_a.id " +
+            "   LEFT JOIN routes r on r.id = orders.route_id " +
+            "   LEFT JOIN stations s_d on r.station_departure_id = s_d.id " +
+            "   LEFT JOIN stations s_a on r.station_arrival_id = s_a.id " +
             "WHERE user_id = ? " +
             "GROUP BY orders.route_id";
-    private static final String SQL_ADD_RESERVE_ORDER = "UPDATE orders " +
+    private static final String SQL_ADD_RESERVE_ORDER = "" +
+            "UPDATE orders " +
             "SET seats = seats + ? " +
             "WHERE id = ?";
-    public static final String SQL_REMOVE_RESERVE_ORDER = "UPDATE orders SET seats = seats - ? WHERE id = ?";
-    public static final String SQL_CHECK_RESERVE_ORDER = "SELECT id FROM orders WHERE id = ? AND seats < 0";
+    public static final String SQL_REMOVE_RESERVE_ORDER = "" +
+            "UPDATE orders " +
+            "SET seats = seats - ? " +
+            "WHERE id = ?";
+    public static final String SQL_CHECK_RESERVE_ORDER = "" +
+            "SELECT id " +
+            "FROM orders " +
+            "WHERE id = ? AND seats < 0";
 
     public static synchronized OrderDAOImpl getInstance() {
         if (instance == null) {
@@ -112,6 +124,8 @@ public class OrderDAOImpl implements OrderDAO {
 
     @Override
     public ArrayList<Order> getAll(Connection connection) throws SQLException {
+
+        logger.debug("#getAll(connection).");
 
         ArrayList<Order> orders = new ArrayList<>();
 
@@ -135,6 +149,8 @@ public class OrderDAOImpl implements OrderDAO {
 
     public Paginator getPaginated(Connection connection, QueryMaker query) throws SQLException {
 
+        logger.debug("#getPaginated(connection, query).");
+
         ArrayList<Order> orders = getFiltered(connection, query);
 
         int totalPages = (int) Math.ceil(orders.size() / (float) (Paginator.PAGE_SIZE));
@@ -145,7 +161,9 @@ public class OrderDAOImpl implements OrderDAO {
                 .build();
     }
 
-    public ArrayList<Order> getFiltered(Connection connection, QueryMaker query) throws SQLException {
+    public ArrayList<Order> getFiltered(Connection connection, QueryMaker query)
+            throws SQLException {
+
         logger.debug("#getFiltered(query).");
 
         ArrayList<Order> orders = new ArrayList<>();
@@ -183,23 +201,10 @@ public class OrderDAOImpl implements OrderDAO {
             preparedStatement = connection.prepareStatement(SQL_GET_GROUPED_BY_ROUTE);
             int l = 0;
             preparedStatement.setInt(++l, userId);
-            logger.trace(preparedStatement);
+//            logger.trace(preparedStatement);
 
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-//                private static final String SQL_GET_GROUPED_BY_ROUTE = "" +
-//                        "SELECT route_id, " +
-//                        "       r.id, " +
-//                        "       r.train_number, " +
-//                        "       s_d.name as station_departure_name, " +
-//                        "       s_a.name as station_arrival_name, " +
-//                        "       sum(seats) as seats " +
-//                        "FROM orders " +
-//                        "         LEFT JOIN routes r on r.id = orders.route_id " +
-//                        "         LEFT JOIN stations s_d on r.station_departure_id = s_d.id " +
-//                        "         LEFT JOIN stations s_a on r.station_arrival_id = s_a.id " +
-//                        "WHERE user_id = ? " +
-//                        "GROUP BY orders.route_id";
                 Station stationDeparture = new Station.Builder()
                         .withName(resultSet.getString("station_departure_name"))
                         .build();
@@ -247,10 +252,6 @@ public class OrderDAOImpl implements OrderDAO {
             if (resultSet.next()) {
                 order = extract(resultSet);
             }
-
-        } catch (SQLException e) {
-            logger.error("Error while get(id): {}", e.getMessage());
-//            throw new DBException("Error while get(id)!", e);
         } finally {
             DBManager.closeResultSet(resultSet);
             DBManager.closePreparedStatement(preparedStatement);
@@ -299,13 +300,9 @@ public class OrderDAOImpl implements OrderDAO {
             preparedStatement.setInt(++l, order.getRoute().getId());
             preparedStatement.setInt(++l, order.getSeats());
             preparedStatement.setString(++l, order.getDateReserve());
-//            preparedStatement.setString(++l, formatter.format(new Date(System.currentTimeMillis())));
             preparedStatement.setInt(++l, id);
 
             preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            logger.error("Error while update(id, order): {}", e.getMessage());
-//            throw new DBException("Error while update(id, order)!", e);
         } finally {
             DBManager.closePreparedStatement(preparedStatement);
         }
@@ -316,92 +313,13 @@ public class OrderDAOImpl implements OrderDAO {
 
         logger.debug("#delete(id): {}", id);
 
-//        ResultSet resultSet;
         PreparedStatement preparedStatement = null;
-//        Connection connection = null;
         try {
-//            /* Set transaction isolation */
-//            connection = dbManager.getConnection();
-//            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
-//            connection.setAutoCommit(false);
-//
-//            preparedStatement = connection.prepareStatement(SQL_GET_ORDER_BY_ID);
-//            preparedStatement.setInt(1, id);
-//            logger.trace(preparedStatement);
-//            resultSet = preparedStatement.executeQuery();
-
-//            if (resultSet.next()) {
-//                int route_id = resultSet.getInt("route_id");
-//                int routeSeats = resultSet.getInt("seats");
-//                int seatsToRemove = routeSeats;
-//                if (this.seats != 0) {
-//                    seatsToRemove = this.seats;
-//                }
-//
-//                /* Remove reserved Seats from Route */
-//                preparedStatement = connection.prepareStatement(SQL_REMOVE_RESERVE_ROUTE);
-//                int l = 0;
-//                preparedStatement.setInt(++l, seatsToRemove);
-//                preparedStatement.setInt(++l, route_id);
-//                logger.trace(preparedStatement);
-//                preparedStatement.executeUpdate();
-//
-//                /* Check if reserved Seats in Route remains above zero */
-//                preparedStatement = connection.prepareStatement(SQL_CHECK_RESERVE_ROUTE);
-//                preparedStatement.setInt(1, route_id);
-//                logger.trace(preparedStatement);
-//                ResultSet resultSetRoute = preparedStatement.executeQuery();
-//                if (resultSetRoute.next()) {
-//                    /* Rollback */
-//                    connection.rollback();
-//                    logger.error("Not enough reserve to remove from Route (id): {}", route_id);
-////                    throw new DBException("Not enough reserve to remove from Route (id): " + route_id, null);
-//                }
-//
-//                logger.info("this.seats {}", this.seats);
-//                logger.info("seatsToRemove {}", seatsToRemove);
-
-//                if (seatsToRemove == routeSeats) {
-            /* Seats to remove equals to Total seats in Order - deleting Order */
             preparedStatement = connection.prepareStatement(SQL_DELETE_ORDER);
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
-//                } else {
-//                    /* Seats to remove less than Total seats in Order - decreasing Seats in Order */
-//                    preparedStatement = connection.prepareStatement(SQL_REMOVE_RESERVE_ORDER);
-//                    l = 0;
-//                    preparedStatement.setInt(++l, seatsToRemove);
-//                    preparedStatement.setInt(++l, id);
-//                    preparedStatement.executeUpdate();
-//
-//                    /* Check if Seats in Order remains above zero */
-//                    preparedStatement = connection.prepareStatement(SQL_CHECK_RESERVE_ORDER);
-//                    preparedStatement.setInt(1, id);
-//                    ResultSet resultSetOrder = preparedStatement.executeQuery();
-//                    if (resultSetOrder.next()) {
-//                        /* Rollback */
-//                        connection.rollback();
-//                        logger.error("Not enough reserved Seats to remove from Order (id): {}", id);
-////                        throw new DBException("Not enough reserved Seats to remove from Order (id): " + id, null);
-//                    }
-//                }
-//            }
-//            /* Commit */
-//            connection.commit();
-
-//        } catch (SQLException e) {
-//            try {
-//                /* Rollback */
-//                connection.rollback();
-//            } catch (SQLException ex) {
-//                logger.error("Error while rollback - delete(id): {}", e.getMessage());
-////                throw new DBException("Error while rollback - delete(id)!", e);
-//            }
-//            logger.error("Error while delete(id): {}", e.getMessage());
-////            throw new DBException("Error while delete(id)!", e);
         } finally {
             DBManager.closePreparedStatement(preparedStatement);
-            DBManager.closeConnection(connection);
         }
     }
 

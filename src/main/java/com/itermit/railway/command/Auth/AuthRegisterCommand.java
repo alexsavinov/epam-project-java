@@ -1,6 +1,7 @@
 package com.itermit.railway.command.Auth;
 
 import com.itermit.railway.command.Command;
+import com.itermit.railway.db.CommandException;
 import com.itermit.railway.db.DBException;
 import com.itermit.railway.db.UserManager;
 import com.itermit.railway.db.entity.User;
@@ -11,7 +12,6 @@ import org.apache.logging.log4j.Logger;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 public class AuthRegisterCommand implements Command {
@@ -20,14 +20,15 @@ public class AuthRegisterCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-            throws DBException {
+            throws CommandException {
 
         logger.debug("#execute(request, response).  {}", request.getRequestURI());
+
         try {
             request.setCharacterEncoding("utf-8");
         } catch (UnsupportedEncodingException e) {
             logger.error("UnsupportedEncodingException. Error during setCharacterEncoding!  {}", e.getMessage());
-            throw new DBException("Error set character Encoding!", e);
+            throw new CommandException("Error set character Encoding!", e);
         }
 
         String name = request.getParameter("name");
@@ -53,13 +54,7 @@ public class AuthRegisterCommand implements Command {
         /* Display errors on the same page */
         if (sbErrors.length() > 0) {
             request.getSession().setAttribute("errors", sbErrors);
-            try {
-                response.sendRedirect("/register");
-                return null;
-            } catch (IOException e) {
-                logger.error("IOException. Error redirecting! {}", e.getMessage());
-                throw new DBException("Error redirecting!", e);
-            }
+            return "/register";
         }
 
         /* Creating user */
@@ -71,7 +66,12 @@ public class AuthRegisterCommand implements Command {
                 .withIsAdmin(false)
                 .build();
 
-        user = UserManager.getInstance().get(user);
+        try {
+            user = UserManager.getInstance().get(user);
+        } catch (DBException e) {
+            logger.error("DBException. {}", e.getMessage());
+            throw new CommandException(e.getMessage(), e);
+        }
 
         if (user.getId() != 0) {
             logger.info("user id: {}", user.getId());
@@ -88,18 +88,18 @@ public class AuthRegisterCommand implements Command {
 
             if (sbErrors.length() > 0) {
                 request.getSession().setAttribute("errors", sbErrors);
-                try {
-                    response.sendRedirect("/register");
-                    return null;
-                } catch (IOException e) {
-                    logger.error("IOException. Error redirecting! {}", e.getMessage());
-                    throw new DBException("Error redirecting!", e);
-                }
+                return "/register";
             }
         }
 
         user.generateActivateToken();
-        UserManager.getInstance().add(user);
+
+        try {
+            UserManager.getInstance().add(user);
+        } catch (DBException e) {
+            logger.error("DBException. {}", e.getMessage());
+            throw new CommandException(e.getMessage(), e);
+        }
 
         try {
             SendEmailUtil.sendEmail(
@@ -110,20 +110,13 @@ public class AuthRegisterCommand implements Command {
                             "http://localhost:8080/activate/" + user.getActivationToken());
         } catch (MessagingException e) {
             logger.error("Error sending email! {}", e.getMessage());
-            throw new DBException("Error sending email!", e);
+            throw new CommandException("Error sending email!", e);
         }
 
         request.getSession().setAttribute("messages",
                 "User " + name + " added! Activation email was sent to " + email + "!");
 
-        try {
-            response.sendRedirect("/login");
-        } catch (IOException e) {
-            logger.error("IOException. Error redirecting! {}", e.getMessage());
-            throw new DBException("Error redirecting!", e);
-        }
-
-        return null;
+        return "/login";
     }
 
 }

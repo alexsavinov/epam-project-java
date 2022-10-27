@@ -1,6 +1,5 @@
 package com.itermit.railway.utils;
 
-
 public enum Condition {
 
     GT(">"),

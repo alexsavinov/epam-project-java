@@ -1,6 +1,5 @@
 package com.itermit.railway.controller;
 
-import com.itermit.railway.command.CommandContainer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,20 +20,31 @@ public class AuthServlet extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(AuthServlet.class);
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
         logger.debug("#doGet(request, response).  {}", request.getRequestURI());
 
         if (request.getRequestURI().equals("/profile")) {
+
             request.getRequestDispatcher("/profile.jsp").forward(request, response);
+
         } else if (request.getRequestURI().equals("/login")) {
+
             request.getRequestDispatcher("/auth.jsp").forward(request, response);
+
         } else if (request.getRequestURI().equals("/register")) {
+
             request.getRequestDispatcher("/register.jsp").forward(request, response);
+
         } else if (request.getRequestURI().equals("/logout")) {
+
             doPost(request, response);
+
         } else if (request.getRequestURI().startsWith("/activate")) {
+
             doPost(request, response);
+
         } else {
             request.setAttribute("error", "UNHANDLED request: " + request.getRequestURI());
             request.getRequestDispatcher("/error").forward(request, response);
@@ -43,39 +53,35 @@ public class AuthServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
 
         logger.debug("#doPost(request, response).  {}", request.getRequestURI());
 
         /* Reset session attributes */
-        String commandName = "searchReset";
-        CommandContainer.runCommand(request, response, commandName);
+        CommandHandler.processRedirect("searchReset", request, response);
 
         if (request.getRequestURI().equals("/login")) {
 
-            commandName = "authLogin";
+            CommandHandler.processRedirect("authLogin", request, response);
 
         } else if (request.getRequestURI().equals("/logout")) {
 
-            commandName = "authLogout";
-
+            CommandHandler.processRedirect("authLogout", request, response);
 
         } else if (request.getRequestURI().equals("/register")) {
 
-            commandName = "authRegister";
-
+            CommandHandler.processRedirect("authRegister", request, response);
 
         } else if (request.getRequestURI().startsWith("/activate")) {
 
-            commandName = "authActivate";
+            CommandHandler.processRedirect("authActivate", request, response);
 
         } else {
             request.setAttribute("error", "UNHANDLED request: " + request.getRequestURI());
             request.getRequestDispatcher("/error").forward(request, response);
             logger.error("UNHANDLED request!  {}", request.getRequestURI());
         }
-
-        CommandContainer.runCommand(request, response, commandName);
     }
 
 }

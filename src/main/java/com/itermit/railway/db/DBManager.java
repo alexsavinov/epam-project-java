@@ -20,6 +20,16 @@ public class DBManager {
     private final DataSource dataSource;
     private static final Logger logger = LogManager.getLogger(DBManager.class);
 
+    private DBManager() {
+        try {
+            Context initContext = new InitialContext();
+            Context envContext = (Context) initContext.lookup("java:/comp/env");
+            dataSource = (DataSource) envContext.lookup("jdbc/sql-connector-pool");
+        } catch (NamingException e) {
+            throw new IllegalStateException("Cannot obtain a data source", e);
+        }
+    }
+
     /*
      * Returns an instance of DB Manager
      */
@@ -33,16 +43,6 @@ public class DBManager {
         return instance;
     }
 
-    private DBManager() {
-        try {
-            Context initContext = new InitialContext();
-            Context envContext = (Context) initContext.lookup("java:/comp/env");
-            dataSource = (DataSource) envContext.lookup("jdbc/sql-connector-pool");
-        } catch (NamingException e) {
-            throw new IllegalStateException("Cannot obtain a data source", e);
-        }
-    }
-
     /*
      * Creates connection to DB
      */
@@ -51,14 +51,7 @@ public class DBManager {
 //        logger.trace("#getConnection().");
 
         Connection connection;
-
-//        try {
         connection = dataSource.getConnection();
-//            logger.warn("connection: {}", connection);
-//        } catch (SQLException e) {
-//            logger.error("Error while getConnection(): {}", e.getMessage());
-//            throw new SQLException("Error while getConnection()!", e);
-//        }
 
         return connection;
     }
@@ -71,12 +64,6 @@ public class DBManager {
 //        logger.trace("#closeConnection(connection).");
 
         if (connection != null) {
-//            try {
-//                connection.close();
-//            } catch (SQLException e) {
-//                logger.error("Error while closeConnection(connection): {}", e.getMessage());
-//                throw new DBException("Error while closeConnection(connection)!", e);
-//            }
         }
     }
 
@@ -90,10 +77,6 @@ public class DBManager {
         if (statement != null) {
 //            try {
             statement.close();
-//            } catch (SQLException e) {
-//                logger.error("Error while closeStatement(statement): {}", e.getMessage());
-//                throw new DBException("Error while closeStatement(statement)!", e);
-//            }
         }
     }
 
@@ -105,12 +88,7 @@ public class DBManager {
 //        logger.trace("#closePreparedStatement(preparedStatement).");
 
         if (preparedStatement != null) {
-//            try {
             preparedStatement.close();
-//            } catch (SQLException e) {
-//                logger.error("Error while closePreparedStatement(preparedStatement): {}", e.getMessage());
-//                throw new DBException("Error while closePreparedStatement(preparedStatement)!", e);
-//            }
         }
     }
 
@@ -122,12 +100,7 @@ public class DBManager {
 //        logger.trace("#closeResultSet(resultSet).");
 
         if (resultSet != null) {
-//            try {
             resultSet.close();
-//            } catch (SQLException e) {
-//                logger.error("Error while closeResultSet(resultSet): {}", e.getMessage());
-//                throw new DBException("Error while closeResultSet(resultSet)!", e);
-//            }
         }
     }
 

@@ -1,6 +1,5 @@
 package com.itermit.railway.controller;
 
-import com.itermit.railway.command.CommandContainer;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,20 +21,15 @@ public class SearchServlet extends HttpServlet {
 
         logger.debug("#doGet(request, response).  {}", request.getRequestURI());
 
-        String commandName;
-
         if (request.getRequestURI().equals("/search")) {
 
-            commandName = "searchGet";
+            CommandHandler.processForward("searchGet", request, response);
 
         } else {
             request.setAttribute("error", "UNHANDLED request: " + request.getRequestURI());
             request.getRequestDispatcher("/error").forward(request, response);
             logger.error("doGet UNHANDLED request!  {}", request.getRequestURI());
-            return;
         }
-
-        CommandContainer.runCommand(request, response, commandName);
     }
 
     @Override
@@ -44,20 +38,18 @@ public class SearchServlet extends HttpServlet {
 
         logger.debug("#doPost(request, response).  {}", request.getRequestURI());
 
-        String commandName = null;
-
         if (request.getRequestURI().equals("/search")) {
 
             String action = request.getParameter("action");
-            logger.trace("doPost > action: {}", action);
+//            logger.trace("doPost > action: {}", action);
 
             if (action != null && !action.isEmpty() && action.equals("reset")) {
 
-                commandName = "searchReset";
+                CommandHandler.processRedirect("searchReset", request, response);
 
             } else {
 
-                commandName = "searchPost";
+                CommandHandler.processRedirect("searchPost", request, response);
 
             }
         } else {
@@ -65,8 +57,6 @@ public class SearchServlet extends HttpServlet {
             request.getRequestDispatcher("/error").forward(request, response);
             logger.error("UNHANDLED request!  {}", request.getRequestURI());
         }
-
-        CommandContainer.runCommand(request, response, commandName);
     }
 
 }

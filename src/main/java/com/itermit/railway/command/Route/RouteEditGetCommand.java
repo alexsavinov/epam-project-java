@@ -2,6 +2,7 @@ package com.itermit.railway.command.Route;
 
 import com.itermit.railway.command.Command;
 import com.itermit.railway.command.CommandContainer;
+import com.itermit.railway.db.CommandException;
 import com.itermit.railway.db.DBException;
 import com.itermit.railway.db.RouteManager;
 import com.itermit.railway.db.StationManager;
@@ -10,10 +11,8 @@ import com.itermit.railway.db.entity.Station;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class RouteEditGetCommand implements Command {
@@ -22,30 +21,26 @@ public class RouteEditGetCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
-            throws DBException {
+            throws CommandException {
 
         logger.debug("#execute(request, response).  {}", request.getRequestURI());
 
         int id = CommandContainer.getIdFromRequest(request);
 
-        ArrayList<Station> stations = StationManager.getInstance().getAll();
-        Route route = RouteManager.getInstance().get(id);
-
-        request.setAttribute("route", route);
-        request.setAttribute("stations", stations);
-        request.setAttribute("action", "edit");
-
+        ArrayList<Station> stations = null;
         try {
-            request.getRequestDispatcher("/route.jsp").forward(request, response);
-        } catch (ServletException e) {
-            logger.error("ServletException. Error route editing! {}", e.getMessage());
-            throw new DBException("Error route editing!", e);
-        } catch (IOException e) {
-            logger.error("IOException. Error route editing! {}", e.getMessage());
-            throw new DBException("Error route editing!", e);
+            stations = StationManager.getInstance().getAll();
+            Route route = RouteManager.getInstance().get(id);
+
+            request.setAttribute("route", route);
+            request.setAttribute("stations", stations);
+            request.setAttribute("action", "edit");
+        } catch (DBException e) {
+            logger.error("DBException. {}", e.getMessage());
+            throw new CommandException(e.getMessage(), e);
         }
 
-        return null;
+        return "/route.jsp";
     }
 
 }
