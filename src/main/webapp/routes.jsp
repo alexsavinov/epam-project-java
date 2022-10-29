@@ -1,13 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/parts/init.jspf" %>
 
-<c:set var="page_title" value="Routes" scope="page"/>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <%@ include file="/parts/head.jspf" %>
-    <title>Railway ticket office - ${page_title}</title>
+    <title>
+        <fmt:message key='index_jsp.title'/> - <fmt:message key='profile_jsp.routes'/>
+    </title>
 </head>
 <body>
 
@@ -21,22 +21,22 @@
         <a class="btn btn-sm btn-outline-secondary mt-2 mb-1 <customTags:access role="user" modifier="d-none"/>"
            href="/routes/add">
             <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            Add ${url}
+            <fmt:message key='words.add'/> ${url}
         </a>
 
         <table class="table table-striped table-hover p-5 mt-3" aria-describedby="Routes">
             <thead class="table-secondary">
             <tr>
                 <th scope="col">id</th>
-                <th scope="col">Train #</th>
-                <th scope="col">Departure</th>
-                <th scope="col">Date/time</th>
-                <th scope="col">Arrival</th>
-                <th scope="col">Date/time</th>
-                <th scope="col">Travel time</th>
-                <th scope="col">Travel cost</th>
-                <th scope="col">Seats total</th>
-                <th scope="col">Seats available</th>
+                <th scope="col"><fmt:message key='words.trainNumberColumn'/></th>
+                <th scope="col"><fmt:message key='words.stationDeparture'/></th>
+                <th scope="col"><fmt:message key='words.DateTimeDeparture'/></th>
+                <th scope="col"><fmt:message key='words.stationArrival'/></th>
+                <th scope="col"><fmt:message key='words.DateTimeArrival'/></th>
+                <th scope="col"><fmt:message key='words.TravelTime'/></th>
+                <th scope="col"><fmt:message key='words.TravelCost'/></th>
+                <th scope="col"><fmt:message key='words.SeatsTotal'/></th>
+                <th scope="col"><fmt:message key='words.SeatsAvailable'/></th>
             </tr>
             </thead>
 

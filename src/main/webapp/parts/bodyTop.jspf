@@ -8,7 +8,7 @@
         <i class="fa fa-arrow-circle-left fa-2x" aria-hidden="true"></i>
 
         <div class="ms-3 h3 m-0 p-0 _main-color4 _link-back">
-            ${page_title}
+            ${page_title} <fmt:message key='${key_title}'/>
         </div>
 
     </a>

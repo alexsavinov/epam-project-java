@@ -9,10 +9,13 @@ import javax.naming.NamingException;
 import javax.sql.DataSource;
 import java.sql.*;
 
-/*
- * Serves DB connection routines.
- * Trows DBException.
- * Singleton pattern example.
+/**
+ * Serves DB connection to DataSource.
+ * <p>
+ * Also, can close PreparedStatement and ResultSet, rollback connection.
+ * Singleton.
+ *
+ * @author O.Savinov
  */
 public class DBManager {
 
@@ -20,6 +23,9 @@ public class DBManager {
     private final DataSource dataSource;
     private static final Logger logger = LogManager.getLogger(DBManager.class);
 
+    /**
+     * Default constructor
+     */
     private DBManager() {
         try {
             Context initContext = new InitialContext();
@@ -30,25 +36,32 @@ public class DBManager {
         }
     }
 
-    /*
-     * Returns an instance of DB Manager
+    /**
+     * Returns an instance of DB Manager.
+     *
+     * @return DBManager
      */
     public static synchronized DBManager getInstance() {
 
-//        logger.debug("#DBManager getInstance().");
-
         if (instance == null) {
+            logger.debug("#DBManager getInstance().");
             instance = new DBManager();
         }
         return instance;
     }
 
-    /*
-     * Creates connection to DB
+    /**
+     * Returns a DB connection from the Pool Connections.
+     * <p>
+     * Before using you have to configure DataSource and
+     * Connections Pool in webapp/META-INF/context.xml file.
+     *
+     * @return DB connection
+     * @throws SQLException
      */
     public Connection getConnection() throws SQLException {
 
-//        logger.trace("#getConnection().");
+        logger.trace("#getConnection().");
 
         Connection connection;
         connection = dataSource.getConnection();
@@ -56,70 +69,57 @@ public class DBManager {
         return connection;
     }
 
-    /*
-     * Closes Connection to DB
+    /**
+     * Closes Connection to DataSource.
+     *
+     * @param connection Connection
+     * @throws SQLException
      */
     public static void closeConnection(Connection connection) throws SQLException {
-
-//        logger.trace("#closeConnection(connection).");
-
         if (connection != null) {
+            logger.trace("#closeConnection(connection).");
+            connection.close();
         }
     }
 
-    /*
-     * Closes Statement to DB
-     */
-    public static void closeStatement(Statement statement) throws SQLException {
-
-//        logger.trace("#closeStatement(statement).");
-
-        if (statement != null) {
-//            try {
-            statement.close();
-        }
-    }
-
-    /*
-     * Closes preparedStatement
+    /**
+     * Closes PreparedStatement.
+     *
+     * @param preparedStatement PreparedStatement to close.
+     * @throws SQLException
      */
     public static void closePreparedStatement(PreparedStatement preparedStatement) throws SQLException {
-
-//        logger.trace("#closePreparedStatement(preparedStatement).");
-
         if (preparedStatement != null) {
+            logger.trace("#closePreparedStatement(preparedStatement).");
             preparedStatement.close();
         }
     }
 
-    /*
-     * Closes resultSet
+    /**
+     * Closes ResultSet.
+     *
+     * @param resultSet ResultSet to close.
+     * @throws SQLException
      */
     public static void closeResultSet(ResultSet resultSet) throws SQLException {
-
-//        logger.trace("#closeResultSet(resultSet).");
-
         if (resultSet != null) {
+            logger.trace("#closeResultSet(resultSet).");
             resultSet.close();
         }
     }
 
-    /*
-     * Closes resultSet
+    /**
+     * Rollbacks a connection.
+     *
+     * @param connection Connection to rollback.
+     * @throws SQLException
      */
-    public static void rollback(Connection connection) throws DBException {
-
-//        logger.trace("#rollback(connection).");
+    public static void rollback(Connection connection) throws SQLException {
 
         if (connection != null) {
-            try {
-                connection.rollback();
-            } catch (SQLException e) {
-                logger.error("Error while rollback(connection): {}", e.getMessage());
-                throw new DBException("Error while rollback(connection)!", e);
-            }
+            logger.trace("#rollback(connection).");
+            connection.rollback();
         }
-
     }
 
 }

@@ -10,6 +10,13 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
+/**
+ * Sends email message.
+ * <p>
+ * Reads settings for delivering from properties file.
+ *
+ * @author O.Savinov
+ */
 public class SendEmailUtil {
 
     private static Properties conf;
@@ -35,6 +42,14 @@ public class SendEmailUtil {
     private SendEmailUtil() {
     }
 
+    /**
+     * Sends email message to Recipient.
+     *
+     * @param recipientEmail String with recipient email address
+     * @param subject        String with subject
+     * @param content        String with message
+     * @throws MessagingException
+     */
     public static void sendEmail(String recipientEmail, String subject, String content) throws MessagingException {
 
         logger.debug("sendEmail(recipientEmail, subject, content): {} {}", recipientEmail, subject);
@@ -57,11 +72,9 @@ public class SendEmailUtil {
                     }
                 });
 
-//        logger.info("properties: {}", properties);
-
         MimeMessage message = new MimeMessage(session);
         try {
-            message.setFrom(new InternetAddress(MAIL_FROM, "Elective"));
+            message.setFrom(new InternetAddress(MAIL_FROM, "admin@railway.itermit.com"));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipientEmail));
             message.setSubject(subject);
             message.setContent(content, "text/html;charset=utf-8");

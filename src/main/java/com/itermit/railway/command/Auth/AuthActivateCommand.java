@@ -9,10 +9,22 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Command to activate User.
+ *
+ * @author O.Savinov
+ */
 public class AuthActivateCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(AuthActivateCommand.class);
 
+    /**
+     * Command execution.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @return Address string
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
             throws CommandException {
@@ -22,7 +34,7 @@ public class AuthActivateCommand implements Command {
         String activationToken = CommandContainer.getTokenFromRequest(request);
 
         logger.info("activationToken {}", activationToken);
-            request.getSession().setAttribute("messages", "User activated!");
+        request.getSession().setAttribute("messages", "User activated!");
 
         return "/login";
     }

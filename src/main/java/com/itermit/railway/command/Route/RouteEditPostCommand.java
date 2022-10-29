@@ -13,10 +13,25 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Command to edit Route.
+ * <p>
+ * Processes POST-Request.
+ * Updates existed Route in database.
+ *
+ * @author O.Savinov
+ */
 public class RouteEditPostCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(RouteEditPostCommand.class);
 
+    /**
+     * Command execution.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @return Address string
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
             throws CommandException {

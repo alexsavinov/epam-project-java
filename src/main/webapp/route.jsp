@@ -9,7 +9,7 @@
     <%@ include file="/parts/head.jspf" %>
 
     <head>
-        <title>Railway ticket office - ${page_title}</title>
+        <title><fmt:message key='index_jsp.title'/> - ${page_title}</title>
     </head>
 <body>
 
@@ -34,7 +34,7 @@
         </div>
 
         <div class="form-group mb-1">
-            <label for="station_departure">Station departure</label>
+            <label for="station_departure"><fmt:message key='words.stationDeparture'/></label>
             <select class="form-control" id="station_departure" name="station_departure">
                 <c:forEach var="station" items="${stations}">
                     <option value="${station.getId()}"
@@ -55,7 +55,7 @@
         </div>
 
         <div class="form-group mb-1">
-            <label for="station_arrival">Station arrival</label>
+            <label for="station_arrival"><fmt:message key='words.stationArrival'/></label>
             <select class="form-control" id="station_arrival" name="station_arrival">
                 <c:forEach var="station" items="${stations}">
                     <option value="${station.getId()}"
@@ -82,7 +82,7 @@
         <%--        </div>--%>
 
         <div class="mb-1">
-            <label for="travel_cost" class="form-label">Travel cost</label>
+            <label for="travel_cost" class="form-label"><fmt:message key='words.TravelCost'/></label>
             <input type="number" class="form-control" aria-label="travel_cost"
                    id="travel_cost" name="travel_cost"
                    value="${route.getTravelCost()}">
@@ -96,7 +96,7 @@
         </div>
 
         <div class="mb-1">
-            <label for="seats_total" class="form-label">Seats total</label>
+            <label for="seats_total" class="form-label"><fmt:message key='words.SeatsTotal'/></label>
             <input type="number" class="form-control" aria-label="seats_total"
                    id="seats_total" name="seats_total"
                    value="${route.getSeatsTotal()}">
@@ -104,11 +104,11 @@
 
         <div class="form-group mt-3">
             <button type="submit" class="btn" <customTags:access role="user" modifier="disabled"/>>
-                Save
+                <fmt:message key='words.save'/>
             </button>
             <a class="btn btn-outline-secondary <customTags:access role="user" modifier="disabled"/>"
                href="/routes/delete/${route.getId()}">
-                Delete
+                <fmt:message key='words.delete'/>
             </a>
         </div>
 

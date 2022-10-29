@@ -2,7 +2,6 @@ package com.itermit.railway.dao.impl;
 
 import com.itermit.railway.dao.StationDAO;
 import com.itermit.railway.db.entity.Station;
-import com.itermit.railway.db.entity.User;
 import com.itermit.railway.db.DBManager;
 import com.itermit.railway.utils.Paginator;
 import com.itermit.railway.utils.QueryMaker;
@@ -15,11 +14,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import static com.itermit.railway.db.Fields.ENTITY_ID;
+import static com.itermit.railway.db.Fields.USER_NAME;
+
+/**
+ * DAO Implementation for Stations.
+ * <p>
+ * Processes request to database from OrderManager with a given connection.
+ *
+ * @author O.Savinov
+ */
 public class StationDAOImpl implements StationDAO {
 
     private DBManager dbManager;
     private static StationDAOImpl instance;
     private static final Logger logger = LogManager.getLogger(StationDAOImpl.class);
+    /* SQL Queries */
     private static final String SQL_GET_ALL_STATIONS = "" +
             "SELECT id, name " +
             "FROM stations";
@@ -38,10 +48,18 @@ public class StationDAOImpl implements StationDAO {
             "DELETE FROM stations " +
             "WHERE id = ?";
 
+    /**
+     * Default constructor
+     */
     private StationDAOImpl() {
         dbManager = DBManager.getInstance();
     }
 
+    /**
+     * Returns an instance of Station's DAO implementation.
+     *
+     * @return StationDAOImpl
+     */
     public static synchronized StationDAOImpl getInstance() {
         if (instance == null) {
             instance = new StationDAOImpl();
@@ -49,6 +67,13 @@ public class StationDAOImpl implements StationDAO {
         return instance;
     }
 
+    /**
+     * Returns a list of Stations.
+     *
+     * @param connection Connection to DataSource
+     * @return ArrayList of Stations
+     * @throws SQLException
+     */
     @Override
     public ArrayList<Station> getAll(Connection connection) throws SQLException {
 
@@ -75,16 +100,44 @@ public class StationDAOImpl implements StationDAO {
         return stations;
     }
 
+    /**
+     * Returns wrapped by Paginator list of Stations.
+     * <p>
+     * Actually always returns null. Persists for backward compatibility.
+     *
+     * @param connection Connection to DataSource
+     * @param query      QueryMaker to construct SQL-query with conditions
+     * @return Paginated list of Stations
+     * @throws SQLException
+     */
     @Override
     public Paginator getPaginated(Connection connection, QueryMaker query) throws SQLException {
         return null;
     }
 
+    /**
+     * Returns a filtered list of Stations.
+     * <p>
+     * Actually always returns null. Persists for backward compatibility.
+     *
+     * @param connection Connection to DataSource
+     * @param query      QueryMaker to construct SQL-query with conditions
+     * @return ArrayList of Stations
+     * @throws SQLException
+     */
     @Override
     public ArrayList<Station> getFiltered(Connection connection, QueryMaker query) throws SQLException {
         return null;
     }
 
+    /**
+     * Returns a Station by id.
+     *
+     * @param connection Connection to DataSource
+     * @param id         Integer value of Station id
+     * @return Station
+     * @throws SQLException
+     */
     @Override
     public Station get(Connection connection, int id) throws SQLException {
 
@@ -112,6 +165,13 @@ public class StationDAOImpl implements StationDAO {
         return station;
     }
 
+    /**
+     * Adds a new Station.
+     *
+     * @param connection Connection to DataSource
+     * @param station    Station to add
+     * @throws SQLException
+     */
     @Override
     public void add(Connection connection, Station station) throws SQLException {
 
@@ -129,6 +189,14 @@ public class StationDAOImpl implements StationDAO {
         }
     }
 
+    /**
+     * Updates existed Station.
+     *
+     * @param connection Connection to DataSource
+     * @param id         Integer value of Station id
+     * @param station    Station data to update
+     * @throws SQLException
+     */
     @Override
     public void update(Connection connection, int id, Station station) throws SQLException {
 
@@ -147,6 +215,13 @@ public class StationDAOImpl implements StationDAO {
         }
     }
 
+    /**
+     * Deletes existed Station by id.
+     *
+     * @param connection Connection to DataSource
+     * @param id         Integer value of Station id
+     * @throws SQLException
+     */
     @Override
     public void delete(Connection connection, int id) throws SQLException {
 
@@ -164,12 +239,19 @@ public class StationDAOImpl implements StationDAO {
         }
     }
 
+    /**
+     * Extracts Station entity from given ResultSet.
+     *
+     * @param resultSet ResultSet to process
+     * @return Station
+     * @throws SQLException
+     */
     @Override
     public Station extract(ResultSet resultSet) throws SQLException {
 
         return new Station.Builder()
-                .withId(resultSet.getInt(User.F_ID))
-                .withName(resultSet.getString(User.F_NAME))
+                .withId(resultSet.getInt(ENTITY_ID))
+                .withName(resultSet.getString(USER_NAME))
                 .build();
     }
 

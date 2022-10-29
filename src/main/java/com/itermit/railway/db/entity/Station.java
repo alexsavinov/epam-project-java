@@ -2,10 +2,12 @@ package com.itermit.railway.db.entity;
 
 import java.io.Serializable;
 
+/**
+ * Station entity.
+ *
+ * @author O.Savinov
+ */
 public class Station implements Serializable {
-
-    public static final String F_ID = "id";
-    public static final String F_NAME = "name";
 
     private int id;
     private String name;

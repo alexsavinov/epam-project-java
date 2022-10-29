@@ -14,10 +14,25 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Command to add Reserve.
+ * <p>
+ * Processes POST-Request.
+ * Adds new Reserve to database.
+ *
+ * @author O.Savinov
+ */
 public class ReserveAddPostCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(ReserveAddPostCommand.class);
 
+    /**
+     * Command execution.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @return Address string
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
             throws CommandException {

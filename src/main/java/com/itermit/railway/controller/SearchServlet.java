@@ -10,13 +10,28 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Search servlet controller.
+ * <p>
+ * Processes request and response by related command depend on URI.
+ *
+ * @author O.Savinov
+ */
 @WebServlet(name = "SearchServlet", urlPatterns = {"/search"})
 public class SearchServlet extends HttpServlet {
 
     private static final Logger logger = LogManager.getLogger(SearchServlet.class);
 
+    /**
+     * Handles GET-Requests.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         logger.debug("#doGet(request, response).  {}", request.getRequestURI());
@@ -32,8 +47,16 @@ public class SearchServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Handles POST-Requests.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws
             ServletException, IOException {
 
         logger.debug("#doPost(request, response).  {}", request.getRequestURI());

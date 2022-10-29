@@ -14,10 +14,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
+/**
+ * Command to delete Reserve.
+ * <p>
+ * Processes POST-Request.
+ * Deletes Reserve from database.
+ *
+ * @author O.Savinov
+ */
 public class ReserveDeleteCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(ReserveDeleteCommand.class);
 
+    /**
+     * Command execution.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @return Address string
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
             throws CommandException {

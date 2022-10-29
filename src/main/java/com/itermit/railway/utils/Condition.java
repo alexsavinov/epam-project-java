@@ -1,5 +1,10 @@
 package com.itermit.railway.utils;
 
+/**
+ * Names and values of query conditions and orders.
+ *
+ * @author O.Savinov
+ */
 public enum Condition {
 
     GT(">"),

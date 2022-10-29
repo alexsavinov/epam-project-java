@@ -11,10 +11,25 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Command to delete Route.
+ * <p>
+ * Processes POST-Request.
+ * Deletes Route from database.
+ *
+ * @author O.Savinov
+ */
 public class RouteDeleteCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(RouteDeleteCommand.class);
 
+    /**
+     * Command execution.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @return Address string
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
             throws CommandException {

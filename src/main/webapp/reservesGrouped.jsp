@@ -1,13 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/parts/init.jspf" %>
 
-<c:set var="page_title" value="Your Reserves by Routes" scope="page"/>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <%@ include file="/parts/head.jspf" %>
-    <title>Railway ticket office - ${page_title}</title>
+    <title>
+        <fmt:message key='index_jsp.title'/> - <fmt:message key='reservesGrouped_jsp.tittle'/>
+    </title>
 </head>
 <body>
 
@@ -22,10 +22,10 @@
 
             <thead class="_main-color4 _main-bg-color2 ">
             <tr class="">
-                <th scope="col">Route</th>
+                <th scope="col"><fmt:message key='routes.route'/></th>
                 <th scope="col">Total seats reserved</th>
-                <th scope="col">Ticket price</th>
-                <th scope="col">Total travel cost</th>
+                <th scope="col">Ticket price<fmt:message key='routes.TicketPrice'/></th>
+                <th scope="col"><fmt:message key='routes.TravelCostTotal'/></th>
             </tr>
             </thead>
 

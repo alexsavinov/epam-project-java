@@ -12,10 +12,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
+/**
+ * Command to get grouped by Route list of Reserves.
+ * <p>
+ * Processes GET-Request.
+ * Displays grouped by Route list of Reserves.
+ *
+ * @author O.Savinov
+ */
 public class ReservesGroupedListCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(ReservesGroupedListCommand.class);
 
+    /**
+     * Command execution.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @return Address string
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
             throws CommandException {

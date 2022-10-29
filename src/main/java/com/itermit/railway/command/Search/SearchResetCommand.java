@@ -13,10 +13,25 @@ import java.util.Arrays;
 
 import static com.itermit.railway.command.Search.SearchGetCommand.getDefaultDaterange;
 
+/**
+ * Command to reset Search conditions and results.
+ * <p>
+ * Processes POST-Request.
+ * Clears all manual setting for Search.
+ *
+ * @author O.Savinov
+ */
 public class SearchResetCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(SearchResetCommand.class);
 
+    /**
+     * Command execution.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @return Address string
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
             throws CommandException {

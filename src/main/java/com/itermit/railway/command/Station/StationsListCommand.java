@@ -12,10 +12,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
+/**
+ * Command to get list of Stations.
+ * <p>
+ * Processes GET-Request.
+ * Displays list of Stations.
+ *
+ * @author O.Savinov
+ */
 public class StationsListCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(StationsListCommand.class);
 
+    /**
+     * Command execution.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @return Address string
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
             throws CommandException {

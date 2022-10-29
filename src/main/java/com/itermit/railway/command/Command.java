@@ -6,8 +6,20 @@ import javax.servlet.http.HttpServletResponse;
 import com.itermit.railway.db.CommandException;
 import com.itermit.railway.db.DBException;
 
+/**
+ * Command interface.
+ *
+ * @author O.Savinov
+ */
 public interface Command {
 
-    String execute(HttpServletRequest req, HttpServletResponse resp) throws DBException, CommandException;
+    /**
+     * Command execution.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @return Address string
+     */
+    String execute(HttpServletRequest request, HttpServletResponse response) throws DBException, CommandException;
 
 }

@@ -1,13 +1,14 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/parts/init.jspf" %>
 
-<c:set var="page_title" value="User (${action})" scope="page"/>
+<%--<c:set var="page_title" value="User ${action}" scope="page"/>--%>
+<c:set var="key_title" value="words.user" scope="page"/>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <%@ include file="/parts/head.jspf" %>
-    <title>Railway ticket office - User</title>
+    <title><fmt:message key='index_jsp.title'/> - <fmt:message key='${key_title}'/></title>
 </head>
 <body>
 
@@ -86,11 +87,11 @@
 
             <div class="form-group mt-3">
                 <button type="submit" class="btn" <customTags:access role="user" modifier="disabled"/>>
-                    Save
+                    <fmt:message key='words.save'/>
                 </button>
                 <a class="btn btn-outline-secondary <customTags:access role="user" modifier="disabled"/>"
                    href="/users/delete/${user.getId()}">
-                    Delete
+                    <fmt:message key='words.delete'/>
                 </a>
             </div>
 

@@ -17,10 +17,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
+/**
+ * Command to get list of Reserves.
+ * <p>
+ * Processes GET-Request.
+ * Displays list of Reserves.
+ *
+ * @author O.Savinov
+ */
 public class ReservesListCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(ReservesListCommand.class);
 
+    /**
+     * Command execution.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @return Address string
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
             throws CommandException {

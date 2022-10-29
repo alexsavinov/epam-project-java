@@ -14,10 +14,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 
+/**
+ * Command to register User.
+ *
+ * @author O.Savinov
+ */
 public class AuthRegisterCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(AuthRegisterCommand.class);
 
+    /**
+     * Command execution.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @return Address string
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
             throws CommandException {

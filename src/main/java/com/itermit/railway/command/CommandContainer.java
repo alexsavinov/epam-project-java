@@ -18,6 +18,13 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Command container.
+ * <p>
+ * Resolve command by name and runs related execute method.
+ *
+ * @author O.Savinov
+ */
 public class CommandContainer {
 
     private static final Map<String, Command> commands;
@@ -71,13 +78,30 @@ public class CommandContainer {
         commands.put("reserveDelete", new ReserveDeleteCommand());
     }
 
+    /**
+     * Default constructor
+     */
     private CommandContainer() {
     }
 
+    /**
+     * Returns Command by its name.
+     *
+     * @param commandName String with command name
+     * @return Command
+     */
     public static Command getCommand(String commandName) {
         return commands.get(commandName);
     }
 
+    /**
+     * Runs Command with given name.
+     *
+     * @param request     HttpServletRequest
+     * @param response    HttpServletResponse
+     * @param commandName String with command name
+     * @return String with address to process
+     */
     public static String runCommand(HttpServletRequest request, HttpServletResponse response, String commandName)
             throws CommandException {
 
@@ -97,6 +121,12 @@ public class CommandContainer {
         return null;
     }
 
+    /**
+     * Parses id from URL.
+     *
+     * @param request HttpServletRequest
+     * @return Integer value of certain id from HttpServletRequest
+     */
     public static int getIdFromRequest(HttpServletRequest request)
             throws CommandException {
 
@@ -112,6 +142,12 @@ public class CommandContainer {
         return id;
     }
 
+    /**
+     * Parses token from URL.
+     *
+     * @param request HttpServletRequest
+     * @return String value of token from HttpServletRequest
+     */
     public static String getTokenFromRequest(HttpServletRequest request)
             throws CommandException {
 
@@ -127,6 +163,12 @@ public class CommandContainer {
         return token;
     }
 
+    /**
+     * Parses table name from Error string.
+     *
+     * @param defaultMessage String with default error message
+     * @return String with update error message
+     */
     public static String getErrorMessage(String defaultMessage, SQLException e) {
 
         if (e.getErrorCode() == 1451) {
@@ -137,6 +179,12 @@ public class CommandContainer {
         return defaultMessage;
     }
 
+    /**
+     * Parses integer value from request.
+     *
+     * @param request HttpServletRequest
+     * @return Integer value of given parameter name
+     */
     public static int getIntegerFromRequest(HttpServletRequest request, String param) {
 
         String paramValue = request.getParameter(param);
@@ -147,6 +195,12 @@ public class CommandContainer {
         return 0;
     }
 
+    /**
+     * Parses string value from request.
+     *
+     * @param request HttpServletRequest
+     * @return String value of given parameter name
+     */
     public static String getStringFromRequest(HttpServletRequest request, String param) {
 
         String paramValue = request.getParameter(param);

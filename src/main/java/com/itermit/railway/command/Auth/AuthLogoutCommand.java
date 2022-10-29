@@ -8,10 +8,22 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * Command to log out User.
+ *
+ * @author O.Savinov
+ */
 public class AuthLogoutCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(AuthLogoutCommand.class);
 
+    /**
+     * Command execution.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @return Address string
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
             throws CommandException {

@@ -1,10 +1,16 @@
 package com.itermit.railway.db.entity;
 
 import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Route entity.
+ *
+ * @author O.Savinov
+ */
 public class Route implements Serializable {
 
     private int id;
@@ -21,10 +27,43 @@ public class Route implements Serializable {
     private Route() {
     }
 
+    /**
+     * Generates description string for Route from Train number and Stations.
+     *
+     * @return String with generated description
+     */
     public String getName() {
         return trainNumber + " ("
-                + stationDeparture.getName() + " - "
-                + stationArrival.getName() + ")";
+                + ((stationDeparture == null) ? "" : stationDeparture.getName()) + " - "
+                + ((stationArrival == null) ? "" : stationArrival.getName()) + ")";
+    }
+
+    /**
+     * Returns formatted string.
+     *
+     * @return String with formatted travel time
+     */
+    public String getTravelTime() {
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
+        LocalDateTime date1 = LocalDateTime.parse(dateDeparture, formatter);
+        LocalDateTime date2 = LocalDateTime.parse(dateArrival, formatter);
+
+        Duration duration = Duration.between(date1, date2);
+
+//        int seconds = duration.toSecondsPart();
+//        int minutes = duration.toMinutesPart();
+//        int hours = duration.toHoursPart();
+//        long days = duration.toDays();
+        long hours = duration.toHours();
+
+        StringBuilder sb = new StringBuilder();
+//        if (days != 0) sb.append(days + (days == 1 ? " day " : " days "));
+        if (hours != 0) sb.append(hours + (hours == 1 ? " hour " : " hours "));
+//        if (minutes != 0) sb.append(minutes + (minutes == 1 ? " minute " : " minutes "));
+//        if (seconds != 0) sb.append(seconds + (seconds == 1 ? " second " : " seconds "));
+
+        return sb.toString().trim();
     }
 
     public int getId() {
@@ -73,30 +112,6 @@ public class Route implements Serializable {
 
     public void setDateArrival(String dateArrival) {
         this.dateArrival = dateArrival;
-    }
-
-    public String getTravelTime() {
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm:ss");
-        LocalDateTime date1 = LocalDateTime.parse(dateDeparture, formatter);
-        LocalDateTime date2 = LocalDateTime.parse(dateArrival, formatter);
-
-        Duration duration = Duration.between(date1, date2);
-
-//        int seconds = duration.toSecondsPart();
-//        int minutes = duration.toMinutesPart();
-//        int hours = duration.toHoursPart();
-//        long days = duration.toDays();
-        long hours = duration.toHours();
-
-        StringBuilder sb = new StringBuilder();
-//        if (days != 0) sb.append(days + (days == 1 ? " day " : " days "));
-        if (hours != 0) sb.append(hours + (hours == 1 ? " hour " : " hours "));
-//        if (minutes != 0) sb.append(minutes + (minutes == 1 ? " minute " : " minutes "));
-//        if (seconds != 0) sb.append(seconds + (seconds == 1 ? " second " : " seconds "));
-
-        return sb.toString();
-
     }
 
     public int getTravelCost() {
@@ -198,5 +213,5 @@ public class Route implements Serializable {
             return route;
         }
     }
-    
+
 }

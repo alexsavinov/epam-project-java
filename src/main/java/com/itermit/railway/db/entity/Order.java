@@ -5,13 +5,18 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
+/**
+ * Order entity.
+ *
+ * @author O.Savinov
+ */
 public class Order implements Serializable {
+
     private int id;
     private User user;
     private Route route;
     private int seats;
     private String dateReserve;
-
 
     private Order() {
     }
@@ -74,6 +79,19 @@ public class Order implements Serializable {
             order = new Order();
         }
 
+        /**
+         * Sets current date and time to Reserve Date.
+         *
+         * @return Order.Builder
+         */
+        public Order.Builder withDefaultDateReserve() {
+            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(
+                    "yyyy-MM-dd hh:mm:ss",
+                    Locale.ENGLISH);
+            order.setDateReserve(dateTimeFormatter.format(LocalDateTime.now()));
+            return this;
+        }
+
         public Order.Builder withId(int id) {
             order.setId(id);
             return this;
@@ -96,14 +114,6 @@ public class Order implements Serializable {
 
         public Order.Builder withDateReserve(String date) {
             order.setDateReserve(date);
-            return this;
-        }
-
-        public Order.Builder withDefaultDateReserve() {
-            DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(
-                    "yyyy-MM-dd hh:mm:ss",
-                    Locale.ENGLISH);
-            order.setDateReserve(dateTimeFormatter.format(LocalDateTime.now()));
             return this;
         }
 

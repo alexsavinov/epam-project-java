@@ -5,7 +5,8 @@
 <html lang="en">
 <head>
     <%@ include file="/parts/head.jspf" %>
-    <title>Railway ticket office - Profile</title>
+    <title>
+        <fmt:message key='index_jsp.title'/> - <fmt:message key='profile_jsp.title'/></title>
 </head>
 <body>
 
@@ -13,7 +14,7 @@
     <%@ include file="/parts/header.jspf" %>
 
     <div class="ms-5 mt-3 h3 _main-color4">
-        Profile
+        <fmt:message key='profile_jsp.title'/>
     </div>
 
     <div class="_wrapper-profile">
@@ -23,31 +24,31 @@
             <a class="btn btn-outline-secondary _btn_profile mb-2 shadow-sm <customTags:access role="user" modifier="d-none"/>"
                href="/users">
                 <em class="fa fa-user-circle fa-3x _profile-btn"></em>
-                Users
+                <fmt:message key='words.users'/>
             </a>
 
             <a class="btn btn-outline-secondary _btn_profile mb-2 shadow-sm"
                href="/stations">
                 <em class="fa fa-university fa-3x _profile-btn"></em>
-                Stations
+                <fmt:message key='profile_jsp.stations'/>
             </a>
 
             <a class="btn btn-outline-secondary _btn_profile mb-2 shadow-sm <customTags:access role="user" modifier="d-none"/>"
                href="/routes">
                 <em class="fa fa-map fa-3x _profile-btn"></em>
-                Routes
+                <fmt:message key='profile_jsp.routes'/>
             </a>
 
             <a class="btn btn-outline-secondary _btn_profile mb-2 shadow-sm <customTags:access role="user" modifier="d-none"/>"
                href="/orders">
                 <em class="fa fa-window-restore fa-3x _profile-btn"></em>
-                Orders
+                <fmt:message key='profile_jsp.orders'/>
             </a>
 
             <a class="btn btn-outline-secondary _btn_profile mb-2 shadow-sm"
                href="/reserves/grouped">
                 <em class="fa fa-handshake fa-3x _profile-btn"></em>
-                Reserves
+                <fmt:message key='profile_jsp.reserves'/>
             </a>
 
         </div>

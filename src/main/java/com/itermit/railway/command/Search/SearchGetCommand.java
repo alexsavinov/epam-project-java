@@ -16,10 +16,25 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Locale;
 
+/**
+ * Command to Search for Routes with certain conditions.
+ * <p>
+ * Processes GET-Request.
+ * Displays Form to submit.
+ *
+ * @author O.Savinov
+ */
 public class SearchGetCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(SearchGetCommand.class);
 
+    /**
+     * Command execution.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @return Address string
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
             throws CommandException {
@@ -45,6 +60,13 @@ public class SearchGetCommand implements Command {
         return "/search.jsp";
     }
 
+    /**
+     * Generates string with period for Start date and Finish date.
+     * <p>
+     * Fills Search form with default period.
+     *
+     * @return Date-range string.
+     */
     public static String getDefaultDaterange() {
 
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.ENGLISH);

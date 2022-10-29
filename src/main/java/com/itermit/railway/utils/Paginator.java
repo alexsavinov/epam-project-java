@@ -3,9 +3,14 @@ package com.itermit.railway.utils;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * Pagination for handy display large amount of data.
+ *
+ * @author O.Savinov
+ */
 public class Paginator {
 
-    private static Properties conf;
+    private static final Properties conf;
 
     static {
         try {

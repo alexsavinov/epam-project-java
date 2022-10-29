@@ -3,6 +3,7 @@ package com.itermit.railway.listeners;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebListener;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,8 +13,12 @@ import java.util.Properties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-/*
- *  Initializes locale settings for multi-language resources.
+/**
+ * Context listener.
+ * <p>
+ * Initializes locale settings for multi-language resources.
+ *
+ * @author O.Savinov
  */
 @WebListener
 public class ContextListener implements ServletContextListener {
@@ -46,7 +51,7 @@ public class ContextListener implements ServletContextListener {
         loadLocales(context);
 
         /* Reading settings from properties file  */
-//        getProperties(context);
+        getProperties(context);
 
         if (logger != null) {
             logger.warn("locales.list = {}", context.getAttribute(LOCALES));
@@ -54,8 +59,10 @@ public class ContextListener implements ServletContextListener {
         }
     }
 
-    /*
-     *  Init locales settings
+    /**
+     * Initialises locales settings.
+     *
+     * @param context ServletContext
      */
     private void loadLocales(ServletContext context) {
 
@@ -80,8 +87,10 @@ public class ContextListener implements ServletContextListener {
 
     }
 
-    /*
-     *  Reading settings from properties file
+    /**
+     * Reads settings from properties file.
+     *
+     * @param context ServletContext
      */
     private void getProperties(ServletContext context) {
 

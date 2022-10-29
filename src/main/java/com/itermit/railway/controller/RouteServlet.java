@@ -10,6 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Route servlet controller.
+ * <p>
+ * Processes request and response by related command depend on URI.
+ *
+ * @author O.Savinov
+ */
 @WebServlet(name = "RouteServlet",
         urlPatterns = {
                 "/routes",
@@ -21,12 +28,28 @@ public class RouteServlet extends HttpServlet {
 
     private static final Logger logger = LogManager.getLogger(RouteServlet.class);
 
+    /**
+     * Handles GET-Requests.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         logger.debug("#doGet(request, response).  {}", request.getRequestURI());
 
+        /**
+         * Handles GET-Requests.
+         *
+         * @param request  HttpServletRequest
+         * @param response HttpServletResponse
+         * @throws ServletException
+         * @throws IOException
+         */
         if (request.getRequestURI().equals("/routes")) {
 
             CommandHandler.processForward("routesList", request, response);
@@ -54,8 +77,16 @@ public class RouteServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Handles POST-Requests.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         logger.debug("#doPost(request, response).  {}", request.getRequestURI());

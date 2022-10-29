@@ -5,7 +5,7 @@
 <html lang="en">
 <head>
     <%@ include file="/parts/head.jspf" %>
-    <title>Railway ticket office - Search</title>
+    <title><fmt:message key='index_jsp.title'/> - <fmt:message key='search_jsp.search'/></title>
 </head>
 <body>
 
@@ -13,7 +13,7 @@
     <%@ include file="/parts/header.jspf" %>
 
     <div class="ms-5 mt-3 h3 _main-color4">
-        Search
+        <fmt:message key='search_jsp.search'/>
     </div>
 
     <%-- align-items-start align-items-sm-center --%>
@@ -29,7 +29,7 @@
                         <%-- Daterange --%>
                         <div class="form-group me-lg-3 mb-1 ms-1">
                             <label for="daterange" class="form-label">
-                                Date range
+                                <fmt:message key='search_jsp.dateRange'/>:
                             </label>
                             <input type="text" class="form-control _input-daterange"
                                    id="daterange" name="daterange" aria-label="daterange"
@@ -39,7 +39,7 @@
                         <%-- Train number --%>
                         <div class="form-group me-lg-3 mb-1 ms-1">
                             <label for="train_number" class="form-label">
-                                Train number
+                                <fmt:message key='words.trainNumber'/>:
                             </label>
                             <input type="text" class="form-control _input-train-number"
                                    id="train_number" name="train_number" aria-label="train_number"
@@ -53,7 +53,7 @@
                         <%-- Station departure --%>
                         <div class="form-group ms-1 me-1 mb-1">
                             <label for="station_departure_id" class="form-label">
-                                Station departure
+                                <fmt:message key='words.stationDeparture'/>:
                             </label>
                             <select class="form-control _input-station"
                                     id="station_departure_id" name="station_departure_id">
@@ -71,7 +71,7 @@
                         <%-- Station arrival --%>
                         <div class="form-group ms-1 me-1 mb-1">
                             <label for="station_arrival_id" class="form-label">
-                                Station arrival
+                                <fmt:message key='words.stationArrival'/>:
                             </label>
                             <select class="form-control _input-station"
                                     id="station_arrival_id" name="station_arrival_id">
@@ -97,7 +97,9 @@
                         <%-- Travel cost --%>
                         <div class="d-flex flex-column me-md-1 ms-1 mb-1">
                             <div>
-                                <label class="form-label">Travel cost from:</label>
+                                <label class="form-label">
+                                    <fmt:message key='search_jsp.TravelCostFrom'/>:
+                                </label>
                             </div>
                             <div class="d-flex g-0 m-0 p-0">
                                 <%-- cost_min--%>
@@ -117,7 +119,7 @@
 
                                 <%-- cost_max--%>
                                 <label for="cost_max" class="form-label ms-2 me-2 mt-1">
-                                    to:
+                                    <fmt:message key='words.to'/>:
                                 </label>
                                 <div class="input-group _input-number">
                                     <input type="number" class="form-control"
@@ -140,7 +142,9 @@
                         <div class="form-group d-flex flex-column ms-1 mb-1">
 
                             <div>
-                                <label class="form-label">Travel time (in hours) from:</label>
+                                <label class="form-label">
+                                    <fmt:message key='search_jsp.TravelTimeFrom'/>:
+                                </label>
                             </div>
                             <div class="d-flex g-0 m-0 p-0">
                                 <%-- travel_time_min --%>
@@ -161,7 +165,7 @@
 
                                 <%-- travel_time_max --%>
                                 <label for="travel_time_max" class="form-label ms-2 me-2 mt-1">
-                                    to:
+                                    <fmt:message key='words.to'/>:
                                 </label>
                                 <div class="input-group _input-number ">
                                     <input type="number" class="form-control"
@@ -190,7 +194,9 @@
                         <div class="mb-1 form-group d-flex flex-column mt-0 ms-1">
 
                             <div>
-                                <label class="form-label">Seats available from:</label>
+                                <label class="form-label">
+                                    <fmt:message key='search_jsp.SeatsAvailableFrom'/>:
+                                </label>
                             </div>
                             <div class="d-flex g-0 m-0 p-0">
 
@@ -212,7 +218,7 @@
 
                                 <%-- seats_available_max --%>
                                 <label for="seats_available_max" class="form-label ms-2 me-2 mt-1">
-                                    to:
+                                    <fmt:message key='words.to'/>:
                                 </label>
                                 <div class="input-group _input-number">
                                     <input type="number" class="form-control"
@@ -236,7 +242,9 @@
                         <div class="mb-1 form-group d-flex flex-column mt-0 ms-1">
 
                             <div>
-                                <label class="form-label">Seats reserved from:</label>
+                                <label class="form-label">
+                                    <fmt:message key='search_jsp.SeatsReservedFrom'/>:
+                                </label>
                             </div>
                             <div class="d-flex g-0 m-0 p-0">
 
@@ -258,7 +266,7 @@
 
                                 <%-- seats_reserved_max --%>
                                 <label for="seats_available_max" class="form-label ms-2 me-2 mt-1">
-                                    to:
+                                    <fmt:message key='words.to'/>:
                                 </label>
                                 <div class="input-group _input-number">
                                     <input type="number" class="form-control"
@@ -289,13 +297,13 @@
                 <%-- Search --%>
                 <button id="submit_button" type="submit" class="btn btn-outline-secondary _btn_form">
                     <em class="fa fa-search fa-2l me-2"></em>
-                    Search
+                    <fmt:message key='words.search'/>
                 </button>
                 <%-- Reset --%>
                 <button id="reset_button" type="reset" class="btn btn-outline-secondary _btn_form"
                         onclick="resetSearchForm()">
                     <em class="fa fa-refresh fa-2l me-2"></em>
-                    Reset
+                    <fmt:message key='words.reset'/>
                 </button>
             </div>
 
@@ -340,7 +348,7 @@
         <div class="mt-4">
             <c:if test="${paginator ne null}">
                 <div class="h3 ms-5 _main-color1">
-                    Routes found: ${paginator.getResults()}
+                    <fmt:message key='words.RoutesFound'/>: ${paginator.getResults()}
                 </div>
             </c:if>
             <c:if test="${routes ne null and not empty routes and routes.size() ge 0}">

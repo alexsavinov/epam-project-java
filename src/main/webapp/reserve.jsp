@@ -18,7 +18,7 @@
 <html lang="en">
 <head>
     <%@ include file="/parts/head.jspf" %>
-    <title>Railway ticket office - ${page_title}</title>
+    <title><fmt:message key='index_jsp.title'/> - ${page_title}</title>
 <body>
 
 <div class="_wrapper">
@@ -103,7 +103,7 @@
 
                 <%-- seats_available --%>
                 <div class="mb-2 p-3 d-flex justify-content-between align-items-baseline">
-                    <span class="badge bg-success _main-color3">Seats available: ${route.getSeatsAvailable()}</span>
+                    <span class="badge bg-success _main-color3"><fmt:message key='words.SeatsAvailable'/>: ${route.getSeatsAvailable()}</span>
 <%--                    <div class="fs-3">--%>
 <%--                        Seats available:--%>
 <%--                    </div>--%>

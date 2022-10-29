@@ -27,8 +27,8 @@
 <%--            <th scope="col">Date departure</th>--%>
 <%--            <th scope="col">Travel time</th>--%>
 <%--            <th scope="col">Date arrival</th>--%>
-<%--            <th scope="col">Travel cost</th>--%>
-<%--            <th scope="col">Seats total</th>--%>
+<%--            <th scope="col"><fmt:message key='words.TravelCost'/></th>--%>
+<%--            <th scope="col"><fmt:message key='words.SeatsTotal'/></th>--%>
         </tr>
         </thead>
 

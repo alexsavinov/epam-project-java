@@ -1,7 +1,5 @@
 package com.itermit.railway.db.entity;
 
-import com.itermit.railway.db.DBException;
-
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
@@ -10,14 +8,12 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
 
+/**
+ * User entity.
+ *
+ * @author O.Savinov
+ */
 public class User implements Serializable {
-    public static final String F_ID = "id";
-    public static final String F_NAME = "name";
-    public static final String F_PASSWORD = "password";
-    public static final String F_EMAIL = "email";
-    public static final String F_ISADMIN = "isadmin";
-    public static final String F_ISACTIVE = "isactive";
-    public static final String F_ACTIVATION_TOKEN = "activation_token";
 
     private int id;
     private String name;
@@ -27,18 +23,18 @@ public class User implements Serializable {
     private boolean isActive;
     private String activationToken;
 
-    /*
-     * Returns encrypted string
+    /**
+     * Returns encrypted password string.
+     *
+     * @param password String with password
+     * @return String with encrypted password
+     * @throws NoSuchAlgorithmException
      */
-    public static String passwordEncrypt(String password) throws DBException {
+    public static String passwordEncrypt(String password) throws NoSuchAlgorithmException {
 
         MessageDigest md;
 
-        try {
-            md = MessageDigest.getInstance("SHA-256");
-        } catch (NoSuchAlgorithmException e) {
-            throw new DBException("Error encrypting password!", e);
-        }
+        md = MessageDigest.getInstance("SHA-256");
 
         md.update(password.getBytes(StandardCharsets.UTF_8));
         byte[] digest = md.digest();
@@ -46,15 +42,22 @@ public class User implements Serializable {
         return String.format("%064x", new BigInteger(1, digest));
     }
 
+    /**
+     * Generates and sets activation token string for self.
+     */
+    public void generateActivateToken() {
+        final SecureRandom secureRandom = new SecureRandom();
+        final Base64.Encoder base64Encoder = Base64.getUrlEncoder();
+        byte[] randomBytes = new byte[24];
+        secureRandom.nextBytes(randomBytes);
+        setActivationToken(base64Encoder.encodeToString(randomBytes));
+    }
+
     private User() {
     }
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public boolean setIsAdmin() {
-        return isAdmin;
     }
 
     public boolean getIsActive() {
@@ -85,8 +88,8 @@ public class User implements Serializable {
         return isAdmin;
     }
 
-    public void setIsAdmin(boolean isadmin) {
-        this.isAdmin = isadmin;
+    public void setIsAdmin(boolean isAdmin) {
+        this.isAdmin = isAdmin;
     }
 
     public String getName() {
@@ -108,6 +111,7 @@ public class User implements Serializable {
     public String getEmail() {
         return email;
     }
+
     public void setActive(boolean active) {
         isActive = active;
     }
@@ -123,14 +127,6 @@ public class User implements Serializable {
                 ", isactive='" + isActive + '\'' +
                 ", activation_token='" + activationToken + '\'' +
                 '}';
-    }
-
-    public void generateActivateToken() {
-        final SecureRandom secureRandom = new SecureRandom();
-        final Base64.Encoder base64Encoder = Base64.getUrlEncoder();
-        byte[] randomBytes = new byte[24];
-        secureRandom.nextBytes(randomBytes);
-        setActivationToken(base64Encoder.encodeToString(randomBytes));
     }
 
     public static class Builder {

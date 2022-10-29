@@ -11,10 +11,22 @@ import com.itermit.railway.db.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Command to authenticate User.
+ *
+ * @author O.Savinov
+ */
 public class AuthLoginCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(AuthLoginCommand.class);
 
+    /**
+     * Command execution.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @return Address string
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
             throws CommandException {

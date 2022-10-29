@@ -6,6 +6,15 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * Helper class for generating queries.
+ * <p>
+ * Constructs result query from four parts:
+ * <p>
+ * Main part, Conditions, Sorts, Offset.
+ *
+ * @author O.Savinov
+ */
 public class QueryMaker implements Serializable {
 
     private StringBuilder queryMain = new StringBuilder();
@@ -13,7 +22,7 @@ public class QueryMaker implements Serializable {
     private StringBuilder querySort = new StringBuilder();
     private StringBuilder queryOffset = new StringBuilder();
     private int page;
-    private ArrayList<String> paramList = new ArrayList();
+    private final ArrayList<String> paramList = new ArrayList<>();
 
     private QueryMaker() {
     }
@@ -46,12 +55,17 @@ public class QueryMaker implements Serializable {
         return queryOffset;
     }
 
+    /**
+     * Constructs string with offset for pagination purpose.
+     *
+     * @param page page number
+     */
     public void setQueryOffset(int page) {
         setPage(page);
         this.queryOffset = new StringBuilder(" LIMIT ")
                 .append(Paginator.PAGE_SIZE)
                 .append(" OFFSET ")
-                .append(Integer.valueOf(page) * Paginator.PAGE_SIZE - Paginator.PAGE_SIZE);
+                .append(page * Paginator.PAGE_SIZE - Paginator.PAGE_SIZE);
     }
 
     public int getPage() {
@@ -70,6 +84,13 @@ public class QueryMaker implements Serializable {
         this.querySort = new StringBuilder();
     }
 
+    /**
+     * Constructs string with conditions and filters.
+     *
+     * @param field     String with field name
+     * @param condition Condition
+     * @param value     String value
+     */
     public void updateQueryCondition(String field, Condition condition, String value) {
 
         if (field.equals("seats_available"))
@@ -91,6 +112,12 @@ public class QueryMaker implements Serializable {
         paramList.add(value);
     }
 
+    /**
+     * Constructs string with sorts.
+     *
+     * @param field     String with field name
+     * @param condition Condition
+     */
     private void updateQuerySort(String field, Condition condition) {
 
         if (field.equals("seats_available"))
@@ -107,6 +134,13 @@ public class QueryMaker implements Serializable {
         }
     }
 
+    /**
+     * Returns PreparedStatement instance from given connection.
+     * <p>
+     * Dynamically fills statement parameters with values from paramList.
+     *
+     * @param connection Connection
+     */
     public PreparedStatement getPreparedStatement(Connection connection) throws SQLException {
 
         PreparedStatement preparedStatement;
@@ -120,6 +154,14 @@ public class QueryMaker implements Serializable {
         return preparedStatement;
     }
 
+    /**
+     * Returns final query.
+     * <p>
+     * Joins all parts of query together.
+     * Only Main part is required, others are optional.
+     *
+     * @return String with final query
+     */
     public String getFinalQuery() {
 
         return queryMain

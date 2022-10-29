@@ -48,7 +48,7 @@
                         Close
                     </button>
                     <button type="submit" class="btn btn-outline-secondary _btn_form">
-                        Delete
+                        <fmt:message key='words.delete'/>
                     </button>
                 </div>
 

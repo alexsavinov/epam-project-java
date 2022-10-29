@@ -19,12 +19,21 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static com.itermit.railway.db.Fields.*;
+
+/**
+ * DAO Implementation for Orders.
+ * <p>
+ * Processes request to database from OrderManager with a given connection.
+ *
+ * @author O.Savinov
+ */
 public class OrderDAOImpl implements OrderDAO {
 
     private DBManager dbManager;
     private static OrderDAOImpl instance;
     private static final Logger logger = LogManager.getLogger(OrderDAOImpl.class);
-
+    /* SQL Queries */
     private static final String SQL_GET_ALL_ORDERS = "" +
             "SELECT " +
             "   orders.id, " +
@@ -111,6 +120,18 @@ public class OrderDAOImpl implements OrderDAO {
             "FROM orders " +
             "WHERE id = ? AND seats < 0";
 
+    /**
+     * Default constructor
+     */
+    private OrderDAOImpl() {
+        dbManager = DBManager.getInstance();
+    }
+
+    /**
+     * Returns an instance of Order's DAO implementation.
+     *
+     * @return OrderDAOImpl
+     */
     public static synchronized OrderDAOImpl getInstance() {
         if (instance == null) {
             instance = new OrderDAOImpl();
@@ -118,10 +139,13 @@ public class OrderDAOImpl implements OrderDAO {
         return instance;
     }
 
-    private OrderDAOImpl() {
-        dbManager = DBManager.getInstance();
-    }
-
+    /**
+     * Returns a list of Orders.
+     *
+     * @param connection Connection to DataSource
+     * @return ArrayList of Orders
+     * @throws SQLException
+     */
     @Override
     public ArrayList<Order> getAll(Connection connection) throws SQLException {
 
@@ -134,7 +158,7 @@ public class OrderDAOImpl implements OrderDAO {
 
         try {
             preparedStatement = connection.prepareStatement(SQL_GET_ALL_ORDERS);
-//            logger.trace(SQL_GET_ALL_ORDERS);
+            logger.trace(SQL_GET_ALL_ORDERS);
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 orders.add(extract(resultSet));
@@ -147,6 +171,14 @@ public class OrderDAOImpl implements OrderDAO {
         return orders;
     }
 
+    /**
+     * Returns wrapped by Paginator list of Orders.
+     *
+     * @param connection Connection to DataSource
+     * @param query      QueryMaker to construct SQL-query with conditions
+     * @return Paginated list of Orders
+     * @throws SQLException
+     */
     public Paginator getPaginated(Connection connection, QueryMaker query) throws SQLException {
 
         logger.debug("#getPaginated(connection, query).");
@@ -161,6 +193,14 @@ public class OrderDAOImpl implements OrderDAO {
                 .build();
     }
 
+    /**
+     * Returns a filtered list of Orders.
+     *
+     * @param connection Connection to DataSource
+     * @param query      QueryMaker to construct SQL-query with conditions
+     * @return ArrayList of Orders
+     * @throws SQLException
+     */
     public ArrayList<Order> getFiltered(Connection connection, QueryMaker query)
             throws SQLException {
 
@@ -187,6 +227,14 @@ public class OrderDAOImpl implements OrderDAO {
         return orders;
     }
 
+    /**
+     * Returns a grouped by Route list of Orders for related User.
+     *
+     * @param connection Connection to DataSource
+     * @param userId     Integer value of User id
+     * @return ArrayList of Orders grouped by Route
+     * @throws SQLException
+     */
     public ArrayList<Order> getGroupedByRouteOfUser(Connection connection, int userId)
             throws SQLException {
 
@@ -201,29 +249,30 @@ public class OrderDAOImpl implements OrderDAO {
             preparedStatement = connection.prepareStatement(SQL_GET_GROUPED_BY_ROUTE);
             int l = 0;
             preparedStatement.setInt(++l, userId);
-//            logger.trace(preparedStatement);
+            logger.trace(preparedStatement);
 
             resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 Station stationDeparture = new Station.Builder()
-                        .withName(resultSet.getString("station_departure_name"))
+                        .withName(resultSet.getString(ROUTE_STATION_DEPARTURE_NAME))
                         .build();
 
                 Station stationArrival = new Station.Builder()
-                        .withName(resultSet.getString("station_arrival_name"))
+                        .withName(resultSet.getString(ROUTE_STATION_ARRIVAL_NAME))
                         .build();
 
                 Route route = new Route.Builder()
-                        .withId(resultSet.getInt("route_id"))
-                        .withTrainNumber(resultSet.getString("train_number"))
-                        .withTravelCost(resultSet.getInt("travel_cost"))
+                        .withId(resultSet.getInt(ORDER_ROUTE_ID))
+                        .withTrainNumber(resultSet.getString(ROUTE_TRAIN_NUMBER))
+                        .withTravelCost(resultSet.getInt(ROUTE_TRAVEL_COST))
                         .withStationDeparture(stationDeparture)
                         .withStationArrival(stationArrival)
                         .build();
 
                 orders.add(new Order.Builder()
                         .withRoute(route)
-                        .withSeats(resultSet.getInt("seats"))
+                        .withUser(new User.Builder().withId(userId).build())
+                        .withSeats(resultSet.getInt(ORDER_SEATS))
                         .build());
             }
         } finally {
@@ -234,6 +283,14 @@ public class OrderDAOImpl implements OrderDAO {
         return orders;
     }
 
+    /**
+     * Returns an Order by id.
+     *
+     * @param connection Connection to DataSource
+     * @param id         Integer value of Order id
+     * @return Order
+     * @throws SQLException
+     */
     @Override
     public Order get(Connection connection, int id) throws SQLException {
 
@@ -260,6 +317,13 @@ public class OrderDAOImpl implements OrderDAO {
         return order;
     }
 
+    /**
+     * Adds a new Order.
+     *
+     * @param connection Connection to DataSource
+     * @param order      Order to add
+     * @throws SQLException
+     */
     @Override
     public void add(Connection connection, Order order) throws SQLException {
 
@@ -282,6 +346,14 @@ public class OrderDAOImpl implements OrderDAO {
         }
     }
 
+    /**
+     * Updates existed Order.
+     *
+     * @param connection Connection to DataSource
+     * @param id         Integer value of Order id
+     * @param order      Order data to update
+     * @throws SQLException
+     */
     @Override
     public void update(Connection connection, int id, Order order) throws SQLException {
 
@@ -308,6 +380,13 @@ public class OrderDAOImpl implements OrderDAO {
         }
     }
 
+    /**
+     * Deletes existed Order by id.
+     *
+     * @param connection Connection to DataSource
+     * @param id         Integer value of Order id
+     * @throws SQLException
+     */
     @Override
     public void delete(Connection connection, int id) throws SQLException {
 
@@ -323,42 +402,49 @@ public class OrderDAOImpl implements OrderDAO {
         }
     }
 
+    /**
+     * Extracts Order entity from given ResultSet.
+     *
+     * @param resultSet ResultSet to process
+     * @return Order
+     * @throws SQLException
+     */
     @Override
     public Order extract(ResultSet resultSet) throws SQLException {
 
         User user = new User.Builder()
-                .withId(resultSet.getInt("user_id"))
-                .withName(resultSet.getString("user_name"))
+                .withId(resultSet.getInt(ORDER_USER_ID))
+                .withName(resultSet.getString(ORDER_USER_NAME))
                 .build();
 
         Station stationDeparture = new Station.Builder()
-                .withId(resultSet.getInt("station_departure_id"))
-                .withName(resultSet.getString("station_departure_name"))
+                .withId(resultSet.getInt(ROUTE_STATION_DEPARTURE_ID))
+                .withName(resultSet.getString(ROUTE_STATION_DEPARTURE_NAME))
                 .build();
 
         Station stationArrival = new Station.Builder()
-                .withId(resultSet.getInt("station_arrival_id"))
-                .withName(resultSet.getString("station_arrival_name"))
+                .withId(resultSet.getInt(ROUTE_STATION_ARRIVAL_ID))
+                .withName(resultSet.getString(ROUTE_STATION_ARRIVAL_NAME))
                 .build();
 
         Route route = new Route.Builder()
-                .withId(resultSet.getInt("route_id"))
-                .withTrainNumber(resultSet.getString("route_train_number"))
+                .withId(resultSet.getInt(ORDER_ROUTE_ID))
+                .withTrainNumber(resultSet.getString(ORDER_ROUTE_TRAIN_NUMBER))
                 .withStationDeparture(stationDeparture)
                 .withStationArrival(stationArrival)
-                .withDateDeparture(resultSet.getString("route_date_departure"))
-                .withDateArrival(resultSet.getString("route_date_arrival"))
-                .withTravelCost(resultSet.getInt("route_travel_cost"))
-                .withSeatsReserved(resultSet.getInt("route_seats_reserved"))
-                .withSeatsTotal(resultSet.getInt("route_seats_total"))
+                .withDateDeparture(resultSet.getString(ORDER_ROUTE_DATE_DEPARTURE))
+                .withDateArrival(resultSet.getString(ORDER_ROUTE_DATE_ARRIVAL))
+                .withTravelCost(resultSet.getInt(ORDER_ROUTE_TRAVEL_COST))
+                .withSeatsReserved(resultSet.getInt(ORDER_ROUTE_SEATS_RESERVED))
+                .withSeatsTotal(resultSet.getInt(ORDER_ROUTE_SEATS_TOTAL))
                 .build();
 
         return new Order.Builder()
-                .withId(resultSet.getInt("id"))
+                .withId(resultSet.getInt(ENTITY_ID))
                 .withUser(user)
                 .withRoute(route)
-                .withSeats(resultSet.getInt("seats"))
-                .withDateReserve(resultSet.getString("date_reserve"))
+                .withSeats(resultSet.getInt(ORDER_SEATS))
+                .withDateReserve(resultSet.getString(ORDER_DATE_RESERVE))
                 .build();
     }
 

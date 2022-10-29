@@ -8,7 +8,7 @@
 
 
     <head>
-        <title>Railway ticket office - Route information</title>
+        <title><fmt:message key='index_jsp.title'/> - Route information</title>
     </head>
 <body>
 
@@ -46,8 +46,8 @@
 
             <%-- station_departure --%>
             <div class="form-group mb-1">
-                <label for="station_departure">Station departure</label>
-                <input type="text" class="form-control" placeholder="Station departure" aria-label="station_departure"
+                <label for="station_departure"><fmt:message key='words.stationDeparture'/></label>
+                <input type="text" class="form-control" placeholder="<fmt:message key='words.stationDeparture'/>" aria-label="station_departure"
                        id="station_departure" name="station_departure"
                        value="${route.getStationDeparture().getName()}" disabled>
             </div>
@@ -65,8 +65,8 @@
 
             <%-- station_arrival --%>
             <div class="form-group mb-1">
-                <label for="station_arrival">Station arrival</label>
-                <input type="text" class="form-control" placeholder="Station arrival" aria-label="station_arrival"
+                <label for="station_arrival"><fmt:message key='words.stationArrival'/></label>
+                <input type="text" class="form-control" placeholder="<fmt:message key='words.stationArrival'/>" aria-label="station_arrival"
                        id="station_arrival" name="station_arrival"
                        value="${route.getStationArrival().getName()}"
                        disabled>
@@ -91,7 +91,7 @@
             <%--        </div>--%>
 
             <%--        <div class="mb-1">--%>
-            <%--            <label for="travel_cost" class="form-label">Travel cost</label>--%>
+            <%--            <label for="travel_cost" class="form-label"><fmt:message key='words.TravelCost'/></label>--%>
             <%--            <input type="number" class="form-control" aria-label="travel_cost"--%>
             <%--                   id="travel_cost" name="travel_cost" value="${route.getTravelCost()}">--%>
             <%--        </div>--%>
@@ -106,7 +106,7 @@
 
             <%-- seats_available --%>
             <div class="mb-1">
-                <label for="seats_available" class="form-label">Seats available</label>
+                <label for="seats_available" class="form-label"><fmt:message key='words.SeatsAvailable'/></label>
                 <input type="number" class="form-control" aria-label="seats_available"
                        id="seats_available" name="seats_available"
                        value="${route.getSeatsAvailable()}" disabled>
@@ -114,7 +114,7 @@
 
             <%-- seats_total --%>
             <div class="mb-1">
-                <label for="seats_total" class="form-label">Seats total</label>
+                <label for="seats_total" class="form-label"><fmt:message key='words.SeatsTotal'/></label>
                 <input type="number" class="form-control" aria-label="seats_total"
                        id="seats_total" name="seats_total"
                        value="${route.getSeatsTotal()}" disabled>

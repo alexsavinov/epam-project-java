@@ -10,13 +10,31 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Processes redirect and forward actions.
+ * <p>
+ * Handles related errors.
+ *
+ * @author O.Savinov
+ */
 public class CommandHandler {
 
     private static final Logger logger = LogManager.getLogger(CommandHandler.class);
 
+    /**
+     * Default constructor
+     */
     private CommandHandler() {
     }
 
+    /**
+     * Processes redirect.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @throws ServletException
+     * @throws IOException
+     */
     public static String processRedirect(String commandName, HttpServletRequest request, HttpServletResponse response) {
 
         String address = null;
@@ -50,7 +68,12 @@ public class CommandHandler {
         return null;
     }
 
-
+    /**
+     * Processes forward.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     */
     public static void processForward(String commandName, HttpServletRequest request, HttpServletResponse response) {
 
         String address = null;

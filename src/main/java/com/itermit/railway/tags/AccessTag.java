@@ -7,6 +7,17 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 
+/**
+ * Tag to grant user permission depending on some factors.
+ * <p>
+ * These factors are combinations of attributes isAdmin and isAuthorized.
+ * It can be interpreted as roles: "admin", "user" and "guest".
+ * <p>
+ * Roles "admin" and "user" have common role - "authorized".
+ * All others (guests) are unauthorized.
+ *
+ * @author O.Savinov
+ */
 public class AccessTag extends TagSupport {
 
     private static final String ROLE_ADMIN = "admin";
@@ -66,10 +77,21 @@ public class AccessTag extends TagSupport {
         return SKIP_BODY;
     }
 
+    /**
+     * Correctly sets role.
+     *
+     * @param role String
+     */
     public void setRole(String role) {
         this.role = (role == null ? "" : role);
     }
 
+
+    /**
+     * Correctly sets modifier.
+     *
+     * @param modifier String
+     */
     public void setModifier(String modifier) {
         this.modifier = (modifier == null ? "" : modifier);
     }

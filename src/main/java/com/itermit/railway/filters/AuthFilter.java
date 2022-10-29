@@ -12,9 +12,12 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Objects;
 
-/*
+/**
  * Filter for check user permission to page.
- * If user has no access then redirect to Login page.
+ * <p>
+ * If user has no access then redirects to Login page.
+ *
+ * @author O.Savinov
  */
 @WebFilter(urlPatterns = {"/*"},
         initParams = {@WebInitParam(name = "active", value = "true")})
@@ -30,24 +33,22 @@ public class AuthFilter implements Filter {
         isAuthorized = false;
     }
 
-    /*
-     * isAuthorized stores in HttpSession.
-     * And it's sets in moment of user login.
-     * Then deletes on logout.
-     */
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
 
-//        logger.debug("#doFilter(servletRequest, servletResponse, filterChain). active: {}", active);
+        logger.debug("#doFilter(servletRequest, servletResponse, filterChain). active: {}", active);
 
         HttpServletRequest httpReq = (HttpServletRequest) servletRequest;
         HttpServletResponse httpResp = (HttpServletResponse) servletResponse;
         HttpSession session = httpReq.getSession();
 
         if (active.equals(true)) {
-//            logger.info("httpReq.getRequestURI(): {}", httpReq.getRequestURI());
-
+            /*
+             * Boolean isAuthorized - stored in HttpSession.
+             * And it's sets in moment of user login.
+             * Then deletes on logout.
+             */
             isAuthorized = (Boolean) session.getAttribute("isAuthorized");
             isAuthorized = isAuthorized != null && isAuthorized;
 

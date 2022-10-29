@@ -15,11 +15,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import static com.itermit.railway.db.Fields.*;
+
+/**
+ * DAO Implementation for Routes.
+ * <p>
+ * Processes request to database from OrderManager with a given connection.
+ *
+ * @author O.Savinov
+ */
 public class RouteDAOImpl implements RouteDAO {
 
     private DBManager dbManager;
     private static RouteDAOImpl instance;
     private static final Logger logger = LogManager.getLogger(RouteDAOImpl.class);
+    /* SQL Queries */
     private static final String SQL_GET_ALL_ROUTES = "" +
             "SELECT " +
             "   routes.id, " +
@@ -88,10 +98,18 @@ public class RouteDAOImpl implements RouteDAO {
             "   OR seats_reserved < 0 " +
             "   OR seats_total < 0)";
 
+    /**
+     * Default constructor
+     */
     private RouteDAOImpl() {
         dbManager = DBManager.getInstance();
     }
 
+    /**
+     * Returns an instance of Route's DAO implementation.
+     *
+     * @return RouteDAOImpl
+     */
     public static synchronized RouteDAOImpl getInstance() {
         if (instance == null) {
             instance = new RouteDAOImpl();
@@ -99,6 +117,13 @@ public class RouteDAOImpl implements RouteDAO {
         return instance;
     }
 
+    /**
+     * Returns a list of Routes.
+     *
+     * @param connection Connection to DataSource
+     * @return ArrayList of Routes
+     * @throws SQLException
+     */
     @Override
     public ArrayList<Route> getAll(Connection connection) throws SQLException {
 
@@ -123,6 +148,13 @@ public class RouteDAOImpl implements RouteDAO {
         return routes;
     }
 
+    /**
+     * Returns total number of records in DB table for given query.
+     *
+     * @param connection Connection to DataSource
+     * @param query      QueryMaker to construct SQL-query with conditions
+     * @throws SQLException
+     */
     public int getTotalRows(Connection connection, QueryMaker query) throws SQLException {
 
         int totalRows = 0;
@@ -135,7 +167,7 @@ public class RouteDAOImpl implements RouteDAO {
 
             ResultSet rsTotalRows = preparedStatement.executeQuery();
             if (rsTotalRows.next()) {
-                totalRows = rsTotalRows.getInt("total_rows");
+                totalRows = rsTotalRows.getInt(TOTAL_ROWS);
             }
         } finally {
             DBManager.closeResultSet(resultSet);
@@ -145,6 +177,14 @@ public class RouteDAOImpl implements RouteDAO {
         return totalRows;
     }
 
+    /**
+     * Returns wrapped by Paginator list of Routes.
+     *
+     * @param connection Connection to DataSource
+     * @param query      QueryMaker to construct SQL-query with conditions
+     * @return Paginated list of Routes
+     * @throws SQLException
+     */
     public Paginator getPaginated(Connection connection, QueryMaker query) throws SQLException {
 
         logger.debug("#getPaginated(connection, query).");
@@ -167,6 +207,14 @@ public class RouteDAOImpl implements RouteDAO {
                 .build();
     }
 
+    /**
+     * Returns a filtered list of Routes.
+     *
+     * @param connection Connection to DataSource
+     * @param query      QueryMaker to construct SQL-query with conditions
+     * @return ArrayList of Routes
+     * @throws SQLException
+     */
     public ArrayList<Route> getFiltered(Connection connection, QueryMaker query) throws SQLException {
 
         logger.debug("#getAll().  {}", query);
@@ -192,6 +240,14 @@ public class RouteDAOImpl implements RouteDAO {
         return routes;
     }
 
+    /**
+     * Returns a Route by id.
+     *
+     * @param connection Connection to DataSource
+     * @param id         Integer value of Route id
+     * @return Route
+     * @throws SQLException
+     */
     @Override
     public Route get(Connection connection, int id) throws SQLException {
 
@@ -216,6 +272,13 @@ public class RouteDAOImpl implements RouteDAO {
         return route;
     }
 
+    /**
+     * Adds a new Route.
+     *
+     * @param connection Connection to DataSource
+     * @param route      Route to add
+     * @throws SQLException
+     */
     @Override
     public void add(Connection connection, Route route) throws SQLException {
 
@@ -240,6 +303,14 @@ public class RouteDAOImpl implements RouteDAO {
         }
     }
 
+    /**
+     * Updates existed Route.
+     *
+     * @param connection Connection to DataSource
+     * @param id         Integer value of Route id
+     * @param route      Route data to update
+     * @throws SQLException
+     */
     @Override
     public void update(Connection connection, int id, Route route) throws SQLException {
 
@@ -265,6 +336,13 @@ public class RouteDAOImpl implements RouteDAO {
         }
     }
 
+    /**
+     * Deletes existed Route by id.
+     *
+     * @param connection Connection to DataSource
+     * @param id         Integer value of Route id
+     * @throws SQLException
+     */
     @Override
     public void delete(Connection connection, int id) throws SQLException {
 
@@ -282,29 +360,36 @@ public class RouteDAOImpl implements RouteDAO {
         }
     }
 
+    /**
+     * Extracts Route entity from given ResultSet.
+     *
+     * @param resultSet ResultSet to process
+     * @return Route
+     * @throws SQLException
+     */
     @Override
     public Route extract(ResultSet resultSet) throws SQLException {
 
         Station stationDeparture = new Station.Builder()
-                .withId(resultSet.getInt("station_departure_id"))
-                .withName(resultSet.getString("station_departure_name"))
+                .withId(resultSet.getInt(ROUTE_STATION_DEPARTURE_ID))
+                .withName(resultSet.getString(ROUTE_STATION_DEPARTURE_NAME))
                 .build();
 
         Station stationArrival = new Station.Builder()
-                .withId(resultSet.getInt("station_arrival_id"))
-                .withName(resultSet.getString("station_arrival_name"))
+                .withId(resultSet.getInt(ROUTE_STATION_ARRIVAL_ID))
+                .withName(resultSet.getString(ROUTE_STATION_ARRIVAL_NAME))
                 .build();
 
         return new Route.Builder()
-                .withId(resultSet.getInt("id"))
-                .withTrainNumber(resultSet.getString("train_number"))
+                .withId(resultSet.getInt(ENTITY_ID))
+                .withTrainNumber(resultSet.getString(ROUTE_TRAIN_NUMBER))
                 .withStationDeparture(stationDeparture)
                 .withStationArrival(stationArrival)
-                .withDateDeparture(resultSet.getString("date_departure"))
-                .withDateArrival(resultSet.getString("date_arrival"))
-                .withTravelCost(resultSet.getInt("travel_cost"))
-                .withSeatsReserved(resultSet.getInt("seats_reserved"))
-                .withSeatsTotal(resultSet.getInt("seats_total"))
+                .withDateDeparture(resultSet.getString(ROUTE_DATE_DEPARTURE))
+                .withDateArrival(resultSet.getString(ROUTE_DATE_ARRIVAL))
+                .withTravelCost(resultSet.getInt(ROUTE_TRAVEL_COST))
+                .withSeatsReserved(resultSet.getInt(ROUTE_SEATS_RESERVED))
+                .withSeatsTotal(resultSet.getInt(ROUTE_SEATS_TOTAL))
                 .build();
     }
 

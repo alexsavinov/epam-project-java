@@ -10,6 +10,14 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * Maintenances Station CRUD operations.
+ * <p>
+ * Uses dbManager.
+ * Handles SQLException and returns DBException.
+ *
+ * @author O.Savinov
+ */
 public class StationManager {
 
     private static StationManager instance;
@@ -20,6 +28,11 @@ public class StationManager {
         dbManager = DBManager.getInstance();
     }
 
+    /**
+     * Returns an instance of StationManager.
+     *
+     * @return StationManager
+     */
     public static synchronized StationManager getInstance() {
         if (instance == null) {
             instance = new StationManager();
@@ -27,7 +40,14 @@ public class StationManager {
         return instance;
     }
 
+    /**
+     * Returns a list of Stations.
+     *
+     * @return ArrayList of Stations
+     * @throws DBException
+     */
     public ArrayList<Station> getAll() throws DBException {
+
         logger.debug("#getAll()");
 
         try (Connection connection = dbManager.getConnection()) {
@@ -38,7 +58,15 @@ public class StationManager {
         }
     }
 
+    /**
+     * Returns a Station by id.
+     *
+     * @param id Integer value of Station id
+     * @return Station
+     * @throws DBException
+     */
     public Station get(int id) throws DBException {
+
         logger.debug("#get(station).");
 
         try (Connection connection = dbManager.getConnection()) {
@@ -49,7 +77,14 @@ public class StationManager {
         }
     }
 
+    /**
+     * Adds a new Station.
+     *
+     * @param station Station to add
+     * @throws DBException
+     */
     public void add(Station station) throws DBException {
+
         logger.debug("#add(station).");
 
         try (Connection connection = dbManager.getConnection()) {
@@ -60,7 +95,14 @@ public class StationManager {
         }
     }
 
+    /**
+     * Deletes existed Station by id.
+     *
+     * @param id Integer value of Station id
+     * @throws DBException
+     */
     public void delete(int id) throws DBException {
+
         logger.debug("#delete(id).");
 
         try (Connection connection = dbManager.getConnection()) {
@@ -71,7 +113,15 @@ public class StationManager {
         }
     }
 
+    /**
+     * Updates existed Station.
+     *
+     * @param id         Integer value of Station id
+     * @param station       Station data to update
+     * @throws DBException
+     */
     public void update(int id, Station station) throws DBException {
+
         logger.debug("#update(id, station): {} -- {}", id, station);
 
         try (Connection connection = dbManager.getConnection()) {

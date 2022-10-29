@@ -12,12 +12,25 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Objects;
 
+/**
+ * Initialization servlet controller.
+ * <p>
+ * Uses for errors output.
+ *
+ * @author O.Savinov
+ */
 @WebServlet(name = "InitServlet",
         urlPatterns = {"/error"})
 public class InitServlet extends HttpServlet {
 
     private static final Logger logger = LogManager.getLogger(InitServlet.class);
 
+    /**
+     * Handles GET-Requests.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     */
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) {
 
@@ -60,9 +73,14 @@ public class InitServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Handles POSR-Requests.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) {
 
         doGet(request, response);
     }

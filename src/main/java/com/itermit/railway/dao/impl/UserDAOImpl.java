@@ -14,11 +14,21 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import static com.itermit.railway.db.Fields.*;
+
+/**
+ * DAO Implementation for Users.
+ * <p>
+ * Processes request to database from OrderManager with a given connection.
+ *
+ * @author O.Savinov
+ */
 public class UserDAOImpl implements UserDAO {
 
     private DBManager dbManager;
     private static UserDAOImpl instance;
     private static final Logger logger = LogManager.getLogger(UserDAOImpl.class);
+    /* SQL Queries */
     public static final String SQL_GET_ALL_USERS = "" +
             "SELECT id, name, password, email, isadmin, isactive, activation_token " +
             "FROM users";
@@ -45,6 +55,18 @@ public class UserDAOImpl implements UserDAO {
             "SELECT COUNT(*) total_rows " +
             "FROM users";
 
+    /**
+     * Default constructor
+     */
+    private UserDAOImpl() {
+        dbManager = DBManager.getInstance();
+    }
+
+    /**
+     * Returns an instance of User's DAO implementation.
+     *
+     * @return UserDAOImpl
+     */
     public static synchronized UserDAOImpl getInstance() {
         if (instance == null) {
             instance = new UserDAOImpl();
@@ -52,10 +74,44 @@ public class UserDAOImpl implements UserDAO {
         return instance;
     }
 
-    private UserDAOImpl() {
-        dbManager = DBManager.getInstance();
+    /**
+     * Returns a list of Users.
+     *
+     * @param connection Connection to DataSource
+     * @return ArrayList of Users
+     * @throws SQLException
+     */
+    @Override
+    public ArrayList<User> getAll(Connection connection) throws SQLException {
+
+        logger.debug("#getAll(connection).");
+
+        ArrayList<User> users = new ArrayList<>();
+
+        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
+
+        try {
+            preparedStatement = connection.prepareStatement(SQL_GET_ALL_USERS);
+            resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                users.add(extract(resultSet));
+            }
+        } finally {
+            DBManager.closeResultSet(resultSet);
+            DBManager.closePreparedStatement(preparedStatement);
+        }
+
+        return users;
     }
 
+    /**
+     * Returns a list of Users.
+     *
+     * @param connection Connection to DataSource
+     * @return ArrayList of Users
+     * @throws SQLException
+     */
     @Override
     public Paginator getPaginated(Connection connection, QueryMaker query) throws SQLException {
 
@@ -76,6 +132,13 @@ public class UserDAOImpl implements UserDAO {
                 .build();
     }
 
+    /**
+     * Returns total number of records in DB table for given query.
+     *
+     * @param connection Connection to DataSource
+     * @param query      QueryMaker to construct SQL-query with conditions
+     * @throws SQLException
+     */
     public int getTotalRows(Connection connection, QueryMaker query) throws SQLException {
 
         int totalRows = 0;
@@ -88,7 +151,7 @@ public class UserDAOImpl implements UserDAO {
 
             ResultSet rsTotalRows = preparedStatement.executeQuery();
             if (rsTotalRows.next()) {
-                totalRows = rsTotalRows.getInt("total_rows");
+                totalRows = rsTotalRows.getInt(TOTAL_ROWS);
             }
         } finally {
             DBManager.closeResultSet(resultSet);
@@ -98,6 +161,14 @@ public class UserDAOImpl implements UserDAO {
         return totalRows;
     }
 
+    /**
+     * Returns a filtered list of Users.
+     *
+     * @param connection Connection to DataSource
+     * @param query      QueryMaker to construct SQL-query with conditions
+     * @return ArrayList of Users
+     * @throws SQLException
+     */
     @Override
     public ArrayList<User> getFiltered(Connection connection, QueryMaker query) throws SQLException {
 
@@ -124,6 +195,14 @@ public class UserDAOImpl implements UserDAO {
         return users;
     }
 
+    /**
+     * Returns a User by id.
+     *
+     * @param connection Connection to DataSource
+     * @param id         Integer value of User id
+     * @return User
+     * @throws SQLException
+     */
     @Override
     public User get(Connection connection, int id) throws SQLException {
 
@@ -149,6 +228,14 @@ public class UserDAOImpl implements UserDAO {
         return user;
     }
 
+    /**
+     * Returns a User by entity data.
+     *
+     * @param connection Connection to DataSource
+     * @param user       User entity
+     * @return User
+     * @throws SQLException
+     */
     @Override
     public User get(Connection connection, User user) throws SQLException {
 
@@ -176,30 +263,13 @@ public class UserDAOImpl implements UserDAO {
         return user;
     }
 
-    @Override
-    public ArrayList<User> getAll(Connection connection) throws SQLException {
-
-        logger.debug("#getAll(connection).");
-
-        ArrayList<User> users = new ArrayList<>();
-
-        ResultSet resultSet = null;
-        PreparedStatement preparedStatement = null;
-
-        try {
-            preparedStatement = connection.prepareStatement(SQL_GET_ALL_USERS);
-            resultSet = preparedStatement.executeQuery();
-            while (resultSet.next()) {
-                users.add(extract(resultSet));
-            }
-        } finally {
-            DBManager.closeResultSet(resultSet);
-            DBManager.closePreparedStatement(preparedStatement);
-        }
-
-        return users;
-    }
-
+    /**
+     * Adds a new User.
+     *
+     * @param connection Connection to DataSource
+     * @param user       User to add
+     * @throws SQLException
+     */
     @Override
     public void add(Connection connection, User user) throws SQLException {
 
@@ -224,6 +294,14 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
+    /**
+     * Updates existed User.
+     *
+     * @param connection Connection to DataSource
+     * @param id         Integer value of User id
+     * @param user       User data to update
+     * @throws SQLException
+     */
     @Override
     public void update(Connection connection, int id, User user) throws SQLException {
 
@@ -248,6 +326,13 @@ public class UserDAOImpl implements UserDAO {
 
     }
 
+    /**
+     * Deletes existed User by id.
+     *
+     * @param connection Connection to DataSource
+     * @param id         Integer value of User id
+     * @throws SQLException
+     */
     @Override
     public void delete(Connection connection, int id) throws SQLException {
 
@@ -270,17 +355,24 @@ public class UserDAOImpl implements UserDAO {
         }
     }
 
+    /**
+     * Extracts User entity from given ResultSet.
+     *
+     * @param resultSet ResultSet to process
+     * @return User
+     * @throws SQLException
+     */
     @Override
     public User extract(ResultSet resultSet) throws SQLException {
 
         return new User.Builder()
-                .withId(resultSet.getInt(User.F_ID))
-                .withName(resultSet.getString(User.F_NAME))
-                .withPassword(resultSet.getString(User.F_PASSWORD))
-                .withEmail(resultSet.getString(User.F_EMAIL))
-                .withIsAdmin(resultSet.getBoolean(User.F_ISADMIN))
-                .withIsActive(resultSet.getBoolean(User.F_ISACTIVE))
-                .withActivationToken(resultSet.getString(User.F_ACTIVATION_TOKEN))
+                .withId(resultSet.getInt(ENTITY_ID))
+                .withName(resultSet.getString(USER_NAME))
+                .withPassword(resultSet.getString(USER_PASSWORD))
+                .withEmail(resultSet.getString(USER_EMAIL))
+                .withIsAdmin(resultSet.getBoolean(USER_IS_ADMIN))
+                .withIsActive(resultSet.getBoolean(USER_IS_ACTIVE))
+                .withActivationToken(resultSet.getString(USER_ACTIVATION_TOKEN))
                 .build();
     }
 

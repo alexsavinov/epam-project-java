@@ -4,16 +4,18 @@ import java.io.IOException;
 
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 
+/**
+ * Simple tag for display Route description in short name.
+ * <p>
+ * Consist from Train Number and Stations of departure and arrival.
+ *
+ * @author O.Savinov
+ */
 public class RouteName extends SimpleTagSupport {
 
     private String trainNumber;
     private String stationDeparture;
     private String stationArrival;
-
-    /*
-     * Example of usage:
-     *    <customTags:routeName train_number="001" station_arrival="Station1" station_departure="Station2"/>
-     */
 
     @Override
     public void doTag() throws IOException {

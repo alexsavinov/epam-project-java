@@ -7,7 +7,7 @@
 <html lang="en">
 <head>
     <%@ include file="/parts/head.jspf" %>
-    <title>Railway ticket office - ${page_title}</title>
+    <title><fmt:message key='index_jsp.title'/> - ${page_title}</title>
 </head>
 <body>
 
@@ -22,10 +22,10 @@
 
             <thead class="_main-color4 _main-bg-color2 ">
             <tr class="rounded">
-                <th scope="col">Route</th>
-                <th scope="col">Total seats reserved</th>
-                <th scope="col">Ticket price</th>
-                <th scope="col">Total travel cost</th>
+                <th scope="col"><fmt:message key='routes.route'/></th>
+                <th scope="col"><fmt:message key='routes.TotalSeatsReserved'/></th>
+                <th scope="col"><fmt:message key='routes.TicketPrice'/></th>
+                <th scope="col"><fmt:message key='routes.TravelCostTotal'/></th>
             </tr>
             </thead>
 

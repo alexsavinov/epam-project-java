@@ -14,6 +14,14 @@ import java.util.ArrayList;
 
 import static com.itermit.railway.dao.impl.UserDAOImpl.SQL_GET_ALL_USERS;
 
+/**
+ * Maintenances User CRUD operations.
+ * <p>
+ * Uses dbManager.
+ * Handles SQLException and returns DBException.
+ *
+ * @author O.Savinov
+ */
 public class UserManager {
 
     private static UserManager instance;
@@ -24,6 +32,11 @@ public class UserManager {
         dbManager = DBManager.getInstance();
     }
 
+    /**
+     * Returns an instance of UserManager.
+     *
+     * @return UserManager
+     */
     public static synchronized UserManager getInstance() {
         if (instance == null) {
             instance = new UserManager();
@@ -31,30 +44,12 @@ public class UserManager {
         return instance;
     }
 
-    public User get(int id) throws DBException {
-
-        logger.debug("#get(id).");
-
-        try (Connection connection = dbManager.getConnection()) {
-            return UserDAOImpl.getInstance().get(connection, id);
-        } catch (SQLException e) {
-            String errorMessage = CommandContainer.getErrorMessage("Error while get(user)!", e);
-            throw new DBException(errorMessage, e);
-        }
-    }
-
-    public User get(User user) throws DBException {
-
-        logger.debug("#get(user).");
-
-        try (Connection connection = dbManager.getConnection()) {
-            return UserDAOImpl.getInstance().get(connection, user);
-        } catch (SQLException e) {
-            String errorMessage = CommandContainer.getErrorMessage("Error while get(user)!", e);
-            throw new DBException(errorMessage, e);
-        }
-    }
-
+    /**
+     * Returns a list of Users.
+     *
+     * @return ArrayList of Users
+     * @throws DBException
+     */
     public ArrayList<User> getAll() throws DBException {
 
         logger.debug("#getAll()");
@@ -67,6 +62,52 @@ public class UserManager {
         }
     }
 
+    /**
+     * Returns a User by id.
+     *
+     * @param id Integer value of User id
+     * @return User
+     * @throws DBException
+     */
+    public User get(int id) throws DBException {
+
+        logger.debug("#get(id).");
+
+        try (Connection connection = dbManager.getConnection()) {
+            return UserDAOImpl.getInstance().get(connection, id);
+        } catch (SQLException e) {
+            String errorMessage = CommandContainer.getErrorMessage("Error while get(user)!", e);
+            throw new DBException(errorMessage, e);
+        }
+    }
+
+    /**
+     * Returns a User by entity data.
+     *
+     * @param user User entity
+     * @return User
+     * @throws DBException
+     */
+    public User get(User user) throws DBException {
+
+        logger.debug("#get(user).");
+
+        try (Connection connection = dbManager.getConnection()) {
+            return UserDAOImpl.getInstance().get(connection, user);
+        } catch (SQLException e) {
+            String errorMessage = CommandContainer.getErrorMessage("Error while get(user)!", e);
+            throw new DBException(errorMessage, e);
+        }
+    }
+
+    /**
+     * Adds a new User.
+     * <p>
+     * Also checks if user with the same name or email already exist.
+     *
+     * @param user User to add
+     * @throws DBException
+     */
     public void add(User user) throws DBException {
 
         logger.debug("#add(user).");
@@ -81,14 +122,14 @@ public class UserManager {
             connection.setAutoCommit(false);
 
             if (checkSameName(connection, user)) {
-                /* Rollback if not */
+                /* Rollback if the same name */
                 DBManager.rollback(connection);
                 logger.info("User with same name {} is already exists!", user.getName());
                 throw new DBException("User with same name " + user.getName() + " is already exists!", null);
             }
 
             if (checkSameEmail(connection, user)) {
-                /* Rollback if not */
+                /* Rollback if the same email */
                 DBManager.rollback(connection);
                 logger.info("User with same E-mail {} is already exists!", user.getEmail());
                 throw new DBException("User with same E-mail " + user.getEmail() + " is already exists!", null);
@@ -101,18 +142,33 @@ public class UserManager {
 
         } catch (SQLException e) {
             /* Rollback if error */
-            DBManager.rollback(connection);
-            String errorMessage = CommandContainer.getErrorMessage("Error while adding user!", e);
-            throw new DBException(errorMessage, e);
+            try {
+                DBManager.rollback(connection);
+                String errorMessage = CommandContainer.getErrorMessage("Error while adding user!", e);
+                logger.error("{} {}", errorMessage, e.getMessage());
+                throw new DBException(errorMessage, e);
+            } catch (SQLException ex) {
+                logger.error("Error rollback connection! {}", ex.getMessage());
+                throw new DBException("Error rollback connection!", ex);
+            }
         } finally {
             try {
                 DBManager.closeConnection(connection);
             } catch (SQLException e) {
-                throw new DBException("Error closing Prepared statement! ", e);
+                logger.error("Error closing Prepared statement! {}", e.getMessage());
+                throw new DBException("Error closing Prepared statement!", e);
             }
         }
     }
 
+    /**
+     * Returns true if users have same name.
+     *
+     * @param connection Connection to DataSource
+     * @param user       User data to check in DB
+     * @return Boolean
+     * @throws SQLException
+     */
     public Boolean checkSameName(Connection connection, User user) throws SQLException {
 
         QueryMaker query = new QueryMaker.Builder()
@@ -124,6 +180,14 @@ public class UserManager {
         return users.size() > 0;
     }
 
+    /**
+     * Returns true if users have same email.
+     *
+     * @param connection Connection to DataSource
+     * @param user       User data to check in DB
+     * @return Boolean
+     * @throws SQLException
+     */
     public Boolean checkSameEmail(Connection connection, User user) throws SQLException {
 
         QueryMaker query = new QueryMaker.Builder()
@@ -135,6 +199,12 @@ public class UserManager {
         return users.size() > 0;
     }
 
+    /**
+     * Deletes existed User by id.
+     *
+     * @param id Integer value of User id
+     * @throws DBException
+     */
     public void delete(int id) throws DBException {
 
         logger.debug("#delete(id).");
@@ -147,6 +217,13 @@ public class UserManager {
         }
     }
 
+    /**
+     * Updates existed User.
+     *
+     * @param id         Integer value of User id
+     * @param user       User data to update
+     * @throws DBException
+     */
     public void update(int id, User user) throws DBException {
 
         logger.debug("#update(id, user): {} -- {}", id, user);
@@ -158,19 +235,5 @@ public class UserManager {
             throw new DBException(errorMessage, e);
         }
     }
-
-    public void updatePassword(int id, String password) throws DBException {
-
-        logger.debug("#updatePassword(id, password): {}", id);
-
-        try (Connection connection = dbManager.getConnection()) {
-            UserDAOImpl.getInstance().update(connection, id,
-                    new User.Builder().withId(id).withPassword(password).build());
-        } catch (SQLException e) {
-            String errorMessage = CommandContainer.getErrorMessage("Error while update user password!", e);
-            throw new DBException(errorMessage, e);
-        }
-    }
-
 
 }

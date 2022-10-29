@@ -16,10 +16,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
+/**
+ * Command to Search for Routes with certain conditions.
+ * <p>
+ * Processes POST-Request.
+ * Process input filters and displays founded Routes.
+ *
+ * @author O.Savinov
+ */
 public class SearchPostCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(SearchPostCommand.class);
 
+    /**
+     * Command execution.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @return Address string
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
             throws CommandException {
@@ -68,10 +83,6 @@ public class SearchPostCommand implements Command {
 
             Paginator paginator = RouteManager.getInstance().getPaginated(queryBuilder.build());
 
-//        for (Route route: (ArrayList<Route>) paginator.getData()) {
-//            logger.warn(route.getName(), route.getTravelTime());
-//        }
-
             request.getSession().setAttribute("routes", paginator.getData());
             request.getSession().setAttribute("paginator", paginator);
         } catch (DBException e) {
@@ -82,6 +93,13 @@ public class SearchPostCommand implements Command {
         return "/search";
     }
 
+    /**
+     * Fills QueryMaker with given Filtering Parameter.
+     *
+     * @param request  HttpServletRequest
+     * @param queryBuilder QueryMaker builder
+     * @param parameterName Name of parameter
+     */
     private static void processFiltering(HttpServletRequest request,
                                          QueryMaker.Builder queryBuilder,
                                          String parameterName) {
@@ -127,6 +145,14 @@ public class SearchPostCommand implements Command {
         }
     }
 
+
+    /**
+     * Fills QueryMaker with given Sorting Parameter.
+     *
+     * @param request  HttpServletRequest
+     * @param queryBuilder QueryMaker builder
+     * @param parameterName Name of parameter
+     */
     private static void processSorting(HttpServletRequest request,
                                        QueryMaker.Builder queryBuilder,
                                        String parameterName) {

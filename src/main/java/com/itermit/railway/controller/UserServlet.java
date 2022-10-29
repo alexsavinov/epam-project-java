@@ -11,8 +11,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-/*
- * Handles user management.
+/**
+ * Users servlet controller.
+ * <p>
+ * Processes request and response by related command depend on URI.
+ *
+ * @author O.Savinov
  */
 @MultipartConfig
 @WebServlet(name = "UserServlet",
@@ -21,8 +25,16 @@ public class UserServlet extends HttpServlet {
 
     private static final Logger logger = LogManager.getLogger(UserServlet.class);
 
+    /**
+     * Handles GET-Requests.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         logger.debug("#doGet(request, response).  {}", request.getRequestURI());
@@ -50,8 +62,16 @@ public class UserServlet extends HttpServlet {
         }
     }
 
+    /**
+     * Handles POST-Requests.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @throws ServletException
+     * @throws IOException
+     */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws
             ServletException, IOException {
 
         logger.debug("#doPost(request, response).  {}", request.getRequestURI());

@@ -13,10 +13,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
+/**
+ * Command to edit Order.
+ * <p>
+ * Processes GET-Request.
+ * Displays Form to submit.
+ *
+ * @author O.Savinov
+ */
 public class OrderEditGetCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(OrderEditGetCommand.class);
 
+    /**
+     * Command execution.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @return Address string
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
             throws CommandException {

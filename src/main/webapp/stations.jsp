@@ -7,7 +7,7 @@
 <html lang="en">
 <head>
     <%@ include file="/parts/head.jspf" %>
-    <title>Railway ticket office - ${page_title}</title>
+    <title><fmt:message key='index_jsp.title'/> - ${page_title}</title>
 </head>
 <body>
 
@@ -20,7 +20,7 @@
         <a class="btn btn-sm btn-outline-secondary mt-2 mb-1 <customTags:access role="user" modifier="d-none"/>"
            href="/stations/add">
             <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            Add ${url}
+            <fmt:message key='words.add'/> ${url}
         </a>
 
         <table class="table table-striped table-hover p-5" aria-describedby="Stations">

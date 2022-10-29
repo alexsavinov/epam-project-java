@@ -7,7 +7,7 @@
 <html lang="en">
 <head>
     <%@ include file="/parts/head.jspf" %>
-    <title>Railway ticket office - ${page_title}</title>
+    <title><fmt:message key='index_jsp.title'/> - ${page_title}</title>
 </head>
 <body onload="updateTime();">
 
@@ -62,7 +62,7 @@
         </div>
 
         <div class="form-group mb-1">
-            <label for="route">Route</label>
+            <label for="<fmt:message key='routes.route'/></th>"><fmt:message key='routes.route'/></th></label>
             <select class="form-control" id="route" name="route" onchange="updateRoute();">
                 <c:forEach var="route" items="${routes}">
                     <option value="${route.getId()}"
@@ -102,7 +102,9 @@
             <div class="h5">Route details</div>
 
             <div class="mb-1">
-                <label for="train_number" class="form-label">Train number</label>
+                <label for="train_number" class="form-label">
+                    <fmt:message key='words.trainNumberColumn'/>
+                </label>
                 <input type="text" class="form-control" placeholder="Train number" aria-label="train_number"
                        id="train_number" name="train_number"
                        value="${order.getRoute().getTrainNumber()}"
@@ -110,7 +112,9 @@
             </div>
 
             <div class="form-group mb-1">
-                <label for="station_departure">Station departure</label>
+                <label for="station_departure">
+                    <fmt:message key='words.stationDeparture'/>
+                </label>
                 <input type="text" class="form-control" aria-label="station_departure"
                        id="station_departure" name="station_departure"
                        value="${order.getRoute().getStationDeparture().getName()}"
@@ -126,7 +130,9 @@
             </div>
 
             <div class="form-group mb-1">
-                <label for="station_arrival">Station arrival</label>
+                <label for="station_arrival">
+                    <fmt:message key='words.stationArrival'/>
+                </label>
                 <input type="text" class="form-control" aria-label="station_arrival"
                        id="station_arrival" name="station_arrival"
                        value="${order.getRoute().getStationArrival().getName()}"
@@ -134,7 +140,9 @@
             </div>
 
             <div class="mb-1">
-                <label for="date_arrival" class="form-label">Date arrival</label>
+                <label for="date_arrival" class="form-label">
+                    <fmt:message key='words.DateTimeArrival'/>
+                </label>
                 <input type="datetime-local" class="form-control" aria-label="date_arrival" onchange="updateTime();"
                        id="date_arrival" name="date_arrival"
                        value="${order.getRoute().getDateArrival()}"
@@ -143,14 +151,18 @@
             </div>
 
             <div class="mb-1">
-                <label for="travel_time" class="form-label">Travel time</label>
+                <label for="travel_time" class="form-label">
+                    <fmt:message key='words.TravelTime'/>
+                </label>
                 <input type="text" class="form-control" aria-label="travel_time"
                        id="travel_time" name="travel_time"
                        disabled>
             </div>
 
             <div class="mb-1">
-                <label for="travel_cost" class="form-label">Travel cost</label>
+                <label for="travel_cost" class="form-label">
+                    <fmt:message key='words.TravelCost'/>
+                </label>
                 <input type="number" class="form-control" aria-label="travel_cost"
                        id="travel_cost" name="travel_cost"
                        value="${order.getRoute().getTravelCost()}"
@@ -158,7 +170,9 @@
             </div>
 
             <div class="mb-1">
-                <label for="seats_reserved" class="form-label">Seats reserved</label>
+                <label for="seats_reserved" class="form-label">
+                    <fmt:message key='words.SeatsReserved'/>
+                </label>
                 <input type="number" class="form-control" aria-label="seats_reserved"
                        id="seats_reserved" name="seats_reserved"
                        value="${order.getRoute().getSeatsReserved()}"
@@ -166,7 +180,9 @@
             </div>
 
             <div class="mb-1">
-                <label for="seats_available" class="form-label">Seats available</label>
+                <label for="seats_available" class="form-label">
+                    <fmt:message key='words.SeatsAvailable'/>
+                </label>
                 <input type="number" class="form-control" aria-label="seats_available"
                        id="seats_available" name="seats_available"
                        value="${order.getRoute().getSeatsAvailable()}"
@@ -174,7 +190,9 @@
             </div>
 
             <div class="mb-1">
-                <label for="seats_total" class="form-label">Seats total</label>
+                <label for="seats_total" class="form-label">
+                    <fmt:message key='words.SeatsTotal'/>
+                </label>
                 <input type="number" class="form-control" aria-label="seats_total"
                        id="seats_total" name="seats_total"
                        value="${order.getRoute().getSeatsTotal()}"
@@ -185,11 +203,11 @@
 
         <div class="form-group mt-3">
             <button type="submit" class="btn" <customTags:access role="user" modifier="disabled"/>>
-                Save
+                <fmt:message key='words.save'/>
             </button>
             <a class="btn btn-outline-secondary <customTags:access role="user" modifier="disabled"/>"
                href="/orders/delete/${order.getId()}">
-                Delete
+                <fmt:message key='words.delete'/>
             </a>
         </div>
     </form>

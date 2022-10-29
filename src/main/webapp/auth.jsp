@@ -74,6 +74,7 @@
             <div class="mb-1">
                 <label for="password" class="form-label">
                     <fmt:message key='auth_jsp.password'/>
+                    <fmt:message key='users.user'/>
                 </label>
                 <div class="input-group mb-3">
                     <input type="password" class="form-control" id="password" name="password"

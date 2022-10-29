@@ -11,7 +11,7 @@
                 <%-- modal-header --%>
                 <div class="modal-header _main-bg-color4 _main-color2">
                     <h5 class="modal-title" id="reserveAddModalLabel">
-                        Ticket reservation - add
+                        Ticket reservation - <fmt:message key='words.add'/>
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>

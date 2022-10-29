@@ -15,10 +15,25 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 
+/**
+ * Command to edit Route.
+ * <p>
+ * Processes GET-Request.
+ * Displays Form to submit.
+ *
+ * @author O.Savinov
+ */
 public class RouteEditGetCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(RouteEditGetCommand.class);
 
+    /**
+     * Command execution.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @return Address string
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response)
             throws CommandException {
