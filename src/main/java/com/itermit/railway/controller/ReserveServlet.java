@@ -55,7 +55,7 @@ public class ReserveServlet extends HttpServlet {
 
         } else if (request.getRequestURI().contains("/reserves/add")) {
 
-            CommandHandler.processRedirect("reserveAddGet", request, response);
+            CommandHandler.processForward("reserveAddGet", request, response);
 
         } else {
             request.setAttribute("error", "UNHANDLED request: " + request.getRequestURI());

@@ -1,6 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/parts/init.jspf" %>
 
+<c:set var="key_title" value="auth_jsp.title" scope="page"/>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,7 +22,7 @@
     </script>
 
     <title>
-        <fmt:message key='auth_jsp.title'/>
+        <fmt:message key='index_jsp.title'/> - <fmt:message key='${key_title}'/>
     </title>
 
 </head>
@@ -43,28 +45,29 @@
                     <fmt:message key='auth_jsp.username'/>
                 </label>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Name"
-                           aria-label="name" id="name" name="name"
+                    <input type="text" class="form-control" placeholder=
+                    <fmt:message key='auth_jsp.username'/>
+                            aria-label="name" id="name" name="name"
                            data-bs-toggle="popover" data-bs-trigger="manual"
                            data-bs-placement="bottom" data-ds-container="body"
                            data-bs-delay='{"show":100,"hide":300}' data-bs-title=" "
                            onchange="validate(this)"
                            required>
                     <button type="button" class="btn btn-sm btn-warn" data-bs-container="body"
+                            onfocus="showPopover(this)"
                             data-bs-toggle="popover" data-bs-placement="right"
                             data-bs-trigger="focus"
                             data-bs-html="true"
-                            title="Your username must:"
                             data-bs-content="
                         <ul>
-                            <li>Minimum 4 characters</li>
-                            <li>Only numbers are not allowed at least one character should be there</li>
-                            <li>contain at least 1 lowercase character (a-z)</li>
-                            <li>No special characters allowed except</li>
-                            <li>No space allowed</li>
+                            <li><fmt:message key='users.user.help_1'/></li>
+                            <li><fmt:message key='users.user.help_2'/></li>
+                            <li><fmt:message key='users.user.help_3'/></li>
+                            <li><fmt:message key='users.user.help_4'/></li>
+                            <li><fmt:message key='users.user.help_5'/></li>
                             <li>Character only is allowed</li>
                         </ul>"
-                            onfocus="showPopover(this)">
+                            title=<fmt:message key='users.user.help_tittle'/>>
                         ?
                     </button>
                 </div>
@@ -73,12 +76,12 @@
 
             <div class="mb-1">
                 <label for="password" class="form-label">
-                    <fmt:message key='auth_jsp.password'/>
-                    <fmt:message key='users.user'/>
+                    <fmt:message key='users.password'/>
                 </label>
                 <div class="input-group mb-3">
                     <input type="password" class="form-control" id="password" name="password"
-                           placeholder="Password" aria-describedby="passwordHelpBlock"
+                           placeholder=
+                           <fmt:message key='users.password'/> aria-describedby="passwordHelpBlock"
                            data-bs-toggle="popover" data-bs-trigger="manual"
                            data-bs-placement="bottom" data-ds-container="body"
                            data-bs-delay='{"show":100,"hide":300}' data-bs-title=" "
@@ -86,18 +89,18 @@
                            required>
                     <button type="button" class="btn btn-sm btn-warn" data-bs-container="body"
                             data-bs-toggle="popover" data-bs-placement="right"
-                            data-bs-trigger="focus"
-                            data-bs-html="true"
-                            title="Your password must:"
+                            data-bs-trigger="focus" data-bs-html="true"
+                            onfocus="showPopover(this)"
                             data-bs-content="
                         <ul>
-                            <li>Contain at least 8 characters</li>
-                            <li>contain at least 1 number</li>
-                            <li>contain at least 1 lowercase character (a-z)</li>
-                            <li>contain at least 1 uppercase character (A-Z)</li>
-                            <li>contains only 0-9a-zA-Z</li>
+                            <li><fmt:message key='users.password.help_1'/></li>
+                            <li><fmt:message key='users.password.help_2'/></li>
+                            <li><fmt:message key='users.password.help_3'/></li>
+                            <li><fmt:message key='users.password.help_4'/></li>
+                            <li><fmt:message key='users.password.help_5'/></li>
                         </ul>"
-                            onfocus="showPopover(this)">
+                            title=
+                            <fmt:message key='users.password.help_tittle'/>>
                         ?
                     </button>
                 </div>
@@ -115,7 +118,7 @@
                 </form>
 
                 <a id="register_button" onclick="goByUrl('/register')"
-                        class="btn mt-3 _btn_form <customTags:access role="authorized" modifier="disabled"/>">
+                   class="btn mt-3 _btn_form <customTags:access role="authorized" modifier="disabled"/>">
                     <fmt:message key='auth_jsp.btn.register'/>
                 </a>
             </div>
@@ -125,10 +128,10 @@
     </div>
 
 
-<%--    <button class="g-recaptcha"--%>
-<%--            data-sitekey="6LfOWqwiAAAAAECWjWR8VWQWyy094CT6o6b2z58v"--%>
-<%--            data-callback='onSubmit'--%>
-<%--            data-action='submit'>Submit</button>--%>
+    <%--    <button class="g-recaptcha"--%>
+    <%--            data-sitekey="6LfOWqwiAAAAAECWjWR8VWQWyy094CT6o6b2z58v"--%>
+    <%--            data-callback='onSubmit'--%>
+    <%--            data-action='submit'>Submit</button>--%>
 
     <%@ include file="/parts/message.jspf" %>
     <%@ include file="/parts/footer.jspf" %>

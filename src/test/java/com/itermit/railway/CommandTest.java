@@ -16,8 +16,10 @@ import com.itermit.railway.command.Auth.AuthLogoutCommand;
 import com.itermit.railway.command.Auth.AuthRegisterCommand;
 import com.itermit.railway.command.Order.OrderAddGetCommand;
 import com.itermit.railway.command.Order.OrderAddPostCommand;
+import com.itermit.railway.command.Search.SearchGetCommand;
 import com.itermit.railway.command.Search.SearchResetCommand;
 import com.itermit.railway.db.DBManager;
+import com.itermit.railway.db.UserManager;
 import com.itermit.railway.db.entity.User;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -289,17 +291,50 @@ public class CommandTest extends Mockito {
         PrintWriter writer = new PrintWriter(stringWriter);
         when(response.getWriter()).thenReturn(writer);
 
-        final User user = mock(User.class);
-        when(user.getId()).thenReturn(2);
+        when(request.getParameter("name")).thenReturn("writer");
+        when(request.getParameter("password")).thenReturn("writerpassword");
+
+//        final User user = mock(User.class);
+        final User user = new User.Builder().withId(1).build();
+//        when(user.getId()).thenReturn(2);
+
+        UserManager userManager = mock(UserManager.class);
+//        when(userManager.get(user)).thenReturn(user);
+        when(userManager.get(user)).thenReturn(new User.Builder().withId(1).build());
+
+
 
         final AuthLoginCommand authLoginCommand = mock(AuthLoginCommand.class);
         String result = authLoginCommand.execute(request, response);
+
+        System.out.println(request.getSession().getAttribute("userid"));;
 
         assertNull(result);
     }
 
     @Test
     public void AuthLogoutCommandTest() throws Exception {
+
+//        HttpServletRequest request = mock(HttpServletRequest.class);
+//        HttpServletResponse response = mock(HttpServletResponse.class);
+//
+//        HttpSession session = mock(HttpSession.class);
+//        when(request.getSession()).thenReturn(session);
+//
+//        StringWriter stringWriter = new StringWriter();
+//        PrintWriter writer = new PrintWriter(stringWriter);
+//        when(response.getWriter()).thenReturn(writer);
+//
+//        final User user = mock(User.class);
+//        when(user.getId()).thenReturn(2);
+//
+//        final AuthLogoutCommand authLogoutCommand = mock(AuthLogoutCommand.class);
+//        String result = authLogoutCommand.execute(request, response);
+//
+//        assertNull(result);
+
+
+
 
         HttpServletRequest request = mock(HttpServletRequest.class);
         HttpServletResponse response = mock(HttpServletResponse.class);
@@ -311,13 +346,12 @@ public class CommandTest extends Mockito {
         PrintWriter writer = new PrintWriter(stringWriter);
         when(response.getWriter()).thenReturn(writer);
 
-        final User user = mock(User.class);
-        when(user.getId()).thenReturn(2);
+        String result = new AuthLogoutCommand().execute(request, response);
 
-        final AuthLogoutCommand authLogoutCommand = mock(AuthLogoutCommand.class);
-        String result = authLogoutCommand.execute(request, response);
+        assertEquals("/", result);
 
-        assertNull(result);
+
+
     }
 
 
@@ -364,5 +398,26 @@ public class CommandTest extends Mockito {
 
         assertNull(result);
     }
-}
 
+
+    @Test
+    public void SearchGetCommandTest() throws Exception {
+
+        HttpServletRequest request = mock(HttpServletRequest.class);
+        HttpServletResponse response = mock(HttpServletResponse.class);
+
+        HttpSession session = mock(HttpSession.class);
+        when(request.getSession()).thenReturn(session);
+
+        StringWriter stringWriter = new StringWriter();
+        PrintWriter writer = new PrintWriter(stringWriter);
+        when(response.getWriter()).thenReturn(writer);
+
+        String result = new SearchGetCommand().execute(request, response);
+
+        assertEquals("/search.jsp", result);
+    }
+
+
+
+}

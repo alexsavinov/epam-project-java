@@ -24,19 +24,19 @@
             <a class="btn btn-outline-secondary _btn_profile mb-2 shadow-sm <customTags:access role="user" modifier="d-none"/>"
                href="/users">
                 <em class="fa fa-user-circle fa-3x _profile-btn"></em>
-                <fmt:message key='words.users'/>
+                <fmt:message key='users.users'/>
             </a>
 
             <a class="btn btn-outline-secondary _btn_profile mb-2 shadow-sm"
                href="/stations">
                 <em class="fa fa-university fa-3x _profile-btn"></em>
-                <fmt:message key='profile_jsp.stations'/>
+                <fmt:message key='stations.stations'/>
             </a>
 
             <a class="btn btn-outline-secondary _btn_profile mb-2 shadow-sm <customTags:access role="user" modifier="d-none"/>"
                href="/routes">
                 <em class="fa fa-map fa-3x _profile-btn"></em>
-                <fmt:message key='profile_jsp.routes'/>
+                <fmt:message key='routes.routes'/>
             </a>
 
             <a class="btn btn-outline-secondary _btn_profile mb-2 shadow-sm <customTags:access role="user" modifier="d-none"/>"

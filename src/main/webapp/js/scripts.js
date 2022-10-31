@@ -52,7 +52,7 @@ function validate(element) {
             const cost_max = parseInt(document.getElementById('cost_max').value);
             if (!isValidValue(element,
                 cost_max > 0 && element.value > cost_max,
-                'Enter value less than ' + cost_max)) {
+                ((currentLocale == 'uk') ? 'Введіть значення меньше за ' : 'Enter value less than ') + cost_max)) {
                 return;
             }
             break;
@@ -60,7 +60,7 @@ function validate(element) {
             const cost_min = parseInt(document.getElementById('cost_min').value);
             if (!isValidValue(element,
                 cost_min > 0 && element.value < cost_min,
-                'Enter value more than ' + cost_min)) {
+                ((currentLocale == 'uk') ? 'Введіть значення більше за ' : 'Enter value more than ') + cost_min)) {
                 return;
             }
             break;
@@ -69,7 +69,7 @@ function validate(element) {
             if (travel_time_max) element.value = Math.min(travel_time_max, element.value);
             if (!isValidValue(element,
                 travel_time_max > 0 && element.value > travel_time_max,
-                'Enter value less than ' + travel_time_max)) {
+                ((currentLocale == 'uk') ? 'Введіть значення меньше за ' : 'Enter value less than ') + travel_time_max)) {
                 return;
             }
             break;
@@ -77,7 +77,7 @@ function validate(element) {
             const travel_time_min = parseInt(document.getElementById("travel_time_min").value);
             if (!isValidValue(element,
                 travel_time_min > 0 && element.value < travel_time_min,
-                'Enter value more than ' + travel_time_min)) {
+                ((currentLocale == 'uk') ? 'Введіть значення більше за ' : 'Enter value more than ') + travel_time_min)) {
                 return;
             }
             break;
@@ -86,7 +86,7 @@ function validate(element) {
             if (seats_available_max) element.value = Math.min(seats_available_max, element.value);
             if (!isValidValue(element,
                 seats_available_max > 0 && element.value > seats_available_max,
-                'Enter value less than ' + seats_available_max)) {
+                ((currentLocale == 'uk') ? 'Введіть значення меньше за ' : 'Enter value less than ') + seats_available_max)) {
                 return;
             }
             break;
@@ -94,7 +94,7 @@ function validate(element) {
             const seats_available_min = parseInt(document.getElementById("seats_available_min").value);
             if (!isValidValue(element,
                 seats_available_min > 0 && element.value < seats_available_min,
-                'Enter value more than ' + seats_available_min)) {
+                ((currentLocale == 'uk') ? 'Введіть значення більше за ' : 'Enter value more than ') + seats_available_min)) {
                 return;
             }
             break;
@@ -139,7 +139,10 @@ function validate(element) {
                 const nameRGEX = /^[a-zA-Z0-9_]{4,100}[a-zA-Z]+[0-9]*$/;
                 const nameResult = nameRGEX.test(element.value || "");
                 $('#submit_button').removeClass("disabled");
-                if (!isValidValue(element, !nameResult, 'Name is incorrect!')) {
+                if (!isValidValue(
+                    element,
+                    !nameResult,
+                    (currentLocale == 'uk') ? 'Не вірне ім\'я!' : 'Name is incorrect!')) {
                     return;
                 }
             }
@@ -151,7 +154,7 @@ function validate(element) {
     if (min != null) {
         if (!isValidValue(element,
             element.value < min,
-            'Minimum value is ' + min)) {
+            ((currentLocale == 'uk') ? 'Мінімальне значення ' : 'Minimum value is ') + min)) {
             return;
         }
     }
@@ -160,7 +163,7 @@ function validate(element) {
     if (max != null) {
         if (!isValidValue(element,
             element.value > max,
-            'Maximum value is ' + max)) {
+            ((currentLocale == 'uk') ? 'Максимальне значення ' : 'Maximum value is ') + max)) {
             return;
         }
     }

@@ -11,7 +11,7 @@
                 <%-- modal-header --%>
                 <div class="modal-header _main-bg-color4 _main-color2">
                     <h5 class="modal-title" id="reserveAddModalLabel">
-                        Ticket reservation - <fmt:message key='words.add'/>
+                        <fmt:message key='tittles.ticket_reservation'/>
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -21,7 +21,7 @@
                     <div class="form-group d-flex flex-row mb-1 justify-content-between align-items-end">
                         <div>
                             <label class="form-label">
-                                Choose number of tickets to add:
+                                <fmt:message key='tittles.ticket_choose_reserve'/>:
                             </label>
                         </div>
                         <div class="d-flex g-0 m-0 p-0">
@@ -43,10 +43,10 @@
                 <%-- modal-footer --%>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary _btn_form" data-bs-dismiss="modal">
-                        Close
+                        <fmt:message key='actions.close'/>
                     </button>
                     <button type="submit" class="btn btn-outline-secondary _btn_form">
-                        Reserve
+                        <fmt:message key='actions.reserve'/>
                     </button>
                 </div>
 

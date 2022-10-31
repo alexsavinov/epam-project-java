@@ -36,7 +36,7 @@ public class UserDAOImpl implements UserDAO {
             "SELECT * " +
             "FROM users " +
             "WHERE name = ? AND password = SHA2(?, 0)";
-    private static final String SQL_GET_USER_BY_ID = "" +
+    public static final String SQL_GET_USER_BY_ID = "" +
             "SELECT * " +
             "FROM users " +
             "WHERE id = ?";

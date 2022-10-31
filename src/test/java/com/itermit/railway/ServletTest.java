@@ -203,8 +203,19 @@ public class ServletTest extends Mockito {
 
         final UserServlet servlet = mock(UserServlet.class);
 
-        doThrow(new RuntimeException()).when(servlet).doGet(request, response);
-        doThrow(new RuntimeException()).when(servlet).doPost(request, response);
+//        doThrow(new RuntimeException()).when(servlet).doGet(request, response);
+//        doThrow(new RuntimeException()).when(servlet).doPost(request, response);
+
+        when(request.getRequestURI()).thenReturn("/users");
+        servlet.doGet(request, response);
+
+//        request.
+//
+//        servlet.doPost(request, response);
+
+        System.out.println(request.getAttribute("error"));
+
+
     }
 
 

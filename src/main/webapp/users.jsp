@@ -1,8 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/parts/init.jspf" %>
 
-<%--<c:set var="page_title" value="Users" scope="page"/>--%>
-<c:set var="key_title" value="words.users" scope="page"/>
+<c:set var="key_title" value="users.users" scope="page"/>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -18,13 +17,13 @@
 
     <div class="_wrapper-table">
 
-        <a class="btn btn-sm btn-outline-secondary mt-2 mb-1 <customTags:access role="user" modifier="d-none"/>"
+        <a class="btn btn-sm btn-outline-secondary mt-2 mb-3 <customTags:access role="user" modifier="d-none"/>"
            href="/users/add">
             <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            <fmt:message key='words.add'/> ${url}
+            <fmt:message key='actions.add'/> ${url}
         </a>
 
-        <table class="table table-striped table-hover p-5 mt-3" aria-describedby="Users">
+        <table class="table table-striped table-hover p-5 mt-1" aria-describedby="Users">
             <thead class="table-secondary">
             <tr>
                 <th scope="col">

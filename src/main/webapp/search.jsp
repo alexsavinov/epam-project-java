@@ -29,7 +29,7 @@
                         <%-- Daterange --%>
                         <div class="form-group me-lg-3 mb-1 ms-1">
                             <label for="daterange" class="form-label">
-                                <fmt:message key='search_jsp.dateRange'/>:
+                                <fmt:message key='search_jsp.date_range'/>:
                             </label>
                             <input type="text" class="form-control _input-daterange"
                                    id="daterange" name="daterange" aria-label="daterange"
@@ -39,7 +39,7 @@
                         <%-- Train number --%>
                         <div class="form-group me-lg-3 mb-1 ms-1">
                             <label for="train_number" class="form-label">
-                                <fmt:message key='words.trainNumber'/>:
+                                <fmt:message key='routes.train_number'/>:
                             </label>
                             <input type="text" class="form-control _input-train-number"
                                    id="train_number" name="train_number" aria-label="train_number"
@@ -53,7 +53,7 @@
                         <%-- Station departure --%>
                         <div class="form-group ms-1 me-1 mb-1">
                             <label for="station_departure_id" class="form-label">
-                                <fmt:message key='words.stationDeparture'/>:
+                                <fmt:message key='routes.station_departure'/>:
                             </label>
                             <select class="form-control _input-station"
                                     id="station_departure_id" name="station_departure_id">
@@ -71,7 +71,7 @@
                         <%-- Station arrival --%>
                         <div class="form-group ms-1 me-1 mb-1">
                             <label for="station_arrival_id" class="form-label">
-                                <fmt:message key='words.stationArrival'/>:
+                                <fmt:message key='routes.station_arrival'/>:
                             </label>
                             <select class="form-control _input-station"
                                     id="station_arrival_id" name="station_arrival_id">
@@ -98,7 +98,7 @@
                         <div class="d-flex flex-column me-md-1 ms-1 mb-1">
                             <div>
                                 <label class="form-label">
-                                    <fmt:message key='search_jsp.TravelCostFrom'/>:
+                                    <fmt:message key='search_jsp.travel_cost_from'/>:
                                 </label>
                             </div>
                             <div class="d-flex g-0 m-0 p-0">
@@ -143,7 +143,7 @@
 
                             <div>
                                 <label class="form-label">
-                                    <fmt:message key='search_jsp.TravelTimeFrom'/>:
+                                    <fmt:message key='search_jsp.travel_time_from'/>:
                                 </label>
                             </div>
                             <div class="d-flex g-0 m-0 p-0">
@@ -195,7 +195,7 @@
 
                             <div>
                                 <label class="form-label">
-                                    <fmt:message key='search_jsp.SeatsAvailableFrom'/>:
+                                    <fmt:message key='search_jsp.seats_available_from'/>:
                                 </label>
                             </div>
                             <div class="d-flex g-0 m-0 p-0">
@@ -243,7 +243,7 @@
 
                             <div>
                                 <label class="form-label">
-                                    <fmt:message key='search_jsp.SeatsReservedFrom'/>:
+                                    <fmt:message key='search_jsp.seats_reserved_from'/>:
                                 </label>
                             </div>
                             <div class="d-flex g-0 m-0 p-0">
@@ -303,7 +303,7 @@
                 <button id="reset_button" type="reset" class="btn btn-outline-secondary _btn_form"
                         onclick="resetSearchForm()">
                     <em class="fa fa-refresh fa-2l me-2"></em>
-                    <fmt:message key='words.reset'/>
+                    <fmt:message key='actions.reset'/>
                 </button>
             </div>
 
@@ -348,7 +348,7 @@
         <div class="mt-4">
             <c:if test="${paginator ne null}">
                 <div class="h3 ms-5 _main-color1">
-                    <fmt:message key='words.RoutesFound'/>: ${paginator.getResults()}
+                    <fmt:message key='tittles.routes_found'/>: ${paginator.getResults()}
                 </div>
             </c:if>
             <c:if test="${routes ne null and not empty routes and routes.size() ge 0}">

@@ -12,7 +12,7 @@
                 <%-- modal-header --%>
                 <div class="modal-header _main-bg-color4 _main-color2">
                     <h5 class="modal-title" id="reserveDeleteModalLabel">
-                        Ticket reservation - delete ${order_id}
+                        <fmt:message key='tittles.ticket_delete'/> ${order_id}
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -22,7 +22,7 @@
                     <div class="form-group d-flex flex-row mb-1 justify-content-between align-items-end">
                         <div>
                             <label class="form-label">
-                                Choose number of tickets to remove:${order.getId()}
+                                <fmt:message key='tittles.ticket_choose_delete'/>:${order.getId()}
                             </label>
                         </div>
                         <div class="d-flex g-0 m-0 p-0">
@@ -45,10 +45,10 @@
                 <%-- modal-footer --%>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary _btn_form" data-bs-dismiss="modal">
-                        Close
+                        <fmt:message key='actions.close'/>
                     </button>
                     <button type="submit" class="btn btn-outline-secondary _btn_form">
-                        <fmt:message key='words.delete'/>
+                        <fmt:message key='actions.return'/>
                     </button>
                 </div>
 

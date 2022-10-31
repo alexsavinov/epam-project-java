@@ -51,7 +51,7 @@ public class OrderServlet extends HttpServlet {
 
         } else if (request.getRequestURI().startsWith("/orders/add")) {
 
-            CommandHandler.processRedirect("orderAddGet", request, response);
+            CommandHandler.processForward("orderAddGet", request, response);
 
         } else {
             request.setAttribute("error", "UNHANDLED request: " + request.getRequestURI());

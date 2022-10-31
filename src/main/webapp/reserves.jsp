@@ -23,9 +23,9 @@
             <thead class="_main-color4 _main-bg-color2 ">
             <tr class="rounded">
                 <th scope="col"><fmt:message key='routes.route'/></th>
-                <th scope="col"><fmt:message key='routes.TotalSeatsReserved'/></th>
-                <th scope="col"><fmt:message key='routes.TicketPrice'/></th>
-                <th scope="col"><fmt:message key='routes.TravelCostTotal'/></th>
+                <th scope="col"><fmt:message key='routes.total_seats_reserved'/></th>
+                <th scope="col"><fmt:message key='routes.ticket_price'/></th>
+                <th scope="col"><fmt:message key='routes.travel_cost_total'/></th>
             </tr>
             </thead>
 

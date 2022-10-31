@@ -9,6 +9,12 @@
 
         <div class="ms-3 h3 m-0 p-0 _main-color4 _link-back">
             ${page_title} <fmt:message key='${key_title}'/>
+            <c:if test="${action eq 'add'}">
+                (<fmt:message key='actions.add'/>)
+            </c:if>
+            <c:if test="${action eq 'edit'}">
+                (<fmt:message key='actions.edit'/>)
+            </c:if>
         </div>
 
     </a>

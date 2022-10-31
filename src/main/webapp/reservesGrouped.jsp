@@ -1,12 +1,14 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/parts/init.jspf" %>
 
+<c:set var="key_title" value="reserves.reserves" scope="page"/>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <%@ include file="/parts/head.jspf" %>
     <title>
-        <fmt:message key='index_jsp.title'/> - <fmt:message key='reservesGrouped_jsp.tittle'/>
+        <fmt:message key='index_jsp.title'/> - <fmt:message key='${key_title}'/>
     </title>
 </head>
 <body>
@@ -23,9 +25,9 @@
             <thead class="_main-color4 _main-bg-color2 ">
             <tr class="">
                 <th scope="col"><fmt:message key='routes.route'/></th>
-                <th scope="col">Total seats reserved</th>
-                <th scope="col">Ticket price<fmt:message key='routes.TicketPrice'/></th>
-                <th scope="col"><fmt:message key='routes.TravelCostTotal'/></th>
+                <th scope="col"><fmt:message key='routes.total_seats_reserved'/></th>
+                <th scope="col"><fmt:message key='routes.ticket_price'/></th>
+                <th scope="col"><fmt:message key='routes.travel_cost_total'/></th>
             </tr>
             </thead>
 
@@ -80,7 +82,7 @@
 
             <tfoot>
             <tr class="fw-bold">
-                <td>Total:</td>
+                <td><fmt:message key='tittles.total'/>:</td>
                 <td>${total_seats}</td>
                 <td></td>
                 <td>${total_travel_cost} $</td>

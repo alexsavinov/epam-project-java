@@ -1,12 +1,14 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/parts/init.jspf" %>
 
+<c:set var="key_title" value="orders.orders" scope="page"/>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <%@ include file="/parts/head.jspf" %>
     <title>
-        <fmt:message key='index_jsp.title'/> - <fmt:message key='profile_jsp.orders'/>
+        <fmt:message key='index_jsp.title'/> - <fmt:message key='${key_title}'/>
     </title>
 </head>
 <body>
@@ -17,31 +19,22 @@
 
     <div class="_wrapper-table">
 
-        <a class="btn btn-sm btn-outline-secondary mt-2 mb-1 shadow-sm <customTags:access role="user" modifier="d-none"/>"
+        <a class="btn btn-sm btn-outline-secondary mt-2 mb-3 shadow-sm <customTags:access role="user" modifier="d-none"/>"
            href="/orders/add">
             <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            <fmt:message key='words.add'/> ${url}
+            <fmt:message key='actions.add'/> ${url}
         </a>
 
-        <table class="table table-striped table-hover p-5 mt-3" aria-describedby="Orders">
+        <table class="table table-striped table-hover p-5 mt-1" aria-describedby="Orders">
             <thead class="table-secondary">
             <tr>
                 <th scope="col">id</th>
-                <th scope="col">Seats reserved</th>
-                <th scope="col">Date of reserve</th>
-                <th scope="col" class="bg-light" style="border: 1px solid lightgrey;">user id</th>
-                <th scope="col" class="bg-light" style="border: 1px solid lightgrey;">user name</th>
-                <th scope="col">route id</th>
-                <th scope="col"><fmt:message key='words.trainNumberColumn'/></th>
-                <th scope="col">Departure</th>
-                <th scope="col">Date/time</th>
-                <th scope="col">Arrival</th>
-                <th scope="col">Date/time</th>
-                <th scope="col"><fmt:message key='words.TravelTime'/></th>
-                <th scope="col"><fmt:message key='words.TravelCost'/></th>
-                <th scope="col">Seats reserved</th>
-                <th scope="col"><fmt:message key='words.SeatsAvailable'/></th>
-                <th scope="col"><fmt:message key='words.SeatsTotal'/></th>
+                <th scope="col"><fmt:message key='routes.seats_reserved'/></th>
+                <th scope="col"><fmt:message key='orders.date_of_reserve'/></th>
+                <th scope="col" class="bg-light" style="border: 1px solid lightgrey;"><fmt:message key='users.user'/> (id)</th>
+                <th scope="col" class="bg-light" style="border: 1px solid lightgrey;"><fmt:message key='users.user'/> (<fmt:message key='users.name'/>)</th>
+                <th scope="col"><fmt:message key='routes.route'/> (id)</th>
+                <th scope="col"><fmt:message key='routes.train_number_column'/></th>
             </tr>
             </thead>
 
@@ -70,33 +63,6 @@
                     </td>
                     <td>
                             ${order.getRoute().getTrainNumber()}
-                    </td>
-                    <td>
-                            ${order.getRoute().getStationDeparture().getName()}
-                    </td>
-                    <td>
-                            ${order.getRoute().getDateDeparture()}
-                    </td>
-                    <td>
-                            ${order.getRoute().getStationArrival().getName()}
-                    </td>
-                    <td>
-                            ${order.getRoute().getDateArrival()}
-                    </td>
-                    <td>
-                            ${order.getRoute().getTravelTime()}
-                    </td>
-                    <td>
-                            ${order.getRoute().getTravelCost()}
-                    </td>
-                    <td>
-                            ${order.getRoute().getSeatsReserved()}
-                    </td>
-                    <td>
-                            ${order.getRoute().getSeatsAvailable()}
-                    </td>
-                    <td>
-                            ${order.getRoute().getSeatsTotal()}
                     </td>
                 </tr>
             </c:forEach>

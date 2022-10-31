@@ -52,7 +52,7 @@ public class StationServlet extends HttpServlet {
 
         } else if (request.getRequestURI().contains("/stations/add")) {
 
-            CommandHandler.processRedirect("stationAddGet", request, response);
+            CommandHandler.processForward("stationAddGet", request, response);
 
         } else {
             request.setAttribute("error", "UNHANDLED request: " + request.getRequestURI());

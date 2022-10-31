@@ -1,16 +1,16 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/parts/init.jspf" %>
 
-<c:set var="page_title" value="Route (${action})" scope="page"/>
+<c:set var="key_title" value="routes.route" scope="page"/>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <%@ include file="/parts/head.jspf" %>
 
-    <head>
-        <title><fmt:message key='index_jsp.title'/> - ${page_title}</title>
-    </head>
+    <title>
+        <fmt:message key='index_jsp.title'/> - <fmt:message key='${key_title}'/> (${action})
+    </title>
 <body>
 
 <div class="_wrapper">
@@ -28,13 +28,22 @@
         </div>
 
         <div class="mb-1">
-            <label for="train_number" class="form-label">Train number</label>
-            <input type="text" class="form-control" placeholder="Train number" aria-label="train_number"
-                   id="train_number" name="train_number" value="${route.getTrainNumber()}">
+            <label for="train_number" class="form-label">
+                <fmt:message key='routes.train_number'/>
+            </label>
+            <input type="text" class="form-control"
+                   id="train_number" name="train_number"
+                   minlength="2"
+                   value="${route.getTrainNumber()}"
+                   aria-label="train_number"
+                   placeholder=
+            <fmt:message key='routes.train_number'/>>
         </div>
 
         <div class="form-group mb-1">
-            <label for="station_departure"><fmt:message key='words.stationDeparture'/></label>
+            <label for="station_departure">
+                <fmt:message key='routes.station_departure'/>
+            </label>
             <select class="form-control" id="station_departure" name="station_departure">
                 <c:forEach var="station" items="${stations}">
                     <option value="${station.getId()}"
@@ -46,7 +55,9 @@
         </div>
 
         <div class="mb-1">
-            <label for="date_departure" class="form-label">Date departure</label>
+            <label for="date_departure" class="form-label">
+                <fmt:message key='routes.date_time_departure'/>
+            </label>
             <input type="datetime-local" class="form-control" aria-label="date_departure"
                    onchange="updateTime();"
                    id="date_departure" name="date_departure"
@@ -55,7 +66,9 @@
         </div>
 
         <div class="form-group mb-1">
-            <label for="station_arrival"><fmt:message key='words.stationArrival'/></label>
+            <label for="station_arrival">
+                <fmt:message key='routes.station_arrival'/>
+            </label>
             <select class="form-control" id="station_arrival" name="station_arrival">
                 <c:forEach var="station" items="${stations}">
                     <option value="${station.getId()}"
@@ -67,7 +80,9 @@
         </div>
 
         <div class="mb-1">
-            <label for="date_arrival" class="form-label">Date arrival</label>
+            <label for="date_arrival" class="form-label">
+                <fmt:message key='routes.date_time_arrival'/>
+            </label>
             <input type="datetime-local" class="form-control" aria-label="date_arrival" onchange="updateTime();"
                    id="date_arrival" name="date_arrival"
                    value="${route.getDateArrival()}"
@@ -82,33 +97,45 @@
         <%--        </div>--%>
 
         <div class="mb-1">
-            <label for="travel_cost" class="form-label"><fmt:message key='words.TravelCost'/></label>
+            <label for="travel_cost" class="form-label">
+                <fmt:message key='routes.travel_cost'/>
+            </label>
             <input type="number" class="form-control" aria-label="travel_cost"
                    id="travel_cost" name="travel_cost"
-                   value="${route.getTravelCost()}">
+                   min="0" max="9999999"
+                   value="${route.getTravelCost()}"
+                   placeholder="<fmt:message key='routes.travel_cost'/>">
         </div>
 
         <div class="mb-1">
-            <label for="seats_reserved" class="form-label">Seats reserved</label>
+            <label for="seats_reserved" class="form-label">
+                <fmt:message key='routes.seats_reserved'/>
+            </label>
             <input type="number" class="form-control" aria-label="seats_reserved"
                    id="seats_reserved" name="seats_reserved"
-                   value="${route.getSeatsReserved()}">
+                   min="0" max="9999999"
+                   value="${route.getSeatsReserved()}"
+                   placeholder="<fmt:message key='routes.seats_reserved'/>">
         </div>
 
         <div class="mb-1">
-            <label for="seats_total" class="form-label"><fmt:message key='words.SeatsTotal'/></label>
+            <label for="seats_total" class="form-label">
+                <fmt:message key='routes.seats_total'/>
+            </label>
             <input type="number" class="form-control" aria-label="seats_total"
                    id="seats_total" name="seats_total"
-                   value="${route.getSeatsTotal()}">
+                   min="0" max="9999999"
+                   value="${route.getSeatsTotal()}"
+                   placeholder="<fmt:message key='routes.seats_total'/>">
         </div>
 
-        <div class="form-group mt-3">
+        <div class=" form-group mt-3">
             <button type="submit" class="btn" <customTags:access role="user" modifier="disabled"/>>
-                <fmt:message key='words.save'/>
+                <fmt:message key='actions.save'/>
             </button>
             <a class="btn btn-outline-secondary <customTags:access role="user" modifier="disabled"/>"
                href="/routes/delete/${route.getId()}">
-                <fmt:message key='words.delete'/>
+                <fmt:message key='actions.delete'/>
             </a>
         </div>
 
@@ -118,32 +145,32 @@
     <%--        <jsp:param name="orders" value="${userRoutes}"/>--%>
     <%--    </jsp:include>--%>
 
-    <c:if test="${not empty ordersByRoute and ordersByRoute.size() ge 0}">
-        <% request.setAttribute("orders", request.getAttribute("ordersByRoute"));%>
-        <% request.setAttribute("orders_tittle", "Orders by route");%>
+    <%--    <c:if test="${not empty ordersByRoute and ordersByRoute.size() ge 0}">--%>
+    <%--        <% request.setAttribute("orders", request.getAttribute("ordersByRoute"));%>--%>
+    <%--        <% request.setAttribute("orders_tittle", "Orders by route");%>--%>
 
-        <div class="mt-5">
-            <%@ include file="/parts/orders.jspf" %>
-        </div>
-    </c:if>
+    <%--        <div class="mt-5">--%>
+    <%--            <%@ include file="/parts/orders.jspf" %>--%>
+    <%--        </div>--%>
+    <%--    </c:if>--%>
 
-    <c:if test="${not empty ordersByCurrentUser and ordersByCurrentUser.size() ge 0}">
-        <% request.setAttribute("orders", request.getAttribute("ordersByCurrentUser"));%>
-        <% request.setAttribute("orders_tittle", "Orders by logged user"); %>
+    <%--    <c:if test="${not empty ordersByCurrentUser and ordersByCurrentUser.size() ge 0}">--%>
+    <%--        <% request.setAttribute("orders", request.getAttribute("ordersByCurrentUser"));%>--%>
+    <%--        <% request.setAttribute("orders_tittle", "Orders by logged user"); %>--%>
 
-        <div class="mt-5">
-            <%@ include file="/parts/orders.jspf" %>
-        </div>
-    </c:if>
+    <%--        <div class="mt-5">--%>
+    <%--            <%@ include file="/parts/orders.jspf" %>--%>
+    <%--        </div>--%>
+    <%--    </c:if>--%>
 
-    <c:if test="${not empty orders and orders.size() ge 0}">
-        <% request.setAttribute("orders", request.getAttribute("orders"));%>
-        <% request.setAttribute("orders_tittle", "Orders all");%>
+    <%--    <c:if test="${not empty orders and orders.size() ge 0}">--%>
+    <%--        <% request.setAttribute("orders", request.getAttribute("orders"));%>--%>
+    <%--        <% request.setAttribute("orders_tittle", "Orders all");%>--%>
 
-        <div class="mt-5">
-            <%@ include file="/parts/orders.jspf" %>
-        </div>
-    </c:if>
+    <%--        <div class="mt-5">--%>
+    <%--            <%@ include file="/parts/orders.jspf" %>--%>
+    <%--        </div>--%>
+    <%--    </c:if>--%>
 
     <%@ include file="/parts/footer.jspf" %>
 </div>

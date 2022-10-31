@@ -42,9 +42,8 @@ public class RouteEditGetCommand implements Command {
 
         int id = CommandContainer.getIdFromRequest(request);
 
-        ArrayList<Station> stations = null;
         try {
-            stations = StationManager.getInstance().getAll();
+            ArrayList<Station> stations = StationManager.getInstance().getAll();
             Route route = RouteManager.getInstance().get(id);
 
             request.setAttribute("route", route);

@@ -1,13 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/parts/init.jspf" %>
 
-<c:set var="page_title" value="Stations" scope="page"/>
+<c:set var="key_title" value="stations.stations" scope="page"/>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <%@ include file="/parts/head.jspf" %>
-    <title><fmt:message key='index_jsp.title'/> - ${page_title}</title>
+    <title><fmt:message key='index_jsp.title'/> - <fmt:message key='${key_title}'/></title>
 </head>
 <body>
 
@@ -17,17 +17,17 @@
 
     <div class="_wrapper-table">
 
-        <a class="btn btn-sm btn-outline-secondary mt-2 mb-1 <customTags:access role="user" modifier="d-none"/>"
+        <a class="btn btn-sm btn-outline-secondary mt-2 mb-3 <customTags:access role="user" modifier="d-none"/>"
            href="/stations/add">
             <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            <fmt:message key='words.add'/> ${url}
+            <fmt:message key='actions.add'/> ${url}
         </a>
 
         <table class="table table-striped table-hover p-5" aria-describedby="Stations">
             <thead class="table-secondary">
             <tr>
                 <th scope="col">id</th>
-                <th scope="col">Name</th>
+                <th scope="col"><fmt:message key='stations.name'/></th>
             </tr>
             </thead>
             <tbody>

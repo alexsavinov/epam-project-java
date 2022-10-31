@@ -1,12 +1,14 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/parts/init.jspf" %>
 
+<c:set var="key_title" value="routes.routes" scope="page"/>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <%@ include file="/parts/head.jspf" %>
     <title>
-        <fmt:message key='index_jsp.title'/> - <fmt:message key='profile_jsp.routes'/>
+        <fmt:message key='index_jsp.title'/> - <fmt:message key='${key_title}'/>
     </title>
 </head>
 <body>
@@ -18,25 +20,25 @@
 
     <div class="_wrapper-table">
 
-        <a class="btn btn-sm btn-outline-secondary mt-2 mb-1 <customTags:access role="user" modifier="d-none"/>"
+        <a class="btn btn-sm btn-outline-secondary mt-2 mb-3 <customTags:access role="user" modifier="d-none"/>"
            href="/routes/add">
             <i class="fa fa-plus-circle" aria-hidden="true"></i>
-            <fmt:message key='words.add'/> ${url}
+            <fmt:message key='actions.add'/> ${url}
         </a>
 
-        <table class="table table-striped table-hover p-5 mt-3" aria-describedby="Routes">
+        <table class="table table-striped table-hover p-5 mt-1" aria-describedby="Routes">
             <thead class="table-secondary">
             <tr>
                 <th scope="col">id</th>
-                <th scope="col"><fmt:message key='words.trainNumberColumn'/></th>
-                <th scope="col"><fmt:message key='words.stationDeparture'/></th>
-                <th scope="col"><fmt:message key='words.DateTimeDeparture'/></th>
-                <th scope="col"><fmt:message key='words.stationArrival'/></th>
-                <th scope="col"><fmt:message key='words.DateTimeArrival'/></th>
-                <th scope="col"><fmt:message key='words.TravelTime'/></th>
-                <th scope="col"><fmt:message key='words.TravelCost'/></th>
-                <th scope="col"><fmt:message key='words.SeatsTotal'/></th>
-                <th scope="col"><fmt:message key='words.SeatsAvailable'/></th>
+                <th scope="col"><fmt:message key='routes.train_number_column'/></th>
+                <th scope="col"><fmt:message key='routes.station_departure'/></th>
+                <th scope="col"><fmt:message key='routes.date_time_departure'/></th>
+                <th scope="col"><fmt:message key='routes.station_arrival'/></th>
+                <th scope="col"><fmt:message key='routes.date_time_arrival'/></th>
+                <th scope="col"><fmt:message key='routes.travel_time'/></th>
+                <th scope="col"><fmt:message key='routes.travel_cost'/></th>
+                <th scope="col"><fmt:message key='routes.seats_total'/></th>
+                <th scope="col"><fmt:message key='routes.seats_available'/></th>
             </tr>
             </thead>
 

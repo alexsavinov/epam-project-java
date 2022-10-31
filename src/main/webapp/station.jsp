@@ -1,12 +1,14 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/parts/init.jspf" %>
 
+<c:set var="key_title" value="stations.station" scope="page"/>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <%@ include file="/parts/head.jspf" %>
     <title>
-        <fmt:message key='index_jsp.title'/> - <fmt:message key='stations.station'/>
+        <fmt:message key='index_jsp.title'/> - <fmt:message key='${key_title}'/>
     </title>
 </head>
 <body>
@@ -33,24 +35,27 @@
 
             <div class="mb-1">
                 <label for="name" class="form-label">id</label>
-                <input type="text" class="form-control" aria-label="id" id="id" name="id" disabled
+                <input type="text" class="form-control" aria-label="id"
+                       id="id" name="id" disabled
                        value="${station.getId()}">
             </div>
 
             <div class="mb-1">
-                <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" placeholder="Station name" aria-label="name" id="name"
-                       name="name"
-                       value="${station.getName()}">
+                <label for="name" class="form-label"><fmt:message key='stations.name'/></label>
+                <input type="text" class="form-control"
+                       value="${station.getName()}"
+                       aria-label="name" id="name" name="name"
+                       placeholder=
+                <fmt:message key='stations.name'/>>
             </div>
 
             <div class="form-group mt-3">
                 <button type="submit" class="btn" <customTags:access role="user" modifier="disabled"/>>
-                    <fmt:message key='words.save'/>
+                    <fmt:message key='actions.save'/>
                 </button>
                 <a class="btn btn-outline-secondary <customTags:access role="user" modifier="disabled"/>"
                    href="/stations/delete/${station.getId()}">
-                    <fmt:message key='words.delete'/>
+                    <fmt:message key='actions.delete'/>
                 </a>
             </div>
         </form>
@@ -58,13 +63,9 @@
     </div>
 
     <%@ include file="/parts/message.jspf" %>
-
     <%@ include file="/parts/footer.jspf" %>
-
 </div>
 
-
 <%@ include file="/parts/bodyBottom.jspf" %>
-
 </body>
 </html>

@@ -49,7 +49,7 @@ public class UserServlet extends HttpServlet {
 
         } else if (request.getRequestURI().equals("/users/add")) {
 
-            CommandHandler.processRedirect("userAddGet", request, response);
+            CommandHandler.processForward("userAddGet", request, response);
 
         } else if (request.getRequestURI().startsWith("/users/delete")) {
 

@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Command to delete Reserve.
@@ -49,8 +50,12 @@ public class ReserveDeleteCommand implements Command {
             throw new CommandException(e.getMessage(), e);
         }
 
-        request.getSession().setAttribute("messages",
-                String.format("Reserve for %d seats removed (order ID: %d)!", seats, id));
+        HashMap<String, String> localizedMessages = new HashMap<>();
+        localizedMessages.put("en", String.format("Reserve for %d seats removed (order ID: %d)!", seats, id));
+        localizedMessages.put("uk", String.format("Бронювання для %d місць видалене (Замовлення ID: %d)!", seats, id));
+        request.getSession().setAttribute("localizedMessages", localizedMessages);
+
+        request.getSession().removeAttribute("paginator");
 
         int routeId =  Integer.parseInt(request.getParameter("route_id"));
         QueryMaker query = new QueryMaker.Builder()

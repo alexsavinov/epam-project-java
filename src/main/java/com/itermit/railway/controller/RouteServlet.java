@@ -42,14 +42,6 @@ public class RouteServlet extends HttpServlet {
 
         logger.debug("#doGet(request, response).  {}", request.getRequestURI());
 
-        /**
-         * Handles GET-Requests.
-         *
-         * @param request  HttpServletRequest
-         * @param response HttpServletResponse
-         * @throws ServletException
-         * @throws IOException
-         */
         if (request.getRequestURI().equals("/routes")) {
 
             CommandHandler.processForward("routesList", request, response);
@@ -60,7 +52,7 @@ public class RouteServlet extends HttpServlet {
 
         } else if (request.getRequestURI().equals("/routes/add")) {
 
-            CommandHandler.processRedirect("routeAddGet", request, response);
+            CommandHandler.processForward("routeAddGet", request, response);
 
         } else if (request.getRequestURI().startsWith("/routes/info")) {
 

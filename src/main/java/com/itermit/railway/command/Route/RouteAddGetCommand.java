@@ -41,8 +41,10 @@ public class RouteAddGetCommand implements Command {
             ArrayList<Station> stations = StationManager.getInstance().getAll();
             request.setAttribute("stations", stations);
             request.setAttribute("action", "add");
+            request.getSession().setAttribute("action1", "add1");
         } catch (DBException e) {
-            throw new RuntimeException(e);
+            logger.error("DBException. {}", e.getMessage());
+            throw new CommandException(e.getMessage(), e);
         }
 
         return "/route.jsp";

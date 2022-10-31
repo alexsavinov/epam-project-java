@@ -2,65 +2,65 @@
 
 <div class="_wrapper-table">
 
-    <table class="table table-striped table-hover p-5 mt-3"
+    <table class="table table-striped table-hover p-5 mt-1"
            id="routes" aria-describedby="Routes">
 
         <thead class="table-secondary">
         <tr>
             <th scope="col" onclick="sortClick('sort_train_number'); goByPage(${sessionScope.paginator.getPage()});">
-                <fmt:message key='words.trainNumberColumn'/>
+                <fmt:message key='routes.train_number_column'/>
                 <c:if test="${sort_train_number == 'asc'}"><em class="fa fa-arrow-down fa-2l"></em></c:if>
                 <c:if test="${sort_train_number == 'desc'}"><em class="fa fa-arrow-up fa-2l"></em></c:if>
             </th>
             <th scope="col"
                 onclick="sortClick('sort_station_departure'); goByPage(${sessionScope.paginator.getPage()});">
-                <fmt:message key='words.stationDeparture'/>
+                <fmt:message key='routes.station_departure'/>
                 <c:if test="${sort_station_departure == 'asc'}"><em class="fa fa-arrow-down fa-2l"></em></c:if>
                 <c:if test="${sort_station_departure == 'desc'}"><em class="fa fa-arrow-up fa-2l"></em></c:if>
             </th>
             <th scope="col" onclick="sortClick('sort_date_departure'); goByPage(${sessionScope.paginator.getPage()});">
-                <fmt:message key='words.DateTimeDeparture'/>
+                <fmt:message key='routes.date_time_departure'/>
                 <c:if test="${sort_date_departure == 'asc'}"><em class="fa fa-arrow-down fa-2l"></em></c:if>
                 <c:if test="${sort_date_departure == 'desc'}"><em class="fa fa-arrow-up fa-2l"></em></c:if>
             </th>
             <th scope="col" onclick="sortClick('sort_station_arrival'); goByPage(${sessionScope.paginator.getPage()});">
-                <fmt:message key='words.stationArrival'/>
+                <fmt:message key='routes.station_arrival'/>
                 <c:if test="${sort_station_arrival == 'asc'}"><em class="fa fa-arrow-down fa-2l"></em></c:if>
                 <c:if test="${sort_station_arrival == 'desc'}"><em class="fa fa-arrow-up fa-2l"></em></c:if>
             </th>
             <th scope="col" onclick="sortClick('sort_date_arrival'); goByPage(${sessionScope.paginator.getPage()});">
-                <fmt:message key='words.DateTimeArrival'/>
+                <fmt:message key='routes.date_time_arrival'/>
                 <c:if test="${sort_date_arrival == 'asc'}"><em class="fa fa-arrow-down fa-2l"></em></c:if>
                 <c:if test="${sort_date_arrival == 'desc'}"><em class="fa fa-arrow-up fa-2l"></em></c:if>
             </th>
             <th scope="col" onclick="sortClick('sort_travel_time'); goByPage(${sessionScope.paginator.getPage()});">
-                <fmt:message key='words.TravelTime'/>
+                <fmt:message key='routes.travel_time'/>
                 <c:if test="${sort_travel_time == 'asc'}"><em class="fa fa-arrow-down fa-2l"></em></c:if>
                 <c:if test="${sort_travel_time == 'desc'}"><em class="fa fa-arrow-up fa-2l"></em></c:if>
             </th>
             <th scope="col" onclick="sortClick('sort_travel_cost'); goByPage(${sessionScope.paginator.getPage()});">
-                <fmt:message key='words.TravelCost'/>
+                <fmt:message key='routes.travel_cost'/>
                 <c:if test="${sort_travel_cost == 'asc'}"><em class="fa fa-arrow-down fa-2l"></em></c:if>
                 <c:if test="${sort_travel_cost == 'desc'}"><em class="fa fa-arrow-up fa-2l"></em></c:if>
             </th>
             <th scope="col" onclick="sortClick('sort_seats_available'); goByPage(${sessionScope.paginator.getPage()});">
-                <fmt:message key='words.SeatsAvailable'/>
+                <fmt:message key='routes.seats_available'/>
                 <c:if test="${sort_seats_available == 'asc'}"><em class="fa fa-arrow-down fa-2l"></em></c:if>
                 <c:if test="${sort_seats_available == 'desc'}"><em class="fa fa-arrow-up fa-2l"></em></c:if>
             </th>
             <th scope="col" onclick="sortClick('sort_seats_reserved'); goByPage(${sessionScope.paginator.getPage()});">
-                <fmt:message key='words.SeatsReserved'/>
+                <fmt:message key='routes.seats_reserved'/>
                 <c:if test="${sort_seats_reserved == 'asc'}"><em class="fa fa-arrow-down fa-2l"></em></c:if>
                 <c:if test="${sort_seats_reserved == 'desc'}"><em class="fa fa-arrow-up fa-2l"></em></c:if>
             </th>
             <th scope="col" onclick="sortClick('sort_seats_total'); goByPage(${sessionScope.paginator.getPage()});">
-                <fmt:message key='words.SeatsTotal'/>
+                <fmt:message key='routes.seats_total'/>
                 <c:if test="${sort_seats_total == 'asc'}"><em class="fa fa-arrow-down fa-2l"></em></c:if>
                 <c:if test="${sort_seats_total == 'desc'}"><em class="fa fa-arrow-up fa-2l"></em></c:if>
             </th>
             <th scope="col">
                 <div class="d-flex justify-content-center">
-                    <fmt:message key='words.Action'/>
+                    <fmt:message key='tittles.action'/>
                 </div>
             </th>
         </tr>
@@ -106,6 +106,13 @@
                     <div class="d-flex">
 
                         <button type="button"
+                                class="btn btn-outline-secondary btn-sm m-1"
+                                onclick='goByUrl("/routes/info/${route.getId()}")'>
+                            <em class="fa fa-info-circle fa-xl me-1"></em>
+                            <fmt:message key='actions.info'/>
+                        </button>
+
+                        <button type="button"
                                 class="btn btn-outline-secondary btn-sm m-1  <customTags:access role="guest" modifier="d-none"/>"
                                 data-bs-toggle="modal"
                                 data-bs-target="#reserveAddModal"
@@ -115,14 +122,9 @@
                                     disabled
                                 </c:if>>
                             <em class="fa fa-credit-card "></em>
-                            <fmt:message key='words.Reserve'/>
+                            <fmt:message key='actions.reserve'/>
                         </button>
-                        <button type="button"
-                                class="btn btn-outline-secondary btn-sm m-1"
-                                onclick='goByUrl("/routes/info/${route.getId()}")'>
-                            <em class="fa fa-info-circle fa-xl me-1"></em>
-                            <fmt:message key='words.Info'/>
-                        </button>
+
                     </div>
                 </td>
             </tr>

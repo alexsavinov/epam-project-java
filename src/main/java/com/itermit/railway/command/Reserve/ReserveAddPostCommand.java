@@ -13,6 +13,7 @@ import org.apache.logging.log4j.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 
 /**
  * Command to add Reserve.
@@ -56,7 +57,12 @@ public class ReserveAddPostCommand implements Command {
 
         CommandContainer.runCommand(request, response, "searchReset");
 
-        request.getSession().setAttribute("messages", "Reserve for " + seats + " seats added!");
+        HashMap<String, String> localizedMessages = new HashMap<>();
+        localizedMessages.put("en", "Reserve for " + seats + " seats added!");
+        localizedMessages.put("uk", "Бронювання для " + seats + " місць додане!");
+        request.getSession().setAttribute("localizedMessages", localizedMessages);
+
+        request.getSession().removeAttribute("paginator");
 
         return "/reserves/grouped";
     }

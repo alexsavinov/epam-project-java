@@ -189,6 +189,10 @@ nav .navbar-nav li a:hover {
     max-width: 1380px;
 }
 
+th {
+    vertical-align: top;
+}
+
 ._input-number {
     height: 38px;
     width: 134px;

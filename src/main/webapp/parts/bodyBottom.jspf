@@ -12,3 +12,6 @@
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="/js/scripts.js"></script>
+<script>
+    let currentLocale = '<%= session.getAttribute("currentLocale") %>';
+</script>

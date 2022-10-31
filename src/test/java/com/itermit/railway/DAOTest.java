@@ -20,10 +20,16 @@ import javax.servlet.http.HttpSession;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 
 //import static org.junit.Assert.assertNull;
 import org.junit.jupiter.api.Assertions;
+import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
+
+import static com.itermit.railway.dao.impl.UserDAOImpl.SQL_GET_ALL_USERS;
+import static com.itermit.railway.db.Fields.*;
 
 
 public class DAOTest extends Mockito {
@@ -72,12 +78,49 @@ public class DAOTest extends Mockito {
     @Test
     public void UserDAOImplTest() throws Exception {
 
-        final UserDAOImpl implDAO = mock(UserDAOImpl.class);
-        Connection connection = mock(Connection.class);
+//        final UserDAOImpl implDAO = mock(UserDAOImpl.class);
 
-        ArrayList<User> resultGetAll = implDAO.getAll(connection);
-        Assertions.assertEquals(resultGetAll, new ArrayList<User>());
+
+        ResultSet rs = mock(ResultSet.class);
+        when(rs.next())
+                .thenReturn(true)
+                .thenReturn(false);
+
+        when(rs.getInt(ENTITY_ID)).thenReturn(1);
+        when(rs.getString(USER_NAME)).thenReturn("admin");
+        when(rs.getString(USER_PASSWORD)).thenReturn("admin");
+        when(rs.getString(USER_EMAIL)).thenReturn("111");
+        when(rs.getBoolean(USER_IS_ADMIN)).thenReturn(true);
+        when(rs.getBoolean(USER_IS_ACTIVE)).thenReturn(true);
+        when(rs.getString(USER_ACTIVATION_TOKEN)).thenReturn("1232311");
+
+        PreparedStatement pstmt = mock(PreparedStatement.class);
+//        pstmt.setInt(1, 1);
+        when(pstmt.executeQuery()).thenReturn(rs);
+
+        Connection con = mock(Connection.class);
+        when(con.prepareStatement(UserDAOImpl.SQL_GET_USER_BY_ID)).thenReturn(pstmt);
+
+        User expectedUser = new User.Builder().withName("admin").withPassword("admin").build();
+//        expectedUser.setLogin("obama");
+//        expectedUser.setPassword("obamapass");
+
+//        User actualUser = implDAO.get(con, 1);
+        User actualUser = UserDAOImpl.getInstance().get(con, 1);
+
+        System.out.println(actualUser);
+        System.out.println(expectedUser);
+
+//        Assertions.assertEquals(null, actualUser);
+        Assertions.assertTrue(
+                new ReflectionEquals(expectedUser, "id")
+                        .matches(actualUser));
+
+
+//        ArrayList<User> resultGetAll = implDAO.getAll(connection);
+//        Assertions.assertEquals(resultGetAll, new ArrayList<User>());
     }
+
 
 }
 

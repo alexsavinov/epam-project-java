@@ -7,7 +7,7 @@
                 ${orders_tittle}
         </div>
     </c:if>
-    <%--        <a class="btn btn-sm btn-outline-secondary mt-2 mb-1 shadow-sm" href="/orders/add">--%>
+    <%--        <a class="btn btn-sm btn-outline-secondary mt-2 mb-3 shadow-sm" href="/orders/add">--%>
     <%--            <i class="fa fa-plus-circle" aria-hidden="true"></i>--%>
     <%--            <fmt:message key='words.add'/> ${url}--%>
     <%--        </a>--%>
@@ -16,7 +16,7 @@
     <%--    <div> param.orders ${param.orders} </div>--%>
     <%--    <div> orders ${orders} </div>--%>
 
-    <table class="table table-striped table-hover p-5 mt-3" aria-describedby="Tickets">
+    <table class="table table-striped table-hover p-5 mt-1" aria-describedby="Tickets">
         <thead class="table-secondary">
         <tr>
             <th scope="col">Tickets</th>

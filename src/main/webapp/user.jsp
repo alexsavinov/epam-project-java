@@ -1,14 +1,15 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ include file="/parts/init.jspf" %>
 
-<%--<c:set var="page_title" value="User ${action}" scope="page"/>--%>
-<c:set var="key_title" value="words.user" scope="page"/>
+<c:set var="key_title" value="users.user" scope="page"/>
 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <%@ include file="/parts/head.jspf" %>
-    <title><fmt:message key='index_jsp.title'/> - <fmt:message key='${key_title}'/></title>
+    <title>
+        <fmt:message key='index_jsp.title'/> - <fmt:message key='${key_title}'/> (${action})
+    </title>
 </head>
 <body>
 
@@ -40,14 +41,22 @@
             </div>
 
             <div class="mb-1">
-                <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" placeholder="Username" aria-label="name"
-                       id="name" name="name"
-                       value="${user.getName()}">
+                <label for="name" class="form-label">
+                    <fmt:message key='users.name'/>
+                </label>
+                <input type="text" class="form-control"
+                       aria-label="name" id="name" name="name"
+                       placeholder=
+                       <fmt:message key='users.name'/>
+                               value="${user.getName()}">
 
-                <label for="password" class="form-label mt-1">Password</label>
-                <input type="password" class="form-control" placeholder="Password" aria-label="password"
-                       id="password" name="password" value="">
+                <label for="password" class="form-label mt-1">
+                    <fmt:message key='users.password'/>
+                </label>
+                <input type="password" class="form-control"
+                       id="password" name="password" value="" aria-label="password"
+                       placeholder=
+                <fmt:message key='users.password'/>>
 
                 <label for="email" class="form-label mt-1">E-mail</label>
                 <input type="email" class="form-control" placeholder="E-mail" aria-label="email"
@@ -59,7 +68,7 @@
                            <c:if test="${user.getId() eq 1}">disabled</c:if>
                     <customTags:access role="user" modifier="disabled"/>>
                     <label class="form-check-label" for="isadmin">
-                        Admin
+                        <fmt:message key='users.admin'/>
                     </label>
                 </div>
 
@@ -67,15 +76,18 @@
                     <input class="form-check-input" type="checkbox" value="" id="isactive"
                            <c:if test="${user.getIsActive()}">checked</c:if>>
                     <label class="form-check-label" for="isactive">
-                        Active
+                        <fmt:message key='users.active'/>
                     </label>
                 </div>
 
-                <label for="activation_token" class="form-label mt-3">Activation token</label>
-                <input type="activation_token" class="form-control"
-                       placeholder="Activation token" aria-label="activation_token"
+                <label for="activation_token" class="form-label mt-3">
+                    <fmt:message key='users.activation_token'/>
+                </label>
+                <input type="activation_token" class="form-control" aria-label="activation_token"
                        id="activation_token" name="activation_token"
-                       value="${user.getActivationToken()}">
+                       placeholder=
+                       <fmt:message key='users.activation_token'/>
+                               value="${user.getActivationToken()}">
 
             </div>
 
@@ -87,11 +99,11 @@
 
             <div class="form-group mt-3">
                 <button type="submit" class="btn" <customTags:access role="user" modifier="disabled"/>>
-                    <fmt:message key='words.save'/>
+                    <fmt:message key='actions.save'/>
                 </button>
                 <a class="btn btn-outline-secondary <customTags:access role="user" modifier="disabled"/>"
                    href="/users/delete/${user.getId()}">
-                    <fmt:message key='words.delete'/>
+                    <fmt:message key='actions.delete'/>
                 </a>
             </div>
 

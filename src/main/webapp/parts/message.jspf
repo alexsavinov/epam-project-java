@@ -11,6 +11,7 @@
         </div>
 
         <c:set var="errors" value="${null}" scope="session" />
+        <c:set var="localizedErrors" value="${null}" scope="session" />
     </c:if>
 
     <c:if test="${not empty messages}">
@@ -22,6 +23,7 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
         <c:set var="messages" value="${null}" scope="session" />
+        <c:set var="localizedMessages" value="${null}" scope="session" />
     </c:if>
 
 </div>
