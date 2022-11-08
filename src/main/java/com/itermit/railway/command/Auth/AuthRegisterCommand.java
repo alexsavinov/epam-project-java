@@ -85,7 +85,7 @@ public class AuthRegisterCommand implements Command {
             throw new CommandException(e.getMessage(), e);
         }
 
-        if (user.getId() != 0) {
+        if (user != null && user.getId() != 0) {
             logger.info("user id: {}", user.getId());
 
             sbErrors = new StringBuilder();

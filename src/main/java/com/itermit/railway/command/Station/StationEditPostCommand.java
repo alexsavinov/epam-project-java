@@ -48,7 +48,7 @@ public class StationEditPostCommand implements Command {
             request.getSession().setAttribute("messages", "Station updated!");
             request.getSession().setAttribute("url", "/stations");
         } catch (DBException e) {
-            throw new RuntimeException(e);
+            throw new CommandException("update", e);
         }
 
         return "/stations/edit/" + id;

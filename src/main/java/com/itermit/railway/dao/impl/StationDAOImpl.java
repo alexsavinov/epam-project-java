@@ -93,8 +93,8 @@ public class StationDAOImpl implements StationDAO {
                 stations.add(extract(resultSet));
             }
         } finally {
-            DBManager.closeResultSet(resultSet);
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
         }
 
         return stations;
@@ -158,8 +158,8 @@ public class StationDAOImpl implements StationDAO {
                 station = extract(resultSet);
             }
         } finally {
-            DBManager.closeResultSet(resultSet);
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
         }
 
         return station;
@@ -185,7 +185,7 @@ public class StationDAOImpl implements StationDAO {
             preparedStatement.setString(++l, station.getName());
             preparedStatement.executeUpdate();
         } finally {
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closePreparedStatement(preparedStatement);
         }
     }
 
@@ -211,7 +211,7 @@ public class StationDAOImpl implements StationDAO {
             preparedStatement.setInt(++l, id);
             preparedStatement.executeUpdate();
         } finally {
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closePreparedStatement(preparedStatement);
         }
     }
 
@@ -235,7 +235,7 @@ public class StationDAOImpl implements StationDAO {
             preparedStatement.setInt(++l, id);
             preparedStatement.executeUpdate();
         } finally {
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closePreparedStatement(preparedStatement);
         }
     }
 

@@ -123,14 +123,14 @@ public class UserManager {
 
             if (checkSameName(connection, user)) {
                 /* Rollback if the same name */
-                DBManager.rollback(connection);
+                dbManager.rollback(connection);
                 logger.info("User with same name {} is already exists!", user.getName());
                 throw new DBException("User with same name " + user.getName() + " is already exists!", null);
             }
 
             if (checkSameEmail(connection, user)) {
                 /* Rollback if the same email */
-                DBManager.rollback(connection);
+                dbManager.rollback(connection);
                 logger.info("User with same E-mail {} is already exists!", user.getEmail());
                 throw new DBException("User with same E-mail " + user.getEmail() + " is already exists!", null);
             }
@@ -143,7 +143,7 @@ public class UserManager {
         } catch (SQLException e) {
             /* Rollback if error */
             try {
-                DBManager.rollback(connection);
+                dbManager.rollback(connection);
                 String errorMessage = CommandContainer.getErrorMessage("Error while adding user!", e);
                 logger.error("{} {}", errorMessage, e.getMessage());
                 throw new DBException(errorMessage, e);
@@ -153,7 +153,7 @@ public class UserManager {
             }
         } finally {
             try {
-                DBManager.closeConnection(connection);
+                dbManager.closeConnection(connection);
             } catch (SQLException e) {
                 logger.error("Error closing Prepared statement! {}", e.getMessage());
                 throw new DBException("Error closing Prepared statement!", e);

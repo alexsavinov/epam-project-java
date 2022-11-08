@@ -98,8 +98,8 @@ public class UserDAOImpl implements UserDAO {
                 users.add(extract(resultSet));
             }
         } finally {
-            DBManager.closeResultSet(resultSet);
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
         }
 
         return users;
@@ -154,8 +154,8 @@ public class UserDAOImpl implements UserDAO {
                 totalRows = rsTotalRows.getInt(TOTAL_ROWS);
             }
         } finally {
-            DBManager.closeResultSet(resultSet);
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
         }
 
         return totalRows;
@@ -188,8 +188,8 @@ public class UserDAOImpl implements UserDAO {
                 users.add(extract(resultSet));
             }
         } finally {
-            DBManager.closeResultSet(resultSet);
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
         }
 
         return users;
@@ -221,8 +221,8 @@ public class UserDAOImpl implements UserDAO {
                 user = extract(resultSet);
             }
         } finally {
-            DBManager.closeResultSet(resultSet);
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
         }
 
         return user;
@@ -256,8 +256,8 @@ public class UserDAOImpl implements UserDAO {
                 user = extract(resultSet);
             }
         } finally {
-            DBManager.closeResultSet(resultSet);
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
         }
 
         return user;
@@ -290,7 +290,7 @@ public class UserDAOImpl implements UserDAO {
 
             preparedStatement.executeUpdate();
         } finally {
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closePreparedStatement(preparedStatement);
         }
     }
 
@@ -321,7 +321,7 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.setInt(++l, id);
             preparedStatement.executeUpdate();
         } finally {
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closePreparedStatement(preparedStatement);
         }
 
     }
@@ -351,7 +351,7 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement.setInt(++l, id);
             preparedStatement.executeUpdate();
         } finally {
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closePreparedStatement(preparedStatement);
         }
     }
 

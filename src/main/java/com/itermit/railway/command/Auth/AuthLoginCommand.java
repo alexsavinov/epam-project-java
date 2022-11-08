@@ -38,28 +38,27 @@ public class AuthLoginCommand implements Command {
 
         User user;
         try {
-            user = UserManager.getInstance().get(
-                    new User.Builder().withName(name).withPassword(password).build());
-
-            logger.warn("User logged in: {}", user.getName());
-            request.getSession().setAttribute("isAuthorized", true);
-            request.getSession().setAttribute("isAdmin", user.getIsAdmin());
-            request.getSession().setAttribute("userid", user.getId());
-            request.getSession().setAttribute("username", user.getName());
-            request.getSession().setAttribute("email", user.getEmail());
+            User userSearch = new User.Builder().withName(name).withPassword(password).build();
+            user = UserManager.getInstance().get(userSearch);
         } catch (DBException e) {
             logger.error("DBException. {}", e.getMessage());
             throw new CommandException(e.getMessage(), e);
         }
 
-        if (user.getId() == 0) {
+        if (user == null || user.getId() == 0) {
             logger.error("CommandException. 401 Unauthorized");
             request.getSession().setAttribute("errors", "Login or password incorrect!");
             throw new CommandException("401 Unauthorized", null);
-
         }
 
-        return "/profile";
+        logger.warn("User logged in: {}", user.getName());
+        request.getSession().setAttribute("isAuthorized", true);
+        request.getSession().setAttribute("isAdmin", user.getIsAdmin());
+        request.getSession().setAttribute("userid", user.getId());
+        request.getSession().setAttribute("username", user.getName());
+        request.getSession().setAttribute("email", user.getEmail());
+
+        return "/register";
     }
 
 }

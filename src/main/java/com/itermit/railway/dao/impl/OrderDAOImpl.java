@@ -164,8 +164,8 @@ public class OrderDAOImpl implements OrderDAO {
                 orders.add(extract(resultSet));
             }
         } finally {
-            DBManager.closePreparedStatement(preparedStatement);
-            DBManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
+            dbManager.closeResultSet(resultSet);
         }
 
         return orders;
@@ -220,8 +220,8 @@ public class OrderDAOImpl implements OrderDAO {
                 orders.add(extract(resultSet));
             }
         } finally {
-            DBManager.closeResultSet(resultSet);
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
         }
 
         return orders;
@@ -276,8 +276,8 @@ public class OrderDAOImpl implements OrderDAO {
                         .build());
             }
         } finally {
-            DBManager.closeResultSet(resultSet);
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
         }
 
         return orders;
@@ -310,8 +310,8 @@ public class OrderDAOImpl implements OrderDAO {
                 order = extract(resultSet);
             }
         } finally {
-            DBManager.closeResultSet(resultSet);
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
         }
 
         return order;
@@ -342,7 +342,7 @@ public class OrderDAOImpl implements OrderDAO {
             logger.trace(preparedStatement);
             preparedStatement.executeUpdate();
         } finally {
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closePreparedStatement(preparedStatement);
         }
     }
 
@@ -376,7 +376,7 @@ public class OrderDAOImpl implements OrderDAO {
 
             preparedStatement.executeUpdate();
         } finally {
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closePreparedStatement(preparedStatement);
         }
     }
 
@@ -398,7 +398,7 @@ public class OrderDAOImpl implements OrderDAO {
             preparedStatement.setInt(1, id);
             preparedStatement.executeUpdate();
         } finally {
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closePreparedStatement(preparedStatement);
         }
     }
 

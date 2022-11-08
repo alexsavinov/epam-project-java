@@ -42,7 +42,15 @@ public class ReserveAddPostCommand implements Command {
 
         int routeId = CommandContainer.getIntegerFromRequest(request, "route_id");
         int seats = CommandContainer.getIntegerFromRequest(request, "seats");
-        int userId = (int) request.getSession().getAttribute("userid");
+
+        String userIdString = String.valueOf(request.getSession().getAttribute("userid"));
+        int userId;
+        if (userIdString == null) {
+            userId = 0;
+        } else {
+            userId = Integer.parseInt(userIdString);
+
+        }
 
         Order order = new Order.Builder()
                 .withUser(new User.Builder().withId(userId).build())

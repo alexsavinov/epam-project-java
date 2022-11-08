@@ -69,12 +69,20 @@
             <scope>compile</scope>
         </dependency>
 
+<!--        <dependency>-->
+<!--            <groupId>org.mockito</groupId>-->
+<!--            <artifactId>mockito-all</artifactId>-->
+<!--            <version>1.10.19</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>4.8.0</version>
+            <version>4.8.1</version>
             <scope>test</scope>
         </dependency>
+
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -82,6 +90,60 @@
             <scope>test</scope>
         </dependency>
 
+<!--        <dependency>-->
+<!--            <groupId>org.powermock.tests</groupId>-->
+<!--            <artifactId>powermock-tests-utils</artifactId>-->
+<!--            <version>1.6.6</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>2.0.9</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4-common</artifactId>
+            <version>2.0.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito2</artifactId>
+            <version>2.0.9</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-support</artifactId>
+            <version>2.0.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-reflect</artifactId>
+            <version>2.0.9</version>
+        </dependency>
+
+
+<!--        <dependency>-->
+<!--            <groupId>org.powermock</groupId>-->
+<!--            <artifactId>powermock-module-junit4</artifactId>-->
+<!--            <version>2.0.9</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <version>4.8.1</version>
+            <scope>test</scope>
+        </dependency>
+
+<!--        <dependency>-->
+<!--            <groupId>org.powermock</groupId>-->
+<!--            <artifactId>powermock-module-testng</artifactId>-->
+<!--            <version>2.0.9</version>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
 
         <!--        <dependency>-->
         <!--            <groupId>javax.activation</groupId>-->
@@ -111,6 +173,8 @@
             <scope>compile</scope>
         </dependency>
 
+
+
     </dependencies>
 
     <build>
@@ -119,13 +183,61 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
+                <executions>
+                    <execution>
+                        <id>prepare-war</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>exploded</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.22.2</version>
+                <configuration>
+                    <argLine>
+                        --illegal-access=permit
+                    </argLine>
+                </configuration>
+            </plugin>
+
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-jar-plugin</artifactId>-->
+<!--                <version>3.2.2</version>-->
+<!--                <configuration>-->
+<!--                    <archive>-->
+<!--                        <manifestEntries>-->
+<!--                            <Add-Opens>java.base/java.util</Add-Opens>-->
+<!--&lt;!&ndash;                            <Add-Opens>java.util/java.util.Properties</Add-Opens>&ndash;&gt;-->
+<!--                        </manifestEntries>-->
+<!--                    </archive>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.22.2</version>
                 <configuration>
+                    <argLine>
+                        --illegal-access=permit
+                        --add-opens java.base/java.lang=ALL-UNNAMED
+                        --add-opens java.base/java.util=ALL-UNNAMED
+                        --add-opens java.base/java.io=ALL-UNNAMED
+                        --add-opens java.base/java.text=ALL-UNNAMED
+                        --add-opens java.base/jdk.internal=ALL-UNNAMED
+                        --add-opens java.base/jdk.internal.misc=ALL-UNNAMED
+                        --add-opens java.base/jdk.internal.loader=ALL-UNNAMED
+                        --add-exports java.xml/jdk.xml.internal=ALL-UNNAMED
+                        --add-exports java.base/jdk.internal=ALL-UNNAMED
+<!--                        &#45;&#45;add-exports java.base/jdk.internal.misc=ALL-UNNAMED-->
+<!--                        &#45;&#45;add-exports java.base/jdk.internal.loader=ALL-UNNAMED-->
+                    </argLine>
                     <systemPropertyVariables>
                         <logPath>
                             D:\Projects\Java\EPAM\railway.itermit.com\target\railway.itermit.com-2.0-SNAPSHOT\logs
@@ -136,6 +248,16 @@
                     </environmentVariables>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version>
+                <configuration>
+                    <release>11</release>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
 

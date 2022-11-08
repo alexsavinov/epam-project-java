@@ -1,3 +1,4 @@
+use railwaydb;
 drop table if exists routes, stations, orders, users;
 
 ######################################

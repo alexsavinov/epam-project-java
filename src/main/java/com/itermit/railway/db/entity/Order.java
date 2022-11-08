@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Order entity.
@@ -69,6 +70,19 @@ public class Order implements Serializable {
                 ", seats=" + seats +
                 ", dateReserve=" + dateReserve +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Order)) return false;
+        Order order = (Order) o;
+        return getId() == order.getId() && getSeats() == order.getSeats() && Objects.equals(getUser(), order.getUser()) && Objects.equals(getRoute(), order.getRoute()) && Objects.equals(getDateReserve(), order.getDateReserve());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getUser(), getRoute(), getSeats(), getDateReserve());
     }
 
     public static class Builder {

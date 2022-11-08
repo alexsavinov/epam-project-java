@@ -1,6 +1,7 @@
 package com.itermit.railway.utils;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Properties;
 
 /**
@@ -10,17 +11,33 @@ import java.util.Properties;
  */
 public class Paginator {
 
-    private static final Properties conf;
+    private static Properties conf;
+    public static int PAGE_SIZE = 5;
 
     static {
         try {
             conf = PropertiesLoader.loadProperties();
+            if (!conf.isEmpty()) {
+                PAGE_SIZE = Integer.parseInt(conf.getProperty("pagination.page.size"));
+            }
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public static final int PAGE_SIZE = Integer.parseInt(conf.getProperty("pagination.page.size"));
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Paginator)) return false;
+        Paginator paginator = (Paginator) o;
+        return getPage() == paginator.getPage() && getPages() == paginator.getPages() && getResults() == paginator.getResults() && Objects.equals(getData(), paginator.getData());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPage(), getPages(), getResults(), getData());
+    }
+
     int page;
     int pages;
     int results;
@@ -53,11 +70,11 @@ public class Paginator {
         this.page = page;
     }
 
-    public int getNext_page() {
+    public int getNextPage() {
         return Math.min(page + 1, pages);
     }
 
-    public int getPrev_page() {
+    public int getPrevPage() {
         return Math.max(page - 1, 0);
     }
 
@@ -80,11 +97,12 @@ public class Paginator {
     @Override
     public String toString() {
         return "Paginator{" +
-                "page=" + page +
-                ", next_page=" + getPage() +
-                ", prev_page=" + getNext_page() +
-                ", pages=" + pages +
-                ", data=" + data +
+                "page=" + getPage() +
+                ", pages=" + getPages() +
+                ", prevPage=" + getPrevPage() +
+                ", nextPage=" + getNextPage() +
+                ", data=" + getData() +
+                ", results=" + getResults() +
                 '}';
     }
 

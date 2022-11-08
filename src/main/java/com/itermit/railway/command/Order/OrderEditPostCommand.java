@@ -53,7 +53,8 @@ public class OrderEditPostCommand implements Command {
         try {
             OrderManager.getInstance().update(id, order);
         } catch (DBException e) {
-            throw new RuntimeException(e);
+            logger.error("DBException. {}", e.getMessage());
+            throw new CommandException(e.getMessage(), e);
         }
 
         request.getSession().setAttribute("messages", "Order updated!");

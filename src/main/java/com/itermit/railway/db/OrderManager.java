@@ -120,7 +120,7 @@ public class OrderManager {
             ResultSet resultSetRoute = preparedStatement.executeQuery();
             if (resultSetRoute.next()) {
                 /* Rollback if not */
-                DBManager.rollback(connection);
+                dbManager.rollback(connection);
                 logger.error("Total seats exceeded for Route (id): {}", order.getRoute().getId());
                 throw new DBException("Total seats exceeded for Route (id): {}" + order.getRoute().getId(), null);
             }
@@ -133,7 +133,7 @@ public class OrderManager {
         } catch (SQLException e) {
             /* Rollback if error */
             try {
-                DBManager.rollback(connection);
+                dbManager.rollback(connection);
                 String errorMessage = CommandContainer.getErrorMessage("Error while adding order!", e);
                 logger.error("{} {}", errorMessage, e.getMessage());
                 throw new DBException(errorMessage, e);
@@ -143,8 +143,8 @@ public class OrderManager {
             }
         } finally {
             try {
-                DBManager.closeConnection(connection);
-                DBManager.closePreparedStatement(preparedStatement);
+                dbManager.closeConnection(connection);
+                dbManager.closePreparedStatement(preparedStatement);
             } catch (SQLException e) {
                 logger.error("Error closing Prepared statement! {}", e.getMessage());
                 throw new DBException("Error closing Prepared statement!", e);
@@ -345,7 +345,7 @@ public class OrderManager {
         } catch (SQLException e) {
             /* Rollback if error */
             try {
-                DBManager.rollback(connection);
+                dbManager.rollback(connection);
                 String errorMessage = CommandContainer.getErrorMessage("Error while deleting Reserve!", e);
                 logger.error("{} {}", errorMessage, e.getMessage());
                 throw new DBException(errorMessage, e);
@@ -355,8 +355,8 @@ public class OrderManager {
             }
         } finally {
             try {
-                DBManager.closeConnection(connection);
-                DBManager.closePreparedStatement(preparedStatement);
+                dbManager.closeConnection(connection);
+                dbManager.closePreparedStatement(preparedStatement);
             } catch (SQLException e) {
                 logger.error("Error closing Prepared statement! {}", e.getMessage());
                 throw new DBException("Error closing Prepared statement!", e);

@@ -41,7 +41,8 @@ public class OrdersListCommand implements Command {
             ArrayList<Order> orders = OrderManager.getInstance().getAll();
             request.setAttribute("orders", orders);
         } catch (DBException e) {
-            throw new RuntimeException(e);
+            logger.error("DBException. {}", e.getMessage());
+            throw new CommandException(e.getMessage(), e);
         }
 
         return "/orders.jsp";

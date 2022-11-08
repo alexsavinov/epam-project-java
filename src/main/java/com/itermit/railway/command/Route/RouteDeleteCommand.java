@@ -44,7 +44,8 @@ public class RouteDeleteCommand implements Command {
             request.getSession().setAttribute("url", "/routes");
             request.setAttribute("action", "delete");
         } catch (DBException e) {
-            throw new RuntimeException(e);
+            logger.error("DBException. {}", e.getMessage());
+            throw new CommandException(e.getMessage(), e);
         }
 
         return "/routes";

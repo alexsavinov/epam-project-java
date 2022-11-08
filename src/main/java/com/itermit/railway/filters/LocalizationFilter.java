@@ -20,17 +20,13 @@ public class LocalizationFilter implements Filter {
     private static final Logger logger = LogManager.getLogger(LocalizationFilter.class);
 
     @Override
-    public void init(FilterConfig filterConfig) {
-    }
-
-    @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
 
         logger.debug("#doFilter(servletRequest, servletResponse, filterChain).");
 
         HttpServletRequest httpReq = (HttpServletRequest) servletRequest;
-        HashMap<String, String> localizedMessages = (HashMap) httpReq.getSession().getAttribute("localizedMessages");
+        HashMap localizedMessages = (HashMap) httpReq.getSession().getAttribute("localizedMessages");
         if (localizedMessages != null) {
             String currentLocale = (String) httpReq.getSession().getAttribute("currentLocale");
             httpReq.setAttribute("messages", localizedMessages.get(currentLocale));

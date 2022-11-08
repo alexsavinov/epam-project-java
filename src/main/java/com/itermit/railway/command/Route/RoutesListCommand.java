@@ -35,7 +35,7 @@ public class RoutesListCommand implements Command {
     public String execute(HttpServletRequest request, HttpServletResponse response)
             throws CommandException {
 
-        ArrayList<Route> routes = null;
+        ArrayList<Route> routes;
         try {
             routes = RouteManager.getInstance().getAll();
         } catch (DBException e) {

@@ -75,7 +75,7 @@ public class DBManager {
      * @param connection Connection
      * @throws SQLException
      */
-    public static void closeConnection(Connection connection) throws SQLException {
+    public void closeConnection(Connection connection) throws SQLException {
         if (connection != null) {
             logger.trace("#closeConnection(connection).");
             connection.close();
@@ -88,7 +88,7 @@ public class DBManager {
      * @param preparedStatement PreparedStatement to close.
      * @throws SQLException
      */
-    public static void closePreparedStatement(PreparedStatement preparedStatement) throws SQLException {
+    public void closePreparedStatement(PreparedStatement preparedStatement) throws SQLException {
         if (preparedStatement != null) {
             logger.trace("#closePreparedStatement(preparedStatement).");
             preparedStatement.close();
@@ -101,7 +101,7 @@ public class DBManager {
      * @param resultSet ResultSet to close.
      * @throws SQLException
      */
-    public static void closeResultSet(ResultSet resultSet) throws SQLException {
+    public void closeResultSet(ResultSet resultSet) throws SQLException {
         if (resultSet != null) {
             logger.trace("#closeResultSet(resultSet).");
             resultSet.close();
@@ -114,7 +114,7 @@ public class DBManager {
      * @param connection Connection to rollback.
      * @throws SQLException
      */
-    public static void rollback(Connection connection) throws SQLException {
+    public void rollback(Connection connection) throws SQLException {
 
         if (connection != null) {
             logger.trace("#rollback(connection).");

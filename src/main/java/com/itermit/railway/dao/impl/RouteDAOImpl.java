@@ -141,8 +141,8 @@ public class RouteDAOImpl implements RouteDAO {
                 routes.add(extract(resultSet));
             }
         } finally {
-            DBManager.closeResultSet(resultSet);
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
         }
 
         return routes;
@@ -170,8 +170,8 @@ public class RouteDAOImpl implements RouteDAO {
                 totalRows = rsTotalRows.getInt(TOTAL_ROWS);
             }
         } finally {
-            DBManager.closeResultSet(resultSet);
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
         }
 
         return totalRows;
@@ -233,8 +233,8 @@ public class RouteDAOImpl implements RouteDAO {
                 routes.add(extract(resultSet));
             }
         } finally {
-            DBManager.closeResultSet(resultSet);
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
         }
 
         return routes;
@@ -265,8 +265,8 @@ public class RouteDAOImpl implements RouteDAO {
                 route = extract(resultSet);
             }
         } finally {
-            DBManager.closeResultSet(resultSet);
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
         }
 
         return route;
@@ -299,7 +299,7 @@ public class RouteDAOImpl implements RouteDAO {
             preparedStatement.setInt(++l, route.getSeatsTotal());
             preparedStatement.executeUpdate();
         } finally {
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closePreparedStatement(preparedStatement);
         }
     }
 
@@ -332,7 +332,7 @@ public class RouteDAOImpl implements RouteDAO {
             preparedStatement.setInt(++l, id);
             preparedStatement.executeUpdate();
         } finally {
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closePreparedStatement(preparedStatement);
         }
     }
 
@@ -356,7 +356,7 @@ public class RouteDAOImpl implements RouteDAO {
             preparedStatement.setInt(++l, id);
             preparedStatement.executeUpdate();
         } finally {
-            DBManager.closePreparedStatement(preparedStatement);
+            dbManager.closePreparedStatement(preparedStatement);
         }
     }
 

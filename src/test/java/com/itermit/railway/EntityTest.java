@@ -1,6 +1,5 @@
 package com.itermit.railway;
 
-import com.itermit.railway.db.DBException;
 import com.itermit.railway.db.entity.Order;
 import com.itermit.railway.db.entity.Route;
 import com.itermit.railway.db.entity.Station;
@@ -11,9 +10,20 @@ import org.mockito.Mockito;
 
 import java.security.NoSuchAlgorithmException;
 
-
+/**
+ * Entity - Tests.
+ * <p>
+ * Includes test for: Order, Route, Station, User.
+ *
+ * @author O.Savinov
+ */
 public class EntityTest extends Mockito {
 
+    /**
+     * User Test
+     *
+     * @throws Exception
+     */
     @Test
     public void UserTest() throws NoSuchAlgorithmException {
 
@@ -44,12 +54,15 @@ public class EntityTest extends Mockito {
 
         User userMock = mock(User.class);
 
-        doThrow(new RuntimeException()).when(userMock).generateActivateToken();
+        Mockito.doThrow(new RuntimeException()).when(userMock).generateActivateToken();
         user.generateActivateToken();
-
-//        doThrow(new Exception()).doNothing().when(userMock).generateActivateToken();
     }
 
+    /**
+     * Station Test
+     *
+     * @throws Exception
+     */
     @Test
     public void StationTest() {
 
@@ -63,6 +76,11 @@ public class EntityTest extends Mockito {
         Assertions.assertEquals("Station{id=1, name='test'}", station.toString());
     }
 
+    /**
+     * Order Test
+     *
+     * @throws Exception
+     */
     @Test
     public void OrderTest() {
 
@@ -89,6 +107,11 @@ public class EntityTest extends Mockito {
                 "seats_total='0'}, seats=1, dateReserve=null}", order.toString());
     }
 
+    /**
+     * Route Test
+     *
+     * @throws Exception
+     */
     @Test
     public void RouteTest() {
 

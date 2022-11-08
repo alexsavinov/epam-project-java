@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Objects;
 
 /**
  * Command to Search for Routes with certain conditions.
@@ -44,7 +45,8 @@ public class SearchGetCommand implements Command {
         HttpSession session = request.getSession();
 
         String dateRange = String.valueOf(session.getAttribute("daterange"));
-        if (dateRange == null) {
+
+        if (Objects.equals(dateRange, null) || dateRange.isEmpty()) {
             session.setAttribute("daterange", getDefaultDaterange());
         }
 

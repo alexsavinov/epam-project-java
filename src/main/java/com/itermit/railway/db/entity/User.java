@@ -7,6 +7,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.Objects;
 
 /**
  * User entity.
@@ -127,6 +128,19 @@ public class User implements Serializable {
                 ", isactive='" + isActive + '\'' +
                 ", activation_token='" + activationToken + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return getId() == user.getId() && isAdmin == user.isAdmin && isActive == user.isActive && Objects.equals(getName(), user.getName()) && Objects.equals(getPassword(), user.getPassword()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getActivationToken(), user.getActivationToken());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getName(), getPassword(), getEmail(), isAdmin, isActive, getActivationToken());
     }
 
     public static class Builder {
