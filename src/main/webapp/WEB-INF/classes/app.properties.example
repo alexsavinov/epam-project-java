@@ -1,0 +1,10 @@
+pagination.page.size = 3
+
+mail.from = someuser@somedomain.com
+mail.password = somepass
+mail.smtp.host = smtp.somedomain.com
+mail.smtp.port = 587
+mail.smtp.auth = true
+mail.smtp.ssl.trust = smtp.somedomain.com
+mail.smtp.starttls.enable = true
+mail.smtp.ssl.protocols = TLSv1.2

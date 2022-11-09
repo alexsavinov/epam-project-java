@@ -23,3 +23,21 @@ The result of the search is a list of trains, each string of which contains:
 
 If the user is registered in the system, he must be able to buy a ticket
 for the selected route on the specified date (subject to availability).
+
+
+INSTALL
+=====================
+
+# STEP 1
+copy file:
+    src/main/webapp/WEB-INF/classes/app.properties.example
+to:
+    src/main/webapp/WEB-INF/classes/app.properties
+and edit.
+
+# STEP 2
+copy file:
+    src/main/webapp/META-INF/context.xml.example
+to:
+    src/main/webapp/META-INF/context.xml
+and edit.

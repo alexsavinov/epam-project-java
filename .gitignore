@@ -40,3 +40,8 @@ build/
 docs/*
 .idea
 .mvn
+src/test/resources/report
+src/main/webapp/WEB-INF/classes/app.properties
+src/main/webapp/META-INF/context.xml
+.gitignore
+

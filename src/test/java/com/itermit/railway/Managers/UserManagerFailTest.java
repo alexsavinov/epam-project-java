@@ -8,7 +8,6 @@ import com.itermit.railway.dao.impl.RouteDAOImpl;
 import com.itermit.railway.dao.impl.StationDAOImpl;
 import com.itermit.railway.dao.impl.UserDAOImpl;
 import com.itermit.railway.db.*;
-import com.itermit.railway.db.entity.Station;
 import com.itermit.railway.db.entity.User;
 import com.itermit.railway.utils.PropertiesLoader;
 import org.apache.logging.log4j.Logger;
@@ -42,6 +41,15 @@ import java.util.Properties;
 
 import static org.mockito.Mockito.*;
 
+/**
+ * User Manager fail tests.
+ * <p>
+ * Includes tests for:
+ * <p>
+ * UserManagerFail.
+ *
+ * @author O.Savinov
+ */
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({
         AuthLoginCommand.class,
@@ -83,9 +91,13 @@ public class UserManagerFailTest {
         mockLogger = mock(Logger.class);
     }
 
-    /* UserManagerTest - Fail #0 - IllegalStateException - obtain DataSource */
+    /**
+     * UserManagerTest - Fail #0 - IllegalStateException - obtain DataSource
+     *
+     * @throws Exception
+     */
     @Test
-    public void UserManagerFailTest() throws Exception {
+    public void UserManagerFail0Test() throws Exception {
 
         /* logger */
         Whitebox.setInternalState(UserManager.class, "logger", mockLogger);
