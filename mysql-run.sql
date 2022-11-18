@@ -1,6 +1,7 @@
 use railwaydb;
 drop table if exists routes, stations, orders, users;
 
+
 ######################################
 # USERS
 
@@ -19,32 +20,30 @@ create table users
 
 );
 
-
 insert into users (name, password, email, isadmin, isactive)
 values ('admin', SHA2('admin', 0), 'spell478@gmail.com', 1, 1);
-insert into users (name, password,  email, isadmin, isactive)
+insert into users (name, password, email, isadmin, isactive)
 values ('user1', SHA2('pass1', 0), 'user1@railway.itermit.com', 0, 1);
-insert into users (name, password,  email, isadmin, isactive)
+insert into users (name, password, email, isadmin, isactive)
 values ('user2', SHA2('pass2', 0), 'user2@railway.itermit.com', 0, 1);
-insert into users (name, password,  email, isadmin, isactive)
+insert into users (name, password, email, isadmin, isactive)
 values ('user3', SHA2('pass3', 0), 'user3@railway.itermit.com', 0, 1);
-insert into users (name, password,  email, isadmin, isactive)
+insert into users (name, password, email, isadmin, isactive)
 values ('user4', SHA2('pass4', 0), 'user4@railway.itermit.com', 0, 1);
-insert into users (name, password,  email, isadmin, isactive)
+insert into users (name, password, email, isadmin, isactive)
 values ('user5', SHA2('pass5', 0), 'user5@railway.itermit.com', 0, 1);
-insert into users (name, password,  email, isadmin, isactive)
+insert into users (name, password, email, isadmin, isactive)
 values ('user6', SHA2('pass6', 0), 'user6@railway.itermit.com', 0, 0);
-insert into users (name, password,  email, isadmin, isactive)
+insert into users (name, password, email, isadmin, isactive)
 values ('user7', SHA2('pass7', 0), 'user7@railway.itermit.com', 0, 1);
-insert into users (name, password,  email, isadmin, isactive)
+insert into users (name, password, email, isadmin, isactive)
 values ('user8', SHA2('pass8', 0), 'user8@railway.itermit.com', 0, 0);
-insert into users (name, password,  email, isadmin, isactive)
+insert into users (name, password, email, isadmin, isactive)
 values ('user9', SHA2('pass9', 0), 'user9@railway.itermit.com', 0, 0);
 
 
 ######################################
 # STATIONS
-
 
 CREATE TABLE stations
 (
@@ -52,12 +51,6 @@ CREATE TABLE stations
     name VARCHAR(45) NULL,
     PRIMARY KEY (id)
 );
-
-# SELECT id, name FROM stations;
-
-# INSERT INTO stations (id, name) VALUES (?, ?);
-
-# UPDATE stations SET id = ?, name = ? WHERE id = ?;
 
 INSERT INTO stations (name)
 VALUES ('Stockton');
@@ -112,38 +105,6 @@ CREATE TABLE routes
             ON DELETE NO ACTION
             ON UPDATE NO ACTION
 );
-
-# SELECT id,
-#        station_departure_id,
-#        station_arrival_id,
-#        train_number,
-#        date_departure,
-#        date_arrival,
-#        travel_time,
-#        travel_cost,
-#        seats_reserved,
-#        seats_total
-# FROM routes;
-
-# INSERT INTO routes
-# (id,
-#  station_departure_id,
-#  station_arrival_id,
-#  train_number,
-#  date_departure,
-#  date_arrival,
-#  travel_time,
-#  travel_cost,
-#  seats_reserved,
-#  seats_total)
-# VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
-
-
-# UPDATE routes
-# SET id = ?, station_departure_id = ?, station_arrival_id = ?,
-#     train_number = ?, date_departure = ?, date_arrival = ?,
-#     travel_time = ?, travel_cost = ?, seats_reserved = ?, seats_total = ?
-# WHERE id = ?;
 
 INSERT INTO routes
 (station_departure_id,
@@ -213,7 +174,6 @@ INSERT INTO routes
 VALUES (5, 3, 'A06', '2022-10-20 01:45:54', '2022-10-20 13:45:00', 50, 0, 200);
 
 
-
 ######################################
 # orders
 
@@ -228,23 +188,6 @@ CREATE TABLE orders
     FOREIGN KEY (user_id) REFERENCES users (id),
     FOREIGN KEY (route_id) REFERENCES routes (id)
 );
-
-
-
-# SELECT user_id,
-#        route_id,
-#        seats
-# FROM orders;
-
-# INSERT INTO orders (user_id, route_id, seats)
-# VALUES (?, ?, ?);
-
-# UPDATE orders
-# SET user_id  = ?,
-#     route_id = ?,
-#     seats    = ?
-# WHERE user_id = ?
-#   AND route_id = ?;
 
 INSERT INTO orders (user_id, route_id, seats, date_reserve)
 VALUES (1, 1, 11, '2022-09-23 12:45:54');
