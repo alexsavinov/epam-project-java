@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 
 import static com.itermit.railway.dao.impl.UserDAOImpl.SQL_GET_ALL_USERS;
@@ -98,6 +99,72 @@ public class UserManager {
             String errorMessage = CommandContainer.getErrorMessage("Error while get(user)!", e);
             throw new DBException(errorMessage, e);
         }
+    }
+
+    /**
+     * Returns a User by token.
+     *
+     * @param token Activation token string
+     * @return User
+     * @throws DBException
+     */
+    public User activate(String token) throws DBException {
+
+        logger.debug("#getByToken(user).");
+
+        Connection connection = null;
+        User user = null;
+
+        try {
+            connection = dbManager.getConnection();
+
+            /* Set transaction isolation */
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+            connection.setAutoCommit(false);
+
+            /* Search user by token string */
+            user = UserDAOImpl.getInstance().getByToken(connection, token);
+
+            if (user == null) {
+                dbManager.rollback(connection);
+                logger.info("User not found by provided token!");
+                throw new DBException("User not found by provided token!", null);
+            }
+
+            if (user.getIsActive()) {
+                dbManager.rollback(connection);
+                logger.info("User is already activated!");
+                throw new DBException("User is already activated!", null);
+            }
+
+            user.setIsActive(true);
+
+            UserManager.getInstance().update(user.getId(), user);
+
+            /* Commit */
+            connection.commit();
+
+        } catch (SQLException e) {
+            /* Rollback if error */
+            try {
+                dbManager.rollback(connection);
+                String errorMessage = CommandContainer.getErrorMessage("Error while activating user!", e);
+                logger.error("{} {}", errorMessage, e.getMessage());
+                throw new DBException(errorMessage, e);
+            } catch (SQLException ex) {
+                logger.error("Error rollback connection! {}", ex.getMessage());
+                throw new DBException("Error rollback connection!", ex);
+            }
+        } finally {
+            try {
+                dbManager.closeConnection(connection);
+            } catch (SQLException e) {
+                logger.error("Error closing Prepared statement! {}", e.getMessage());
+                throw new DBException("Error closing Prepared statement!", e);
+            }
+        }
+
+        return user;
     }
 
     /**
@@ -231,7 +298,7 @@ public class UserManager {
         try (Connection connection = dbManager.getConnection()) {
             UserDAOImpl.getInstance().update(connection, id, user);
         } catch (SQLException e) {
-            String errorMessage = CommandContainer.getErrorMessage("Error while deleting user!", e);
+            String errorMessage = CommandContainer.getErrorMessage("Error while updating user!", e);
             throw new DBException(errorMessage, e);
         }
     }

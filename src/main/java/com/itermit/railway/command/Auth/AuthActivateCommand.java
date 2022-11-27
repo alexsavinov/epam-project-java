@@ -3,6 +3,9 @@ package com.itermit.railway.command.Auth;
 import com.itermit.railway.command.Command;
 import com.itermit.railway.command.CommandContainer;
 import com.itermit.railway.db.CommandException;
+import com.itermit.railway.db.DBException;
+import com.itermit.railway.db.UserManager;
+import com.itermit.railway.db.entity.User;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,8 +36,16 @@ public class AuthActivateCommand implements Command {
 
         String activationToken = CommandContainer.getTokenFromRequest(request);
 
+        User user;
+        try {
+            user = UserManager.getInstance().activate(activationToken);
+        } catch (DBException e) {
+            request.getSession().setAttribute("errors", e.getMessage());
+            return "/login";
+        }
+
         logger.info("activationToken {}", activationToken);
-        request.getSession().setAttribute("messages", "User activated!");
+        request.getSession().setAttribute("messages", "User activated: " + user.getName());
 
         return "/login";
     }

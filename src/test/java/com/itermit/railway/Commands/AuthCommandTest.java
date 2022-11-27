@@ -146,7 +146,13 @@ public class AuthCommandTest {
 
         Whitebox.setInternalState(AuthLoginCommand.class, "logger", mockLogger);
 
-        User user = new User.Builder().withId(1).withName("name").withPassword("password").build();
+        User user = new User.Builder()
+                .withId(1)
+                .withName("name")
+                .withPassword(User.passwordEncrypt("password"))
+                .withIsActive(true)
+                .build();
+
 
         when(request.getParameter("name")).thenReturn("name");
         when(request.getParameter("password")).thenReturn("password");
@@ -154,7 +160,7 @@ public class AuthCommandTest {
         when(userManager.get(any(User.class))).thenReturn(user);
 
         String result = new AuthLoginCommand().execute(request, response);
-        Assertions.assertEquals("/register", result);
+        Assertions.assertEquals("/profile", result);
     }
 
     /**
@@ -162,13 +168,13 @@ public class AuthCommandTest {
      *
      * @throws Exception
      */
-    @Test(expected = CommandException.class)
+    @Test
     public void AuthLoginCommandFail1Test() throws Exception {
 
         Whitebox.setInternalState(AuthLoginCommand.class, "logger", mockLogger);
 
         String result = new AuthLoginCommand().execute(request, response);
-        Assertions.assertEquals("/register", result);
+        Assertions.assertEquals("/login", result);
     }
 
     /**

@@ -173,7 +173,12 @@ public class CommandContainer {
 
         if (e.getErrorCode() == 1451) {
             String nameDatabase = e.getMessage().split("REFERENCES")[1].split("`")[1];
-            return "First you have to remove an element from the tables: " + nameDatabase;
+            return "First you must delete item from the tables: " + nameDatabase;
+        }
+
+        if (e.getErrorCode() == 1217) {
+            /* "Cannot delete or update a parent row: a foreign key constraint fails" */
+            return "Delete items like this: Orders >> Routes >> Other tables!";
         }
 
         return defaultMessage;

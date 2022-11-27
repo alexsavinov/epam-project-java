@@ -21,7 +21,7 @@
                     class="page-item disabled"
                 </c:if>>
                     <a class="page-link _page-link" href="#"
-                       onclick="goByPage(${sessionScope.paginator.getPrev_page()});">
+                       onclick="goByPage(${sessionScope.paginator.getPrevPage()});">
                         &lsaquo;
                     </a>
                 </li>
@@ -30,12 +30,12 @@
                     class="page-item disabled"
                 </c:if>>
                     <a class="page-link _page-link" href="#"
-                       onclick="goByPage(${sessionScope.paginator.getPrev_page()});">
+                       onclick="goByPage(${sessionScope.paginator.getPrevPage()});">
                         <c:if test="${sessionScope.paginator.pageIsFirst() eq true}">
                             ..
                         </c:if>
                         <c:if test="${sessionScope.paginator.pageIsFirst() ne true}">
-                            ${sessionScope.paginator.getPrev_page()}
+                            ${sessionScope.paginator.getPrevPage()}
                         </c:if>
                     </a>
                 </li>
@@ -50,12 +50,12 @@
                     class="page-item disabled"
                 </c:if>>
                     <a class="page-link _page-link" href="#"
-                       onclick="goByPage(${sessionScope.paginator.getNext_page()});">
+                       onclick="goByPage(${sessionScope.paginator.getNextPage()});">
                         <c:if test="${sessionScope.paginator.pageIsLast() eq true}">
                             ..
                         </c:if>
                         <c:if test="${sessionScope.paginator.pageIsLast() ne true}">
-                            ${sessionScope.paginator.getNext_page()}
+                            ${sessionScope.paginator.getNextPage()}
                         </c:if>
                     </a>
                 </li>
@@ -64,7 +64,7 @@
                     class="page-item disabled"
                 </c:if>>
                     <a class="page-link _page-link" href="#"
-                       onclick="goByPage(${sessionScope.paginator.getNext_page()});">
+                       onclick="goByPage(${sessionScope.paginator.getNextPage()});">
                         &rsaquo;
                     </a>
                 </li>

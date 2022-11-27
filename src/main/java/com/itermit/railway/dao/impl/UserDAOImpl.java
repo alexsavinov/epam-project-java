@@ -35,7 +35,12 @@ public class UserDAOImpl implements UserDAO {
     private static final String SQL_GET_USER_BY_CREDENTIALS = "" +
             "SELECT * " +
             "FROM users " +
-            "WHERE name = ? AND password = SHA2(?, 0)";
+//            "WHERE name = ? AND password = SHA2(?, 0)";
+            "WHERE name = ?";
+    private static final String SQL_GET_USER_BY_TOKEN = "" +
+            "SELECT * " +
+            "FROM users " +
+            "WHERE activation_token = ?";
     public static final String SQL_GET_USER_BY_ID = "" +
             "SELECT * " +
             "FROM users " +
@@ -248,8 +253,43 @@ public class UserDAOImpl implements UserDAO {
             preparedStatement = connection.prepareStatement(SQL_GET_USER_BY_CREDENTIALS);
             int l = 0;
             preparedStatement.setString(++l, user.getName());
-            preparedStatement.setString(++l, user.getPassword());
-//            logger.trace(preparedStatement);
+//            preparedStatement.setString(++l, user.getPassword());
+            logger.trace(preparedStatement);
+
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                user = extract(resultSet);
+            }
+        } finally {
+            dbManager.closeResultSet(resultSet);
+            dbManager.closePreparedStatement(preparedStatement);
+        }
+
+        return user;
+    }
+
+    /**
+     * Returns a User by token.
+     *
+     * @param connection Connection to DataSource
+     * @param token      Activation token string
+     * @return User
+     * @throws SQLException
+     */
+    public User getByToken(Connection connection, String token) throws SQLException {
+
+        logger.debug("#getByToken(connection, token): {}", token);
+
+        ResultSet resultSet = null;
+        PreparedStatement preparedStatement = null;
+
+        User user = null;
+
+        try {
+            preparedStatement = connection.prepareStatement(SQL_GET_USER_BY_TOKEN);
+            int l = 0;
+            preparedStatement.setString(++l, token);
+            logger.trace(preparedStatement);
 
             resultSet = preparedStatement.executeQuery();
             if (resultSet.next()) {
@@ -340,7 +380,7 @@ public class UserDAOImpl implements UserDAO {
 
         if (id == 1) {
             logger.error("Error while delete(id): cannot delete admin!");
-            throw new SQLException("Error while delete(id): cannot delete admin!");
+            throw new SQLException("Error while deleting user: cannot delete admin!");
         }
 
         PreparedStatement preparedStatement = null;

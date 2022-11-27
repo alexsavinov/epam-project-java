@@ -26,10 +26,16 @@ public class LocalizationFilter implements Filter {
         logger.debug("#doFilter(servletRequest, servletResponse, filterChain).");
 
         HttpServletRequest httpReq = (HttpServletRequest) servletRequest;
+        String currentLocale = (String) httpReq.getSession().getAttribute("currentLocale");
+
         HashMap localizedMessages = (HashMap) httpReq.getSession().getAttribute("localizedMessages");
         if (localizedMessages != null) {
-            String currentLocale = (String) httpReq.getSession().getAttribute("currentLocale");
             httpReq.setAttribute("messages", localizedMessages.get(currentLocale));
+        }
+
+        HashMap localizedErrors = (HashMap) httpReq.getSession().getAttribute("localizedErrors");
+        if (localizedErrors != null) {
+            httpReq.setAttribute("errors", localizedErrors.get(currentLocale));
         }
 
         filterChain.doFilter(servletRequest, servletResponse);

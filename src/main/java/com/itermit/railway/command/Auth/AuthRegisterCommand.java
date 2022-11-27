@@ -95,7 +95,7 @@ public class AuthRegisterCommand implements Command {
                         .append(" already activated! Use login page to enter!");
             } else {
                 logger.warn("User exists but not yet activated!");
-                sbErrors.append("User already exists and not yet activated! Re-send activation mail?");
+                sbErrors.append("User already exists and not yet activated! Check for activation mail.");
             }
 
             if (sbErrors.length() > 0) {

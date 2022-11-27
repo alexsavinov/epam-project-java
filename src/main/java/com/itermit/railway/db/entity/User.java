@@ -31,11 +31,15 @@ public class User implements Serializable {
      * @return String with encrypted password
      * @throws NoSuchAlgorithmException
      */
-    public static String passwordEncrypt(String password) throws NoSuchAlgorithmException {
+    public static String passwordEncrypt(String password) {
 
         MessageDigest md;
 
-        md = MessageDigest.getInstance("SHA-256");
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            return "";
+        }
 
         md.update(password.getBytes(StandardCharsets.UTF_8));
         byte[] digest = md.digest();

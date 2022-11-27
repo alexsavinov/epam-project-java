@@ -37,22 +37,24 @@ public class CommandHandler {
      */
     public static String processRedirect(String commandName, HttpServletRequest request, HttpServletResponse response) {
 
-        String address = null;
+        String address;
+        logger.trace("#processRedirect(commandName, request, response) = {}", commandName);
 
         try {
             address = CommandContainer.runCommand(request, response, commandName);
             if (address != null) {
+                logger.info("address = {}", address);
                 try {
                     response.sendRedirect(address);
                 } catch (IOException e) {
                     logger.error("IOException. Error redirecting! {}", e.getMessage());
-                    request.setAttribute("error", "Error while redirecting to " + address);
+                    request.setAttribute("error", "Error while redirecting to address: " + address);
 //                    throw new RuntimeException(e);
                 }
             }
         } catch (CommandException e) {
             logger.error("CommandException. Error executing command! {}", e.getMessage());
-            request.setAttribute("error", "Error while redirecting to " + address);
+            request.setAttribute("error", e.getMessage());
             try {
                 request.getRequestDispatcher("/error").forward(request, response);
             } catch (ServletException ex) {
